@@ -1,0 +1,108 @@
+package jkprotobuf;
+//ddd解决速度
+message Update
+{
+	required int32 state = 1;    //0 access
+	                             //1 dev is busy
+	                             //2 nand file
+	                             //3 fail to update
+	optional int32 value = 2;
+	optional string info = 3;
+}
+
+message Netconfig
+{
+	required string ip = 1;
+	required string netmask = 2;
+	required string gateway = 3;
+	optional int32 state = 4;
+}
+
+message Selfresponse
+{
+	required string mac = 1;
+	required string ip = 2;
+	required string netmask = 3;
+	required string gateway = 4;
+	required string SWversion = 5;
+	required string HWversion = 6;
+	optional string uptime = 7;
+	optional string firmware = 8;
+	optional string name = 9;
+}
+
+message SelfresponseAll
+{
+    repeated Selfresponse szSelfresponse = 1;
+}
+
+message Serverinfo
+{
+	required string server = 1;
+	required int32 port = 2;
+}
+
+message Stat3g_per
+{
+		required int32 number = 1;     //模块对应的序号
+		optional string modelname = 10;
+		required int32 type = 2;       //1-EVDO 2-WCDMA 3-TD 4-WIFI
+		optional int32 stat = 3;       //1-NONE
+								       //2-SMS		正在等待短信
+								       //3-RECVSMS	读取到一条短消息
+								       //4-ATERR	模块测试失败
+								       //5-DIALING	拨号中/WIFI联接中
+								       //6-ONLINE	成功拨号
+								       //7-RESET	模块复位中
+								       //8-KILLING	用户手动停止
+								       //9-DISC		断开/失败
+								       //10-NOAP	没有找到AP(仅WIFI是有效)
+		optional int32 signal1 = 4;    //实际读取强度
+									   //0…31,99	不确定		CDMA/WCDMA
+									   //0/20/40/60/80/99		EVDO
+									   //0…31,99	不确定		TD-GSM
+									   //100…191,199不确定		TD-SCDMA
+									   //0…100					WIFI
+		optional int32 signal2 = 5;    //0…5 等级：5表示信号最强
+		optional int32 simcard = 6;    //0：SIMC卡状态不确定
+                                       //1：SIMC卡OK
+									   //255：SIMC卡不存在
+		optional int32 cdmasignal1 = 7;//只有在电信网络下才会有，同signal1
+		optional int32 cdmasignal2 = 8;//只有在电信网络下才会有，同signal2
+		optional int32 speed = 9;      //指示模块的前5秒内的平均速度 字节/秒
+}
+message Stat3g
+{
+		required int32 count = 1;
+		repeated Stat3g_per stat3g_per = 2;
+		optional int32 cablespeed = 3;
+        optional int32 intervaltime = 4;
+}
+
+message Flowsum_per
+{
+		required int32 id = 1;		//1-ppp1 2-ppp2
+		required int64 send = 2;	//byte
+		required int64 recv = 3;	//byte
+}
+
+message Flowsum
+{
+		repeated Flowsum_per flowsum_per = 1;
+}
+
+message Module_stat_per
+{
+		required int32 slot = 1;
+		required int32 stat = 2;
+}
+
+message Module_stat
+{
+		repeated Module_stat_per module_stat_per = 1;
+}
+
+message MCSystemFunc {
+        optional uint32   iRoute = 1;    // 1 is on, 0 is off
+}
+
