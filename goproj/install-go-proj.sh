@@ -2,9 +2,11 @@
 PWD=`pwd`
 GOPATH=$GOPATH:$PWD
 
-FILES="golanger.com/config golanger.com/framework/web golanger.com/i18n golanger.com/log golanger.com/middleware golanger.com/utils golanger.com/session/filesession golanger.com/session/cookiesession golanger.com/session/memorysession golanger.com/database/activerecord goconfig/config code.google.com/p/go.net/websocket code.google.com/p/goprotobuf/proto code.google.com/p/goprotobuf/protoc-gen-go jk/jkcommon jk/jklog jk/jkconfig jk/jkprotobuf jk/jkserver helper bveth labix.org/v2/mgo labix.org/v2/mgo/bson github.com/mattn/go-sqlite3"
+FILES="github.com/astaxie/beego github.com/beego/bee "
 FILES+=" code.google.com/p/graphics-go/graphics"
-FILES+=" jk/jkprotocol jk/jkparsedoc jk/jknetwork"
+FILES+=" goconfig/config golanger.com/log golanger.com/utils"
+FILES+=" jk/jkcommon jk/jkconfig jk/jkimage jk/jklog jk/jkmath jk/jkserver jk/jkprotocol jk/jkparsedoc jk/jknetwork"
+FILES+=" labix.org/v2/mgo labix.org/v2/mgo/bson"
 FILES+=" github.com/tyranron/daemonigo/"
 
 for i in $FILES
