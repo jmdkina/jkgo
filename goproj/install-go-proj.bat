@@ -2,5 +2,16 @@
 set PWD=%cd%
 set GOPATH=%GOPATH%;%PWD%
 
-for %%i in (golanger.com\config golanger.com\framework\web golanger.com\i18n golanger.com\log golanger.com\middleware golanger.com\utils golanger.com\session\filesession golanger.com\session\cookiesession golanger.com\session\memorysession golanger.com\database\activerecord goconfig\config code.google.com\p\go.net\websocket code.google.com\p\goprotobuf\proto code.google.com\p\graphics-go\graphics code.google.com\p\goprotobuf\protoc-gen-go jk\jkcommon jk\jklog jk\jkprotobuf jk\jkserver  helper bveth labix.org\v2\mgo labix.org\v2\mgo\bson) do go install %%i
+set installfiles=(code.google.com/p/graphics-go/graphics github.com/astaxie/beego github.com/beego/bee ^
+	github.com/go-sql-driver/mysql github.com/howeyc/fsnotify github.com/jtolds/gls ^
+	goconfig/config golanger.com/log golanger.com/utils ^
+	jk/jkcommon jk/jkconfig jk/jkimage jk/jklog jk/jkmath jk/jknetwork jk/jkparsedoc jk/jkprotocol jk/jkserver ^
+	labix.org/v2/mgo labix.org/v2/mgo/bson ^
+	helper bveth )
+
+for %%i in %installfiles% do (
+	echo install %%i
+	go install %%i
+)
+
 pause
