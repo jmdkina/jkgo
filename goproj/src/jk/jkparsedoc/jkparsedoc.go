@@ -24,6 +24,7 @@ func (p *JKParseDoc) parse_one_file(filename string) error {
 	}
 	// p.PrintOut()
 	jklog.L().Infoln("Write to file ", filename, " ...")
+	ph.SetPrefix(p.prefix)
 	err = ph.WriteToHtml()
 	if err != nil {
 		return err
@@ -40,7 +41,7 @@ func (p *JKParseDoc) parse_dir_files(filename string) error {
 			p.parse_dir_files(filename)
 		} else {
 			// jklog.L().Infoln("files : ", path, fi.Name())
-			if fi.Name()[0] == '.' {
+			if fi.Name()[0] == '.' || !strings.HasSuffix(fi.Name(), ".h") {
 				return nil
 			}
 			p.files = append(p.files, path)
@@ -70,7 +71,7 @@ func (p *JKParseDoc) Output() {
 }
 
 func (p *JKParseDoc) generateIndexFile() error {
-	fo, err := os.Create("bvdoc/" + "index.html")
+	fo, err := os.Create(p.prefix + "/" + "index.html")
 	if err != nil {
 		return err
 	}
@@ -100,12 +101,21 @@ func (p *JKParseDoc) generateIndexFile() error {
 
 // Parse start here, give one file or dir
 // It will check all file if give dir
-func JKParseDocStart(filename string) {
+// @docsname: create what dir to save docs
+func JKParseDocStart(filename string, docsname string) {
 	jklog.L().SetLevel(jklog.LEVEL_MUCH)
 	jklog.L().Infoln("parse doc start ", filename)
 
 	p := &JKParseDoc{}
-	p.prefix = "bvdoc"
+
+	// create docsname if it is not exists.
+	err := os.Mkdir(docsname, os.ModeDir)
+	if err != nil {
+		// docs not exists.
+		os.Create(docsname)
+	}
+
+	p.prefix = docsname
 
 	dir, err := os.Stat(filename)
 	if err != nil {

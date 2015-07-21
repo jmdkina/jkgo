@@ -19,10 +19,11 @@ const (
 // Input one file of .h and read the data out put to .html
 
 func parse_get_basename(filename string) string {
-	basefilename := filename
-	i := strings.LastIndex(filename, "/")
+	// convert "\" to "/"
+	basefilename := strings.Replace(filename, "\\", "/", -1)
+	i := strings.LastIndex(basefilename, "/")
 	if i >= 0 {
-		basefilename = filename[i+1 : len(filename)]
+		basefilename = basefilename[i+1 : len(basefilename)]
 	}
 	i = strings.LastIndex(basefilename, ".")
 	if i >= 0 {
@@ -32,6 +33,8 @@ func parse_get_basename(filename string) string {
 }
 
 func parse_get_basepath(filename string) string {
+	// convert "\" to "/"
+	filename = strings.Replace(filename, "\\", "/", -1)
 	basepath := ""
 	i := strings.LastIndex(filename, "/")
 	if i > 0 {
@@ -44,6 +47,7 @@ type ParseHeaderFile struct {
 	all_string   map[string][]string
 	baseFileName string
 	basePath     string
+	prefix       string
 }
 
 func (p *ParseHeaderFile) exist_comment_slave(key string) (string, bool) {
@@ -332,16 +336,37 @@ func (p *ParseHeaderFile) PrintOut() {
 	}
 }
 
+// Set dir where to save files.
+func (p *ParseHeaderFile) SetPrefix(dirname string) {
+	p.prefix = dirname
+}
+
 // Write files to html file
 // depends on what we parse
 func (p *ParseHeaderFile) WriteToHtml() error {
-	fo, err := os.Create("bvdoc/" + p.basePath + "/" + p.baseFileName + ".html")
+	pwd, _ := os.Getwd()
+	basepath := pwd + "/" + p.prefix + "/" + p.basePath
+	// jklog.L().Infoln("filepath: ", basepath)
+	// First create the path
+	// FIX: We can't create dir if there are more levels
+
+	_, err := os.Stat(basepath)
+	if err != nil {
+		// failed create it
+		err = os.Mkdir(basepath, os.ModeDir)
+		if err != nil {
+			jklog.L().Errorln("create ", basepath, " failed.")
+			return err
+		}
+	}
+
+	fo, err := os.Create(basepath + "/" + p.baseFileName + ".html")
 	if err != nil {
 		return err
 	}
 	defer fo.Close()
 
-	jklog.L().Infoln("Write to html file : ", "bvdoc/"+p.basePath+"/"+p.baseFileName+".html")
+	jklog.L().Infoln("Write to html file : ", basepath+"/"+p.baseFileName+".html")
 
 	// How many levels need to upper
 	upper_level := strings.Count(p.basePath, "/")

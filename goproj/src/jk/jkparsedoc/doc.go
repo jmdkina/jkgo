@@ -24,6 +24,8 @@ package jkparsedoc
 
 // All file save to bvdoc start dir
 // Every dir need user create it self, we use it for user define what to parse
+// from 2015-07-21 we support create dir itsself, caller need create first,
+// and caller can save to the position where want.
 
 // Some example below:
 // Define enum
@@ -46,7 +48,7 @@ package jkparsedoc
 //    *
 //    */ This is the last comment line
 //   int xxx(); // read function start.
-//   It will find until the mark ; and fnction parse over.
+//   It will find until the mark ; and function parse over.
 
 // Define comment of the total header file
 //   /** This is the start
