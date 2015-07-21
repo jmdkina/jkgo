@@ -210,7 +210,7 @@ func parse_header_file(filename string) (*ParseHeaderFile, error) {
 					}
 					com_str += line
 				}
-				delete(all_string, "comment_main")
+				// delete(all_string, "comment_main")
 				all_string["comment_main"] = append(all_string["comment_main"], com_str)
 			} else {
 				// Take all comment / other comment
@@ -379,8 +379,8 @@ func (p *ParseHeaderFile) WriteToHtml() error {
 	// 1. Write comment main
 	lencomment := len(p.all_string["comment_main"])
 	if lencomment > 0 {
-		com_str := p.all_string["comment_main"][0]
-		generateHtmlMainComment(fo, com_str)
+
+		generateHtmlMainComment(fo, p.all_string["comment_main"])
 	}
 	fo.WriteString("\n")
 

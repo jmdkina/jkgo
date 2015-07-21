@@ -90,13 +90,15 @@ func generateHtmlALink(fo *os.File, prespace int, aname string) error {
 //
 // Write Main comment to html file
 //
-func generateHtmlMainComment(fo *os.File, com string) error {
+func generateHtmlMainComment(fo *os.File, com []string) error {
 	if fo == nil {
 		return errors.New("No File Out Handle")
 	}
 
-	com_str := "<p><pre>" + com + "</pre></p>\n"
-	fo.WriteString(com_str)
+	for _, v := range com {
+		com_str := "<p><pre>" + v + "</pre></p>\n"
+		fo.WriteString(com_str)
+	}
 
 	return nil
 }
