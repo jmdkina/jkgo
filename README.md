@@ -8,7 +8,7 @@ Here is my own utils functions of golang, config, log and so on.
 
 tmp
 ---
-Simple program for study.
+Simple program for study. Demo with goproj.
 
 More
 ====
