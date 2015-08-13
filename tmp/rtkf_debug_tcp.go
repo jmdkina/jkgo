@@ -7,6 +7,7 @@ import (
 	"jk/jklog"
 	"net"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -57,19 +58,43 @@ func listenLocalTcp(port int) {
 				}
 				from.Write([]byte(senddata))
 
-				buf := make([]byte, 2<<12)
-				n, err := from.Read(buf)
-				if n == 0 {
-					continue
+				remainLen := -1
+				totalLen := 0
+				for {
+
+					buf := make([]byte, 2<<12)
+					n, err := from.Read(buf)
+					if err == io.EOF {
+						break
+					}
+					if err != nil {
+						jklog.L().Infoln("read error ", err)
+						break
+					}
+					if totalLen > 0 {
+						remainLen = remainLen + n
+					}
+
+					value := string(buf[0:n])
+					if strings.HasPrefix(value, "length") {
+						val := strings.Split(value, ":")
+						if len(val) > 1 {
+							l, err := strconv.Atoi(val[1])
+							if err == nil {
+								totalLen = l
+								remainLen = 0
+							}
+						}
+					}
+
+					jklog.L().Infoln("read out data ", n, " of \n", string(buf[0:n]))
+					if totalLen == 0 {
+						break
+					}
+					if remainLen >= totalLen {
+						break
+					}
 				}
-				if err == io.EOF {
-					break
-				}
-				if err != nil {
-					jklog.L().Infoln("read error ", err)
-					break
-				}
-				jklog.L().Infoln("read out data ", n, " of ", string(buf[0:n]))
 			}
 		}
 		jklog.L().Errorln("Can't be here")
