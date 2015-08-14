@@ -28,6 +28,17 @@ func scanLine() string {
 	return string(b)
 }
 
+var bexit = false
+
+type RTKFDebug struct {
+	usedPorts []int
+}
+
+type RTKFDebugItem struct {
+	conn net.Conn
+	data chan string
+}
+
 func listenLocalTcp(port int) {
 	addrto, err := net.ResolveTCPAddr("tcp", ":"+strconv.Itoa(port))
 	if err != nil {
@@ -57,6 +68,10 @@ func listenLocalTcp(port int) {
 					continue
 				}
 				from.Write([]byte(senddata))
+
+				if strings.Contains(senddata, "exitself") {
+					bexit = true
+				}
 
 				remainLen := -1
 				totalLen := 0
@@ -106,11 +121,61 @@ var (
 	serverPort = flag.Int("serverPort", 23433, "which port to connect")
 )
 
+func RTKFDebugConsult(port int) {
+	addrto, err := net.ResolveTCPAddr("tcp", ":"+strconv.Itoa(port))
+	if err != nil {
+		jklog.L().Errorln("error reolve tcp addr ", err)
+		return
+	}
+
+	listen, err := net.ListenTCP("tcp", addrto)
+	if err != nil {
+		jklog.L().Errorln("list local with tcp error ", err)
+		return
+	}
+
+	jklog.L().Infoln("Start to consult with tcp of ", port)
+	go func() {
+		for {
+			jklog.L().Infoln("start to accept consult from remote ...")
+			from, err := listen.Accept()
+			if err != nil {
+				jklog.L().Errorln("accept error ", err)
+				continue
+			}
+			jklog.L().Infoln("Recieved a connected client.. start to read data...")
+			for {
+				buf := make([]byte, 2<<12)
+				n, err := from.Read(buf)
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					jklog.L().Infoln("read error ", err)
+					break
+				}
+				jklog.L().Debugln("Request result: ", buf[0:n])
+				val := string(buf[0:n])
+				if strings.HasPrefix(val, "requestport") {
+					jklog.L().Infoln("Request success, give response port: ")
+					from.Write([]byte("port:23434"))
+					go listenLocalTcp(23434)
+				}
+			}
+		}
+	}()
+
+}
+
 func main() {
 
+	// RTKFDebugConsult(*serverPort)
 	listenLocalTcp(*serverPort)
 
 	for {
+		if bexit == true {
+			break
+		}
 		time.Sleep(200 * time.Millisecond)
 	}
 }
