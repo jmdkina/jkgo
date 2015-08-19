@@ -39,6 +39,15 @@ type RTKFDebugItem struct {
 	data chan string
 }
 
+func usage() {
+	fmt.Println()
+	fmt.Println("  cmd[ps w]        -- execute command and response.")
+	fmt.Println("  file[/etc/model] -- get file info")
+	fmt.Println("  cmd[rtclose]     -- let client exit.")
+	fmt.Println("  exitself         -- close self.")
+	fmt.Println()
+}
+
 func listenLocalTcp(port int) {
 	addrto, err := net.ResolveTCPAddr("tcp", ":"+strconv.Itoa(port))
 	if err != nil {
@@ -64,6 +73,10 @@ func listenLocalTcp(port int) {
 			for {
 				fmt.Print("Connect Client " + from.RemoteAddr().String() + " Cmd : > ")
 				senddata := scanLine()
+				if strings.Contains(senddata, "help") {
+					usage()
+					continue
+				}
 				if len(senddata) <= 5 || senddata == "\r" {
 					continue
 				}
