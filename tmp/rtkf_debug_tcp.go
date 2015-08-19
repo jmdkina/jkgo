@@ -62,7 +62,7 @@ func listenLocalTcp(port int) {
 				continue
 			}
 			for {
-				fmt.Print("Cmd: > ")
+				fmt.Print("Connect Client " + from.RemoteAddr().String() + " Cmd : > ")
 				senddata := scanLine()
 				if len(senddata) <= 5 || senddata == "\r" {
 					continue
