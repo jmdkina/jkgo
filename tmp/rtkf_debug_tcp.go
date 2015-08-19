@@ -169,6 +169,8 @@ func RTKFDebugConsult(port int) {
 
 func main() {
 
+	flag.Parse()
+
 	// RTKFDebugConsult(*serverPort)
 	listenLocalTcp(*serverPort)
 
