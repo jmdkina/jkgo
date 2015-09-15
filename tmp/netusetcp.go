@@ -61,6 +61,8 @@ func listenLocalTcp(port int) {
 					break
 				}
 				jklog.L().Infoln("read out data ", n, " of ", string(buf[0:n]))
+
+				jklog.L().Infoln("read out data from ", from.RemoteAddr().String())
 				from.Write([]byte("I have received your data."))
 			}
 		}
