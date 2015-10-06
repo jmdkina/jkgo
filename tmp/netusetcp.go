@@ -46,6 +46,7 @@ func listenLocalTcp(port int) {
 		for {
 			jklog.L().Infoln("start to accept from remote ...")
 			from, err := listen.Accept()
+
 			if err != nil {
 				jklog.L().Errorln("accept error ", err)
 				return

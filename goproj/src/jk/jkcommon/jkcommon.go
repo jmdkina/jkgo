@@ -1,6 +1,12 @@
 // Package jkcommon defines some common varients.
 package jkcommon
 
+import (
+	"io"
+	"jk/jklog"
+	"os"
+)
+
 const (
 	JK_RESULT_SUCCESS = 0
 	JK_RESULT_E_FAIL  = -100 << iota
@@ -73,4 +79,29 @@ func (rs *ResultStatus) SetItemDelFail() {
 
 func (rs *ResultStatus) SetItemNotExist() {
 	rs.setStatus(JK_RESULT_E_NOT_EXIST, "ItemNotExist")
+}
+
+func JKReadFileData(filename string) (string, error) {
+	f, err := os.Open(filename)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+
+	data := make([]byte, 2<<12)
+	lendata := 0
+	for {
+		tdata := make([]byte, 2<<10)
+		n, err := f.Read(tdata)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return "", err
+		}
+		jklog.L().Debugln("read out data of len : ", n)
+		copy(data[lendata:lendata+n], tdata[0:n])
+		lendata += n
+	}
+	return string(data), nil
 }
