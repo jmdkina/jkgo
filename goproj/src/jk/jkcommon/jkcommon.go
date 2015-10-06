@@ -20,6 +20,11 @@ const (
 	JK_RESULT_E_NO_PERMISSION
 )
 
+const (
+	JK_NET_ADDRESS_LOCAL = "127.0.0.1"
+	JK_NET_ADDRESS_PORT  = 23888
+)
+
 type ResultStatus struct {
 	RS map[string]interface{}
 }
