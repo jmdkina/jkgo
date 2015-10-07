@@ -46,23 +46,28 @@ func listenLocalTcp(port int) {
 		for {
 			jklog.L().Infoln("start to accept from remote ...")
 			from, err := listen.Accept()
+
 			if err != nil {
 				jklog.L().Errorln("accept error ", err)
 				return
 			}
-			for {
-				buf := make([]byte, 2<<12)
-				n, err := from.Read(buf)
-				if err == io.EOF {
-					break
+			go func() {
+				for {
+					buf := make([]byte, 2<<12)
+					n, err := from.Read(buf)
+					if err == io.EOF {
+						break
+					}
+					if err != nil {
+						jklog.L().Infoln("read error ", err)
+						break
+					}
+					jklog.L().Infoln("read out data ", n, " of ", string(buf[0:n]))
+
+					jklog.L().Infoln("read out data from ", from.RemoteAddr().String())
+					from.Write([]byte("I have received your data."))
 				}
-				if err != nil {
-					jklog.L().Infoln("read error ", err)
-					break
-				}
-				jklog.L().Infoln("read out data ", n, " of ", string(buf[0:n]))
-				from.Write([]byte("I have received your data."))
-			}
+			}()
 		}
 		jklog.L().Errorln("Can't be here")
 	}()

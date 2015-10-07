@@ -10,3 +10,17 @@ golanger.com
 labix.org
 
 goproj/bin
+
+goproj/src/golang.org/x/net/
+
+tmp/base/bytes_int
+
+tmp/goosxgui/demo1
+
+tmp/goosxgui/demo2
+
+tmp/network/jkclient
+
+tmp/network/kfclient
+
+tmp/network/kfserver
