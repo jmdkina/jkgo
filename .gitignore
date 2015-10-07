@@ -10,3 +10,11 @@ golanger.com
 labix.org
 
 goproj/bin
+
+tmp/network/kfclient
+
+tmp/network/kfserver
+
+goproj/src/golang.org/x/net/
+
+tmp/base/bytes_int

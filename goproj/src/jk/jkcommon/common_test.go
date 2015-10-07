@@ -24,14 +24,23 @@ func TestJKReadFileData(t *testing.T) {
 
 func TestBytesInt(t *testing.T) {
 	v := 231
-	buf := BytesToInt(int64(v), 4)
+	buf := IntToBytes(int64(v), 4)
 	obuf := []byte{206, 3, 0, 0}
 	if bytes.Compare(buf, obuf) != 0 {
 		t.Fatalf("need %v, buf real is %v\n", obuf, buf)
 	}
 
-	v1 := IntToBytes(buf)
+	v1 := BytesToInt(buf)
 	if int(v1) != v {
 		t.Fatalf("need %d, but real is %d\n", v, v1)
+	}
+}
+
+func TestWriteData(t *testing.T) {
+	filename := "test12"
+	data := "test12test12"
+	ret := JKSaveFileData("123", filename, data)
+	if !ret {
+		t.Fatalf("save data failed. \n")
 	}
 }

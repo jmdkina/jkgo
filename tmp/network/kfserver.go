@@ -3,23 +3,51 @@ package main
 import (
 	"jk/jklog"
 	sv "jk/jknewserver"
+	. "jk/jkprotocol"
+	// "os"
+	. "jk/jkcommon"
 )
+
+const ()
 
 type KFServer struct {
 	handle *sv.JKNewServer
 	proc   sv.JKServerProcess
 }
 
+func (s *KFServer) dealResponseCmd(data string, item *sv.JKServerProcessItem) {
+	p := ParseJKProtocol(data)
+
+	if p != nil {
+		if p.Command() == JK_PROTOCOL_CMD_REGISTER {
+			retstr := p.GenerateResponseOK()
+			item.Conn.Write([]byte(retstr))
+		} else if p.Command() == JK_PROTOCOL_CMD_CONTROL && p.SubCommand() == JK_PROTOCOL_CMD_SAVEFILE {
+			jklog.L().Infoln("command with savefile.")
+			filename, fdata := p.ParseFilenameData()
+			ret := JKSaveFileData(p.ID(), filename, fdata)
+			if ret {
+				retstr := p.GenerateResponseOK()
+				item.Conn.Write([]byte(retstr))
+			} else {
+				retstr := p.GenerateResponseFail()
+				item.Conn.Write([]byte(retstr))
+			}
+		}
+	}
+}
+
 func (s *KFServer) dealResponse(proc sv.JKServerProcess, item *sv.JKServerProcessItem) {
 	for {
-		jklog.L().Debugln("wait response of read result.")
+		jklog.L().Infoln("wait response of read result.")
 		ret := <-item.ReadDone
 
 		if ret {
 			jklog.L().Debugln("response of deal ", item.RemoteAddr)
-			jklog.L().Debugln("data is : ", string(item.Data))
+			// jklog.L().Debugln("data is : ", string(item.Data))
+			s.dealResponseCmd(string(item.Data), item)
 		} else {
-			jklog.L().Debugln("read response failed ", item.RemoteAddr)
+			jklog.L().Errorln("read response failed ", item.RemoteAddr)
 			break
 		}
 	}
@@ -33,7 +61,7 @@ func (s *KFServer) startServer() bool {
 	}
 
 	for {
-		jklog.L().Debugln("wait accept. ")
+		jklog.L().Infoln("wait accept. ")
 		c := s.handle.Accept(&s.proc)
 		if c == nil {
 			jklog.L().Errorln("accept failed.")

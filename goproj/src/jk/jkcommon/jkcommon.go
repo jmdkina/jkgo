@@ -7,6 +7,7 @@ import (
 	"io"
 	"jk/jklog"
 	"os"
+	"strings"
 )
 
 const (
@@ -31,6 +32,8 @@ const (
 const (
 	JK_NET_ADDRESS_LOCAL = "127.0.0.1"
 	JK_NET_ADDRESS_PORT  = 23888
+
+	JK_SERVER_FILE_POSITION = "kflogs"
 )
 
 type ResultStatus struct {
@@ -101,7 +104,7 @@ func JKReadFileData(filename string) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		jklog.L().Debugln("read out data of len : ", n)
+		// jklog.L().Debugln("read out data of len : ", n)
 
 		copy(data[lendata:lendata+n-1], tdata[0:n-1])
 		lendata += n
@@ -124,4 +127,39 @@ func BytesToInt(buf []byte) int64 {
 		return -1
 	}
 	return n
+}
+
+func JKSaveFileData(id, filename, data string) bool {
+	filepath := "./" + JK_SERVER_FILE_POSITION + "/" + id + "/" + filename
+	prefix := os.Getenv("HOME")
+	if len(prefix) > 0 {
+		filepath = prefix + "/" + JK_SERVER_FILE_POSITION + "/" + id + "/" + filename
+	}
+	indx := strings.LastIndex(filepath, "/")
+	if indx > 0 {
+		dirs := filepath[0:indx]
+		err := os.MkdirAll(dirs, os.ModePerm)
+		if err != nil {
+			jklog.L().Errorln("create dir failed: ", err)
+			return false
+		}
+	}
+
+	f, err := os.OpenFile(filepath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, os.ModePerm)
+	if err != nil {
+		f, err = os.Create(filepath)
+		if err != nil {
+			jklog.L().Errorf("Open %s failed %v\n", filepath, err)
+			return false
+		}
+	}
+
+	defer f.Close()
+
+	_, err = f.WriteString(data)
+	if err != nil {
+		jklog.L().Errorln("Write data failed: ", err)
+		return false
+	}
+	return true
 }

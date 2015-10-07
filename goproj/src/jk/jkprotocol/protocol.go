@@ -64,6 +64,16 @@ func (p *JKProtocol) GenerateControlSaveFile(filename string, data string) strin
 	return p.toString() + jk_seperate + filename + jk_seperate + data
 }
 
+func (p *JKProtocol) GenerateResponseOK() string {
+	p.data = "OK"
+	return p.toString() + jk_seperate + p.data
+}
+
+func (p *JKProtocol) GenerateResponseFail() string {
+	p.data = "FAIL"
+	return p.toString() + jk_seperate + p.data
+}
+
 // Server parse files
 func ParseJKProtocol(data string) *JKProtocol {
 	// jklog.L().Debugln("data: ", data)
