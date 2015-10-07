@@ -51,6 +51,7 @@ func (newser *JKNewServer) Read(proc *JKServerProcess, procItem *JKServerProcess
 
 	proc.addItem(servItem)
 
+	jklog.L().Debugln("first read first bytes.")
 	// first read 4 bytes for length.
 	buflen := make([]byte, 4)
 	_, err := procItem.Conn.Read(buflen)

@@ -51,7 +51,7 @@ reconn:
 	if err != nil {
 		jklog.L().Errorln("connect failed: ", err)
 		if cycle {
-			time.Sleep(time.Millisecond * 1000)
+			time.Sleep(time.Millisecond * 5000)
 			conncnts = conncnts + 1
 			goto reconn
 		} else {
