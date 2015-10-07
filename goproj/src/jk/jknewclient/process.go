@@ -2,6 +2,7 @@ package jknewclient
 
 import (
 	// "fmt"
+	. "jk/jkcommon"
 	"jk/jklog"
 	"net"
 	"strconv"
@@ -65,7 +66,12 @@ reconn:
 }
 
 func (cli *JKNewClient) Write(data []byte) (int, error) {
-	return cli.Conn.Write(data)
+	datalen := len(data)
+	wdata := make([]byte, datalen+4)
+	lenbuf := IntToBytes(int64(datalen), 4)
+	copy(wdata, lenbuf)
+	copy(wdata[4:4+datalen], data)
+	return cli.Conn.Write(wdata)
 }
 
 func (cli *JKNewClient) Read(item *JKClientItem) (int, error) {

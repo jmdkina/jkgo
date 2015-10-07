@@ -11,15 +11,17 @@ type KFServer struct {
 }
 
 func (s *KFServer) dealResponse(proc sv.JKServerProcess, item *sv.JKServerProcessItem) {
+	for {
+		jklog.L().Debugln("wait response of read result.")
+		ret := <-item.ReadDone
 
-	jklog.L().Debugln("wait response of read result.")
-	ret := <-item.ReadDone
-
-	if ret {
-		jklog.L().Debugln("response of deal ", item.RemoteAddr)
-		jklog.L().Debugln("data is : ", string(item.Data))
-	} else {
-		jklog.L().Debugln("read response failed ", item.RemoteAddr)
+		if ret {
+			jklog.L().Debugln("response of deal ", item.RemoteAddr)
+			jklog.L().Debugln("data is : ", string(item.Data))
+		} else {
+			jklog.L().Debugln("read response failed ", item.RemoteAddr)
+			break
+		}
 	}
 }
 
@@ -43,10 +45,12 @@ func (s *KFServer) startServer() bool {
 		item.ReadDone = make(chan bool)
 		go s.dealResponse(s.proc, item)
 		go func() bool {
-			_, err := s.handle.Read(&s.proc, item)
-			if err != nil {
-				item.ReadDone <- false
-				return false
+			for {
+				_, err := s.handle.Read(&s.proc, item)
+				if err != nil {
+					item.ReadDone <- false
+					return false
+				}
 			}
 			return true
 		}()

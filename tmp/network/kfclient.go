@@ -6,6 +6,7 @@ import (
 	"jk/jklog"
 	cli "jk/jknewclient"
 	"time"
+	// "encoding/binary"
 )
 
 type KFClient struct {
@@ -30,6 +31,8 @@ func (c *KFClient) startClient() bool {
 	}
 	jklog.L().Debugln("write done of len: ", n)
 
+	time.Sleep(time.Millisecond * 10000)
+	c.handle.Write([]byte("Second data..."))
 	time.Sleep(time.Millisecond * 10000)
 	c.handle.Close()
 	return true

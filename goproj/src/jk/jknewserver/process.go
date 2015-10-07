@@ -50,12 +50,26 @@ func (newser *JKNewServer) Read(proc *JKServerProcess, procItem *JKServerProcess
 
 	proc.addItem(servItem)
 
-	readbuf := make([]byte, 2<<12)
+	// first read 4 bytes for length.
+	buflen := make([]byte, 4)
+	_, err := procItem.Conn.Read(buflen)
+	if err != nil {
+		jklog.L().Errorln("read failed of first read. ", err)
+		return 0, err
+	}
+	datalen := int(BytesToInt(buflen))
+	jklog.L().Debugln("length of after data: ", datalen)
+
+	readbuf := make([]byte, datalen)
 	lenbuf := 0
 
 	jklog.L().Debugln("goto read data from : ", remAddr)
 	for {
-		buf := make([]byte, 2<<10)
+		if lenbuf >= datalen {
+			procItem.ReadDone <- true
+			break
+		}
+		buf := make([]byte, 1024)
 		n, err := procItem.Conn.Read(buf)
 		if err == io.EOF {
 			jklog.L().Infoln("EOF of read.")
@@ -71,7 +85,7 @@ func (newser *JKNewServer) Read(proc *JKServerProcess, procItem *JKServerProcess
 
 		servItem.Data = readbuf
 	}
-	procItem.ReadDone <- true
+	// procItem.ReadDone <- true
 	jklog.L().Infoln("data from ", procItem.RemoteAddr, " with len ", lenbuf)
 	return lenbuf, nil
 }

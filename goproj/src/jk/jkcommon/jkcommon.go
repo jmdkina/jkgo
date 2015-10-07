@@ -2,6 +2,8 @@
 package jkcommon
 
 import (
+	"bytes"
+	"encoding/binary"
 	"io"
 	"jk/jklog"
 	"os"
@@ -100,8 +102,26 @@ func JKReadFileData(filename string) (string, error) {
 			return "", err
 		}
 		jklog.L().Debugln("read out data of len : ", n)
-		copy(data[lendata:lendata+n], tdata[0:n])
+
+		copy(data[lendata:lendata+n-1], tdata[0:n-1])
 		lendata += n
 	}
-	return string(data), nil
+
+	return string(data[0 : lendata-1]), nil
+}
+
+// how many bytes to use @cnts
+func IntToBytes(v int64, cnts int) []byte {
+	buf := make([]byte, cnts)
+	binary.PutVarint(buf, v)
+	return buf
+}
+
+func BytesToInt(buf []byte) int64 {
+	nbuf := bytes.NewBuffer(buf)
+	n, err := binary.ReadVarint(nbuf)
+	if err != nil {
+		return -1
+	}
+	return n
 }
