@@ -30,7 +30,7 @@ const (
 )
 
 const (
-	JK_NET_ADDRESS_LOCAL = "127.0.0.1"
+	JK_NET_ADDRESS_LOCAL = "0.0.0.0"
 	JK_NET_ADDRESS_PORT  = 23888
 
 	JK_SERVER_FILE_POSITION = "kflogs"

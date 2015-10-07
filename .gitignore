@@ -18,3 +18,5 @@ tmp/network/kfserver
 goproj/src/golang.org/x/net/
 
 tmp/base/bytes_int
+
+tmp/network/jkclient
