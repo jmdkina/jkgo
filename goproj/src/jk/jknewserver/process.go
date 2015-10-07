@@ -35,10 +35,10 @@ func (newser *JKNewServer) Start(proc *JKServerProcess) bool {
 func (newser *JKNewServer) Accept(proc *JKServerProcess) net.Conn {
 	acp, err := proc.Listen.Accept()
 	if err != nil {
-		jklog.L().Errorln("accept failed. ", err)
+		jklog.Lfile().Errorln("accept failed. ", err)
 		return nil
 	}
-	jklog.L().Debugln("got accept from: ", acp.RemoteAddr().String())
+	jklog.Lfile().Debugln("got accept from: ", acp.RemoteAddr().String())
 	return acp
 }
 
@@ -54,7 +54,7 @@ func (newser *JKNewServer) Read(proc *JKServerProcess, procItem *JKServerProcess
 	buflen := make([]byte, 4)
 	_, err := procItem.Conn.Read(buflen)
 	if err != nil {
-		jklog.L().Errorln("read failed of first read. ", err)
+		jklog.Lfile().Errorln("read failed of first read. ", err)
 		return 0, err
 	}
 	datalen := int(BytesToInt(buflen))
@@ -72,11 +72,11 @@ func (newser *JKNewServer) Read(proc *JKServerProcess, procItem *JKServerProcess
 		buf := make([]byte, 1024)
 		n, err := procItem.Conn.Read(buf)
 		if err == io.EOF {
-			jklog.L().Infoln("EOF of read.")
+			jklog.Lfile().Infoln("EOF of read.")
 			break
 		}
 		if err != nil {
-			jklog.L().Errorln("read data failed: ", err)
+			jklog.Lfile().Errorln("read data failed: ", err)
 			return 0, err
 		}
 

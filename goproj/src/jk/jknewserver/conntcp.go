@@ -25,13 +25,13 @@ func (ser *JKServerProcess) listenLocalTCP(port int) bool {
 	jklog.L().Debugln("start to listen : ", str)
 	nt, err := net.ResolveTCPAddr("tcp", str)
 	if err != nil {
-		jklog.L().Errorln("error resolve: ", err)
+		jklog.Lfile().Errorln("error resolve: ", err)
 		return false
 	}
 
 	lis, err := net.ListenTCP("tcp", nt)
 	if err != nil {
-		jklog.L().Errorln("error listen: ", err)
+		jklog.Lfile().Errorln("error listen: ", err)
 		return false
 	}
 	ser.Listen = lis

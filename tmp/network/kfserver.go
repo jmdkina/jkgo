@@ -23,7 +23,7 @@ func (s *KFServer) dealResponseCmd(data string, item *sv.JKServerProcessItem) {
 			retstr := p.GenerateResponseOK()
 			item.Conn.Write([]byte(retstr))
 		} else if p.Command() == JK_PROTOCOL_CMD_CONTROL && p.SubCommand() == JK_PROTOCOL_CMD_SAVEFILE {
-			jklog.L().Infoln("command with savefile.")
+			jklog.Lfile().Infoln("command with savefile.")
 			filename, fdata := p.ParseFilenameData()
 			ret := JKSaveFileData(p.ID(), filename, fdata)
 			if ret {
@@ -39,15 +39,15 @@ func (s *KFServer) dealResponseCmd(data string, item *sv.JKServerProcessItem) {
 
 func (s *KFServer) dealResponse(proc sv.JKServerProcess, item *sv.JKServerProcessItem) {
 	for {
-		jklog.L().Infoln("wait response of read result.")
+		jklog.Lfile().Infoln("wait response of read result.")
 		ret := <-item.ReadDone
 
 		if ret {
-			jklog.L().Debugln("response of deal ", item.RemoteAddr)
+			jklog.Lfile().Debugln("response of deal ", item.RemoteAddr)
 			// jklog.L().Debugln("data is : ", string(item.Data))
 			s.dealResponseCmd(string(item.Data), item)
 		} else {
-			jklog.L().Errorln("read response failed ", item.RemoteAddr)
+			jklog.Lfile().Errorln("read response failed ", item.RemoteAddr)
 			break
 		}
 	}
@@ -56,15 +56,16 @@ func (s *KFServer) dealResponse(proc sv.JKServerProcess, item *sv.JKServerProces
 func (s *KFServer) startServer() bool {
 	ret := s.handle.Start(&s.proc)
 	if !ret {
-		jklog.L().Errorln("failed start server.")
+		jklog.Lfile().Errorln("failed start server.")
 		return false
 	}
 
 	for {
 		jklog.L().Infoln("wait accept. ")
+		jklog.Lfile().Infoln("wait accept. ")
 		c := s.handle.Accept(&s.proc)
 		if c == nil {
-			jklog.L().Errorln("accept failed.")
+			jklog.Lfile().Errorln("accept failed.")
 			return false
 		}
 
@@ -83,12 +84,15 @@ func (s *KFServer) startServer() bool {
 			return true
 		}()
 	}
-	jklog.L().Errorln("Program return for failed start.")
+	jklog.Lfile().Errorln("Program return for failed start.")
 
 	return true
 }
 
 func main() {
+
+	jklog.InitLog("/tmp/kfserver.log")
+
 	s := &KFServer{}
 	s.startServer()
 }
