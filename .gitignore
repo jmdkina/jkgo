@@ -12,6 +12,7 @@ labix.org
 goproj/bin
 
 goproj/src/golang.org/x/net/
+goproj/src/git.eclipse.org/
 
 tmp/base/bytes_int
 
