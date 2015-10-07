@@ -21,6 +21,7 @@ type JKServerProcessItem struct {
 	Conn       net.Conn
 	Data       []byte
 	ReadDone   chan bool
+	TimeLast   int64
 }
 
 type JKServerProcess struct {

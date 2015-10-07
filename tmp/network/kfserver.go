@@ -6,6 +6,7 @@ import (
 	. "jk/jkprotocol"
 	// "os"
 	. "jk/jkcommon"
+	// "time"
 )
 
 const ()
@@ -42,6 +43,17 @@ func (s *KFServer) dealResponse(proc sv.JKServerProcess, item *sv.JKServerProces
 		jklog.Lfile().Infoln("wait response of read result.")
 		ret := <-item.ReadDone
 
+		/*
+			now := time.Now().Unix()
+			if item.TimeLast == 0 {
+				item.TimeLast = now
+			}
+			if now-item.TimeLast > 5 {
+				// 5 seconds
+				continue
+			}
+			item.TimeLast = now
+		*/
 		if ret {
 			jklog.Lfile().Debugln("response of deal ", item.RemoteAddr)
 			// jklog.L().Debugln("data is : ", string(item.Data))
