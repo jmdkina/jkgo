@@ -7,6 +7,7 @@ import (
 	"io"
 	"jk/jklog"
 	"os"
+	// "strconv"
 	"strings"
 )
 
@@ -124,8 +125,20 @@ func BytesToInt(buf []byte) int64 {
 	nbuf := bytes.NewBuffer(buf)
 	n, err := binary.ReadVarint(nbuf)
 	if err != nil {
+		jklog.L().Errorln("failed parse: ", err)
 		return -1
 	}
+	return n
+}
+
+func Int32ToBytes(val int32) []byte {
+	buf := make([]byte, 4)
+	binary.LittleEndian.PutUint32(buf, uint32(val))
+	return buf
+}
+
+func BytesToInt32(buf []byte) int32 {
+	n := int32(binary.LittleEndian.Uint32(buf))
 	return n
 }
 

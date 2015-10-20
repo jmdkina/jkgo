@@ -22,14 +22,33 @@ func TestJKReadFileData(t *testing.T) {
 	}
 }
 
+func TestInt32ToBytes(t *testing.T) {
+	v := 12
+	b := Int32ToBytes(int32(v))
+	bold := []byte{0xc, 0, 0, 0}
+	if bytes.Compare(bold, b) != 0 {
+		t.Fatalf("need %v, but real is %v\n", bold, b)
+	}
+}
+
+func TestBytesToInt32(t *testing.T) {
+
+	buf := []byte{12, 0, 0, 0}
+	v1 := BytesToInt32(buf)
+	if v1 != 12 {
+		t.Fatalf("need %d, but real is %d\n", 11, v1)
+	}
+}
+
 func TestBytesInt(t *testing.T) {
-	v := 231
+	v := 6
 	buf := IntToBytes(int64(v), 4)
-	obuf := []byte{206, 3, 0, 0}
+	obuf := []byte{12, 0, 0, 0}
 	if bytes.Compare(buf, obuf) != 0 {
 		t.Fatalf("need %v, buf real is %v\n", obuf, buf)
 	}
 
+	buf = []byte{22, 0, 0, 0}
 	v1 := BytesToInt(buf)
 	if int(v1) != v {
 		t.Fatalf("need %d, but real is %d\n", v, v1)

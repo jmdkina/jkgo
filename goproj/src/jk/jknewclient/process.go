@@ -68,7 +68,7 @@ reconn:
 func (cli *JKNewClient) Write(data []byte) (int, error) {
 	datalen := len(data)
 	wdata := make([]byte, datalen+4)
-	lenbuf := IntToBytes(int64(datalen), 4)
+	lenbuf := Int32ToBytes(int32(datalen))
 	copy(wdata, lenbuf)
 	copy(wdata[4:4+datalen], data)
 	return cli.Conn.Write(wdata)

@@ -8,6 +8,7 @@ import (
 	"crypto/rand"
 	"fmt"
 	"io"
+	"strings"
 	"testing"
 	"unsafe"
 )
@@ -15,6 +16,15 @@ import (
 type md5Test struct {
 	out string
 	in  string
+}
+
+func TestKFMD5(t *testing.T) {
+	str := "0.0.1\r\nmac\r\n1\r\n0\r\n1445340730\r\nab3w-be82f231-aa-cd1b"
+	ret := Sum([]byte(str))
+	oldv := []byte("75251a9b93c27d90ba71ba38707fbbe5")
+	if strings.Compare(fmt.Sprintf("%x", ret), string(oldv)) != 0 {
+		t.Fatalf("need %s, but real is %s", fmt.Sprintf("%x", ret), string(oldv))
+	}
 }
 
 var golden = []md5Test{

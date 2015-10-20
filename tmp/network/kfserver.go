@@ -19,6 +19,7 @@ type KFServer struct {
 func (s *KFServer) dealResponseCmd(data string, item *sv.JKServerProcessItem) {
 	p := ParseJKProtocol(data)
 
+	jklog.Lfile().Debugln("start parse jkprotocol down.")
 	if p != nil {
 		if p.Command() == JK_PROTOCOL_CMD_REGISTER {
 			retstr := p.GenerateResponseOK()
@@ -35,7 +36,10 @@ func (s *KFServer) dealResponseCmd(data string, item *sv.JKServerProcessItem) {
 				item.Conn.Write([]byte(retstr))
 			}
 		}
+	} else {
+		jklog.L().Debugln("invalid data: ", data)
 	}
+	jklog.Lfile().Debugln("jkprotocol parse down.")
 }
 
 func (s *KFServer) dealResponse(proc sv.JKServerProcess, item *sv.JKServerProcessItem) {

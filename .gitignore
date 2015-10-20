@@ -25,3 +25,5 @@ tmp/network/jkclient
 tmp/network/kfclient
 
 tmp/network/kfserver
+
+*.rar

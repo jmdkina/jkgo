@@ -51,7 +51,7 @@ reconn:
 	for {
 		now := time.Now().Unix()
 
-		if now-startTime < 300 {
+		if now-startTime < 10 {
 			time.Sleep(time.Millisecond * 1000)
 			continue
 		}
@@ -71,7 +71,7 @@ reconn:
 
 var (
 	id   = flag.String("id", "kfun", "the unique id")
-	addr = flag.String("addr", "127.0.0.1", "remote addr")
+	addr = flag.String("addr", "0.0.0.0", "remote addr")
 	port = flag.Int("port", JK_NET_ADDRESS_PORT, "remote port")
 	// savepos = flag.String("savepos", "docs", "where to save html files")
 )

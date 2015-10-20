@@ -51,7 +51,7 @@ func (newser *JKNewServer) Read(proc *JKServerProcess, procItem *JKServerProcess
 
 	proc.addItem(servItem)
 
-	jklog.L().Debugln("first read first bytes.")
+	jklog.Lfile().Debugln("first read first bytes.")
 	// first read 4 bytes for length.
 	buflen := make([]byte, 4)
 	_, err := procItem.Conn.Read(buflen)
@@ -59,13 +59,14 @@ func (newser *JKNewServer) Read(proc *JKServerProcess, procItem *JKServerProcess
 		jklog.Lfile().Errorln("read failed of first read. ", err)
 		return 0, err
 	}
-	datalen := int(BytesToInt(buflen))
-	jklog.L().Debugln("length of after data: ", datalen)
+	datalen := int(BytesToInt32(buflen))
+	jklog.L().Debugf("%x,%x,%x,%x\n", buflen[0], buflen[1], buflen[2], buflen[3])
+	jklog.Lfile().Debugln("length of after data: ", datalen)
 
 	readbuf := make([]byte, datalen)
 	lenbuf := 0
 
-	jklog.L().Debugln("goto read data from : ", remAddr)
+	jklog.Lfile().Debugln("goto read data from : ", remAddr)
 	for {
 		if lenbuf >= datalen {
 			procItem.ReadDone <- true
