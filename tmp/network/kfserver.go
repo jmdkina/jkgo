@@ -21,13 +21,16 @@ func (s *KFServer) dealResponseCmd(data string, item *sv.JKServerProcessItem) {
 
 	jklog.Lfile().Debugln("start parse jkprotocol down.")
 	if p != nil {
+		jklog.Lfile().Debugln("command: ", p.Command(), "subcommand: ", p.SubCommand())
 		if p.Command() == JK_PROTOCOL_CMD_REGISTER {
+			jklog.Lfile().Debugln("This is Register command.")
 			retstr := p.GenerateResponseOK()
 			item.Conn.Write([]byte(retstr))
 		} else if p.Command() == JK_PROTOCOL_CMD_CONTROL && p.SubCommand() == JK_PROTOCOL_CMD_SAVEFILE {
-			jklog.Lfile().Infoln("command with savefile.")
+			jklog.Lfile().Debugln("This is save file command")
 			filename, fdata := p.ParseFilenameData()
 			ret := JKSaveFileData(p.ID(), filename, fdata)
+			jklog.L().Debugln("filename: ", filename, ", data length: ", len(fdata))
 			if ret {
 				retstr := p.GenerateResponseOK()
 				item.Conn.Write([]byte(retstr))
@@ -44,7 +47,7 @@ func (s *KFServer) dealResponseCmd(data string, item *sv.JKServerProcessItem) {
 
 func (s *KFServer) dealResponse(proc sv.JKServerProcess, item *sv.JKServerProcessItem) {
 	for {
-		jklog.Lfile().Infoln("wait response of read result.")
+		jklog.Lfile().Infoln("wait response of read result.", item.Id)
 		ret := <-item.ReadDone
 
 		/*
@@ -59,11 +62,11 @@ func (s *KFServer) dealResponse(proc sv.JKServerProcess, item *sv.JKServerProces
 			item.TimeLast = now
 		*/
 		if ret {
-			jklog.Lfile().Debugln("response of deal ", item.RemoteAddr)
+			jklog.Lfile().Debugln(item.Id, " : response of deal ", item.RemoteAddr)
 			// jklog.L().Debugln("data is : ", string(item.Data))
 			s.dealResponseCmd(string(item.Data), item)
 		} else {
-			jklog.Lfile().Errorln("read response failed ", item.RemoteAddr)
+			jklog.Lfile().Errorln(item.Id, " : read response failed ", item.RemoteAddr)
 			break
 		}
 	}

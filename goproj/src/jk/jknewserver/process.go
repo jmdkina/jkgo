@@ -61,12 +61,12 @@ func (newser *JKNewServer) Read(proc *JKServerProcess, procItem *JKServerProcess
 	}
 	datalen := int(BytesToInt32(buflen))
 	jklog.L().Debugf("%x,%x,%x,%x\n", buflen[0], buflen[1], buflen[2], buflen[3])
-	jklog.Lfile().Debugln("length of after data: ", datalen)
+	jklog.Lfile().Debugln("Will read the data of length: ", datalen)
 
 	readbuf := make([]byte, datalen)
 	lenbuf := 0
 
-	jklog.Lfile().Debugln("goto read data from : ", remAddr)
+	jklog.Lfile().Debugln("Start read data cycle from : ", remAddr)
 	for {
 		if lenbuf >= datalen {
 			procItem.ReadDone <- true
@@ -77,6 +77,11 @@ func (newser *JKNewServer) Read(proc *JKServerProcess, procItem *JKServerProcess
 		if err == io.EOF {
 			jklog.Lfile().Infoln("EOF of read.")
 			break
+		}
+		// jklog.L().Debugln("The length read len :", n)
+		if n > datalen {
+			// More data, just cut it.
+			n = datalen
 		}
 		if err != nil {
 			jklog.Lfile().Errorln("read data failed: ", err)
@@ -89,7 +94,7 @@ func (newser *JKNewServer) Read(proc *JKServerProcess, procItem *JKServerProcess
 		servItem.Data = readbuf
 	}
 	// procItem.ReadDone <- true
-	jklog.L().Infoln("data from ", procItem.RemoteAddr, " with len ", lenbuf)
+	jklog.L().Infoln("Read data done from ", procItem.RemoteAddr, " with len ", lenbuf)
 	return lenbuf, nil
 }
 
