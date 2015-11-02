@@ -8,6 +8,7 @@ import (
 	"jk/jklog"
 	"os"
 	// "strconv"
+	"path/filepath"
 	"strings"
 )
 
@@ -94,8 +95,8 @@ func JKReadFileData(filename string) (string, error) {
 	}
 	defer f.Close()
 
-	data := make([]byte, 2<<12)
 	lendata := 0
+	data := make([]byte, 2<<20)
 	for {
 		tdata := make([]byte, 2<<10)
 		n, err := f.Read(tdata)
@@ -105,13 +106,40 @@ func JKReadFileData(filename string) (string, error) {
 		if err != nil {
 			return "", err
 		}
+		if n <= 0 {
+			continue
+		}
 		// jklog.L().Debugln("read out data of len : ", n)
 
-		copy(data[lendata:lendata+n-1], tdata[0:n-1])
+		// jklog.L().Debugln("n: ", n, ", data: ", len(data), ", cap: ", cap(data))
+		if lendata+n > cap(data) {
+			// jklog.L().Debugln("need more length: ", lendata+n)
+			newData := make([]byte, lendata*2)
+			copy(newData, data)
+			data = newData
+		}
+		copy(data[lendata:], tdata[:n])
 		lendata += n
 	}
 
-	return string(data[0 : lendata-1]), nil
+	return string(data[0:lendata]), nil
+}
+
+func JKSaveDataToFile(filename string, data []byte, clear bool) error {
+	f, err := os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, os.ModePerm)
+	if err != nil {
+		return err
+	}
+	if clear {
+		f.Truncate(0)
+	}
+	defer f.Close()
+
+	_, err = f.Write(data)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // how many bytes to use @cnts
@@ -175,4 +203,35 @@ func JKSaveFileData(id, filename, data string) bool {
 		return false
 	}
 	return true
+}
+
+// Give a filepath return all the directory or files
+// @dir: if get directory
+// @file: if get files.
+func JKFileLists(path string, dir, file bool) ([]string, error) {
+	var flists []string
+
+	err := filepath.Walk(path, func(inpath string, f os.FileInfo, err error) error {
+		if f == nil {
+			return err
+		}
+		if strings.Compare(inpath, path) == 0 {
+			return nil
+		}
+		if !dir && f.IsDir() {
+			return nil
+		}
+		if strings.HasPrefix(f.Name(), ".") {
+			return nil
+		}
+		if !file && !f.IsDir() {
+			return nil
+		}
+		flists = append(flists, f.Name())
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return flists, nil
 }

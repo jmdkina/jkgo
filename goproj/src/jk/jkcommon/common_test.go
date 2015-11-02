@@ -6,6 +6,35 @@ import (
 	"testing"
 )
 
+func TestJKFileLists(t *testing.T) {
+	filepath := "/home/v/kflogs"
+
+	files, err := JKFileLists(filepath, false, true)
+	if err != nil {
+		t.Fatalf("failed get file lists ", err)
+	}
+
+	if len(files) <= 0 {
+		t.Fatalf("files less: ", len(files))
+	}
+	for _, v := range files {
+		t.Logf("files: ", v)
+	}
+}
+
+func TestJKWriteFileData(t *testing.T) {
+	filename := "/tmp/test1"
+	err := JKSaveDataToFile(filename, []byte("test1test2test3test4test5test6\n"), true)
+	if err != nil {
+		t.Fatalf("error :", err)
+	}
+	filename = "/tmp/test2"
+	err = JKSaveDataToFile(filename, []byte("test1\ntest2\n"), true)
+	if err != nil {
+		t.Fatalf("error:", err)
+	}
+}
+
 func TestJKReadFileData(t *testing.T) {
 	filename := "/tmp/test1"
 	str, err := JKReadFileData(filename)
