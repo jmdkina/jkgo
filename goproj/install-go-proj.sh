@@ -11,6 +11,15 @@ FILES+=" github.com/tyranron/daemonigo/"
 FILES+=" github.com/jeffallen/mqtt github.com/surgemq/surgemq github.com/surgemq/surgemq/service"
 FILES+=" github.com/deckarep/gosx-notifier"
 
+# go get golang.org/x/mobile/cmd/gomobile
+# gomobile init
+# go get -d golang.org/x/mobile/example/basic
+# gomobile build -target=android golang.org/x/mobile/example/basic
+# gomobile install golang.org/x/mobile/example/basic
+# gomobile build -target=ios golang.org/x/mobile/example/basic
+# ios-deploy -b basic.app
+# go get -d golang.org/x/mobile/example/bind/...
+
 for i in $FILES
 do
     echo "go install $i ..."
