@@ -61,6 +61,10 @@ func (newser *JKNewServer) Read(proc *JKServerProcess, procItem *JKServerProcess
 	}
 	datalen := int(BytesToInt32(buflen))
 	jklog.L().Debugf("%x,%x,%x,%x\n", buflen[0], buflen[1], buflen[2], buflen[3])
+	if datalen > (2000000) {
+		jklog.Lfile().Errorln("Data is too long, I only receive some of them.")
+		datalen = 2000000
+	}
 	jklog.Lfile().Debugln("Will read the data of length: ", datalen)
 
 	readbuf := make([]byte, datalen)
