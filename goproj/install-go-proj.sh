@@ -10,6 +10,7 @@ FILES+=" labix.org/v2/mgo labix.org/v2/mgo/bson"
 FILES+=" github.com/tyranron/daemonigo/"
 FILES+=" github.com/jeffallen/mqtt github.com/surgemq/surgemq github.com/surgemq/surgemq/service"
 FILES+=" github.com/deckarep/gosx-notifier"
+FILES+=" jk/jkeasycrypto"
 
 # go get golang.org/x/mobile/cmd/gomobile
 # gomobile init
