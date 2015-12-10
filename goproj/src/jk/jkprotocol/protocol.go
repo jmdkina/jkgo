@@ -54,8 +54,8 @@ func (p *JKProtocol) toString() string {
 	p.head.timeval = time.Now().Unix()
 	firststring := p.head.version + jk_seperate + p.head.id + jk_seperate +
 		strconv.Itoa(p.head.command) + jk_seperate + strconv.Itoa(p.head.subcommand) + jk_seperate +
-		fmt.Sprintf("%d", p.head.timeval) + jk_seperate + jk_protocol_key
-	key := kfmd5.Sum([]byte(firststring))
+		fmt.Sprintf("%d", p.head.timeval)
+	key := kfmd5.Sum([]byte(firststring + jk_seperate + jk_protocol_key))
 	return firststring + jk_seperate + fmt.Sprintf("%x", key)
 }
 
@@ -90,11 +90,13 @@ func (p *JKProtocol) GenerateResponseFail() string {
 func (p *JKProtocol) checkJKProtocolHeadValid() bool {
 	firststring := p.head.version + jk_seperate + p.head.id + jk_seperate +
 		strconv.Itoa(p.head.command) + jk_seperate + strconv.Itoa(p.head.subcommand) + jk_seperate +
-		fmt.Sprintf("%d", p.head.timeval) + jk_seperate + jk_protocol_key
-	key := kfmd5.Sum([]byte(firststring))
+		fmt.Sprintf("%d", p.head.timeval)
+	key := kfmd5.Sum([]byte(firststring + jk_seperate + jk_protocol_key))
 	if strings.Compare(p.head.sign, fmt.Sprintf("%x", key)) == 0 {
 		return true
 	}
+	jklog.Lfile().Errorf("sign: [%s][%s]\n", p.head.sign, fmt.Sprintf("%x", key))
+	jklog.Lfile().Debugln("the string is : ", firststring)
 	return false
 }
 
