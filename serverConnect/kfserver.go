@@ -7,6 +7,8 @@ import (
 	// "os"
 	. "jk/jkcommon"
 	// "time"
+	"flag"
+	daemon "github.com/tyranron/daemonigo"
 )
 
 const ()
@@ -108,10 +110,29 @@ func (s *KFServer) startServer() bool {
 	return true
 }
 
+var (
+	signal     = flag.String("action", "start", "{quit|stop|reload}")
+	background = flag.Bool("d", false, "Background run")
+)
+
 func main() {
+	flag.Parse()
 
 	jklog.InitLog("/tmp/kfserver.log")
+	jklog.L().Infoln("Program start ...")
 
 	s := &KFServer{}
+
+	// Daemonizing echo server application.
+	if *background {
+		jklog.L().Infoln("background run now.")
+		switch isDaemon, err := daemon.Daemonize(*signal); {
+		case !isDaemon:
+			return
+		case err != nil:
+			jklog.L().Errorln("daemon start failed : ", err.Error())
+		}
+	}
+
 	s.startServer()
 }
