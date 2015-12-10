@@ -33,10 +33,10 @@ func (cli *JKNewClient) CliConnect(connTimes int, cycle bool) bool {
 	}
 
 	connStr := cli.Addr + ":" + strconv.Itoa(cli.Port)
-	jklog.L().Debugln("goto connect to : ", connStr)
+	jklog.Lfile().Debugln("goto connect to : ", connStr)
 	resv, err := net.ResolveTCPAddr("tcp", connStr)
 	if err != nil {
-		jklog.L().Errorln("failed resolve: ", err)
+		jklog.Lfile().Errorln("failed resolve: ", err)
 		return false
 	}
 
@@ -49,7 +49,7 @@ reconn:
 
 	conn, err := net.DialTCP("tcp", nil, resv)
 	if err != nil {
-		jklog.L().Errorln("connect failed: ", err)
+		jklog.Lfile().Errorln("connect failed: ", err)
 		if cycle {
 			time.Sleep(time.Millisecond * 5000)
 			conncnts = conncnts + 1

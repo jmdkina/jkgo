@@ -19,11 +19,14 @@ type KFClient struct {
 
 func (c *KFClient) startClient(addr string, port int) bool {
 
+	jklog.Lfile().Debugln("Start to connect ", addr, ": ", port)
 	c.handle = cli.JKNewClientNew(addr, port)
 
 reconn:
+	jklog.Lfile().Infoln("start to connect ...")
 	ret := c.handle.CliConnect(0, true)
 	if !ret {
+		jklog.Lfile().Errorln("connect failed.")
 		return false
 	}
 
@@ -34,18 +37,18 @@ reconn:
 
 	n, err := c.handle.Write([]byte(regstr))
 	if err != nil {
-		jklog.L().Errorln("write failed: ", err)
+		jklog.Lfile().Errorln("write failed: ", err)
 		goto reconn
 	}
-	jklog.L().Debugln("write done of len: ", n)
+	jklog.Lfile().Debugln("write done of len: ", n)
 
 	itemData := &cli.JKClientItem{}
 	n, err = c.handle.Read(itemData)
 	if err != nil {
-		jklog.L().Errorln("read failed, ", err)
+		jklog.Lfile().Errorln("read failed, ", err)
 
 	} else {
-		jklog.L().Infoln("read data: ", string(itemData.Data))
+		jklog.Lfile().Infoln("read data: ", string(itemData.Data))
 	}
 
 	var startTime int64
@@ -61,7 +64,7 @@ reconn:
 		wstr := p.GenerateControlSaveFile(*id+".log", "Hello, I'm online - "+time.Now().String())
 		_, err = c.handle.Write([]byte(wstr))
 		if err != nil {
-			jklog.L().Errorln("write failed, ", err)
+			jklog.Lfile().Errorln("write failed, ", err)
 			goto reconn
 		}
 	}
@@ -82,9 +85,12 @@ var (
 func main() {
 	flag.Parse()
 
+	jklog.InitLog("/tmp/jkclient.log")
+
+	jklog.Lfile().Infoln("Program start ...")
 	// Daemonizing echo server application.
 	if *background {
-		jklog.L().Infoln("background run now.")
+		jklog.Lfile().Infoln("background run now.")
 		switch isDaemon, err := daemon.Daemonize(*signal); {
 		case !isDaemon:
 			return
