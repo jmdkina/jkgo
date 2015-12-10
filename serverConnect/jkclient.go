@@ -8,6 +8,7 @@ import (
 	"time"
 	// "encoding/binary"
 	"flag"
+	daemon "github.com/tyranron/daemonigo"
 	. "jk/jkprotocol"
 )
 
@@ -74,11 +75,23 @@ var (
 	addr = flag.String("addr", "0.0.0.0", "remote addr")
 	port = flag.Int("port", JK_NET_ADDRESS_PORT, "remote port")
 	// savepos = flag.String("savepos", "docs", "where to save html files")
+	signal     = flag.String("action", "start", "{quit|stop|reload}")
+	background = flag.Bool("d", false, "Background run")
 )
 
 func main() {
 	flag.Parse()
 
+	// Daemonizing echo server application.
+	if *background {
+		jklog.L().Infoln("background run now.")
+		switch isDaemon, err := daemon.Daemonize(*signal); {
+		case !isDaemon:
+			return
+		case err != nil:
+			jklog.L().Errorln("daemon start failed : ", err.Error())
+		}
+	}
 	c := &KFClient{}
 	c.startClient(*addr, *port)
 }
