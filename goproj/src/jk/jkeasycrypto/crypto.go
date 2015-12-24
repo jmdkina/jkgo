@@ -3,31 +3,55 @@ package jkeasycrypto
 import (
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/rand"
+	// "crypto/rand"
 	"encoding/base64"
-	"io"
+	// "encoding/hex"
+	// "io"
+	// "jk/jklog"
 )
 
 func JKAESEncrypt(key, text []byte) string {
+	// jklog.L().Infoln("Text len ", len(text), "orign text: ", text)
+	// if len(text)%aes.BlockSize != 0 {
+	// jklog.L().Infoln("plaintext is not a multiple of blocksize")
+	// }
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return ""
 	}
-	ciphertext := make([]byte, aes.BlockSize+len(text))
-	iv := ciphertext[:aes.BlockSize]
-	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		return ""
+	ciphertext := make([]byte, len(text))
+	// iv := ciphertext[:aes.BlockSize]
+
+	iv := []byte{
+		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+		0x07, 0x08, 0x09, 0x0A, 0x0B,
+		0x0C, 0x0D, 0x0E, 0x0F,
 	}
+
+	// if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+	// return ""
+	// }
+	// jklog.L().Infof("cipher text: %v\n", iv)
+
 	cfb := cipher.NewCFBEncrypter(block, iv)
-	cfb.XORKeyStream(ciphertext[aes.BlockSize:], text)
+	// cfb := cipher.NewCBCEncrypter(block, iv)
+	// cfb.CryptBlocks(ciphertext, text)
+	cfb.XORKeyStream(ciphertext, text)
+
+	// jklog.L().Infof("ciphertext: %v , len %d\n", ciphertext, len(ciphertext))
+
 	return base64.StdEncoding.EncodeToString(ciphertext)
+	// return hex.EncodeToString(ciphertext)
 }
 
 func JKAESDecrypt(key []byte, b64 string) string {
 	text, err := base64.StdEncoding.DecodeString(b64)
+	// text, err := hex.DecodeString(b64)
 	if err != nil {
 		return ""
 	}
+	// jklog.L().Infoln("decode data len: ", len(text), " text: ", text)
+
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return ""
@@ -35,9 +59,27 @@ func JKAESDecrypt(key []byte, b64 string) string {
 	if len(text) < aes.BlockSize {
 		return ""
 	}
-	iv := text[:aes.BlockSize]
-	text = text[aes.BlockSize:]
+
+	// iv := text[:aes.BlockSize]
+	iv := []byte{
+		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+		0x07, 0x08, 0x09, 0x0A, 0x0B,
+		0x0C, 0x0D, 0x0E, 0x0F,
+	}
+	// iv := make([]byte, aes.BlockSize)
+	// jklog.L().Infof("iv %v\n", iv)
+	// text = text[aes.BlockSize:]
+
+	// jklog.L().Infoln("real data: ", text)
+
+	if len(text)%aes.BlockSize != 0 {
+		panic("ciphertext is not a multiple of the block size")
+	}
+
 	cfb := cipher.NewCFBDecrypter(block, iv)
+	// cfb := cipher.NewCBCDecrypter(block, iv)
+	// cfb.CryptBlocks(text, text)
+	// jklog.L().Infof("first block %v\n", text)
 	cfb.XORKeyStream(text, text)
 	return string(text)
 }
