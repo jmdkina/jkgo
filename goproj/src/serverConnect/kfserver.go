@@ -14,8 +14,9 @@ import (
 const ()
 
 type KFServer struct {
-	handle *sv.JKNewServer
-	proc   sv.JKServerProcess
+	handle     *sv.JKNewServer
+	proc       sv.JKServerProcess
+	onlineCnts int64 // for how many item online concurrent
 }
 
 func (s *KFServer) dealResponseCmd(data string, item *sv.JKServerProcessItem) {
@@ -43,6 +44,10 @@ func (s *KFServer) dealResponseCmd(data string, item *sv.JKServerProcessItem) {
 				retstr := p.GenerateResponseFail()
 				item.Conn.Write([]byte(retstr))
 			}
+		} else {
+			jklog.Lfile().Errorln("Command not support")
+			retstr := p.GenerateResponseFail()
+			item.Conn.Write([]byte(retstr))
 		}
 	} else {
 		jklog.L().Debugln("invalid data: ", data)
@@ -93,14 +98,20 @@ func (s *KFServer) startServer() bool {
 			return false
 		}
 
+		s.onlineCnts = s.onlineCnts+1
+
 		item := &sv.JKServerProcessItem{}
 		item.Conn = c
 		item.ReadDone = make(chan bool)
+
+		jklog.Lfile().Debugf("a new item connect in [%s] now counts [%d].\n", c.RemoteAddr().String(), s.onlineCnts)
 		go s.dealResponse(s.proc, item)
 		go func() bool {
 			for {
 				_, err := s.handle.Read(&s.proc, item)
 				if err != nil {
+					s.onlineCnts = s.onlineCnts -1
+					jklog.Lfile().Warnf("closed for read error [%s] now online counts [%d].\n", item.Conn.RemoteAddr().String(), s.onlineCnts)
 					item.ReadDone <- false
 					return false
 				}

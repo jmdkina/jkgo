@@ -5,6 +5,7 @@ import (
 	. "jk/jkcommon"
 	"jk/jklog"
 	"net"
+//	"time"
 )
 
 type JKNewServer struct {
@@ -54,6 +55,7 @@ func (newser *JKNewServer) Read(proc *JKServerProcess, procItem *JKServerProcess
 	jklog.Lfile().Debugln("first read first bytes.")
 	// first read 4 bytes for length.
 	buflen := make([]byte, 4)
+//	procItem.Conn.SetReadDeadline(time.Unix(10000, 10000));
 	_, err := procItem.Conn.Read(buflen)
 	if err != nil {
 		jklog.Lfile().Errorln("read failed of first read. ", err)
