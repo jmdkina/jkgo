@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"jk/jklog"
 	"jk/kfmd5"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -44,9 +46,17 @@ import (
 // 8. len     (16) : Data length, exclude the 16 bytes sign d[9:10] tenth
 // id: 6bytes
 // code: 1bytes means fail code, success when all 1, max support 2^8-1 codes, only effective when response
+// code: first bits 1 success, 0 fail, others: fail code
 //
 // 9. Use same sequence if the data is continue, you must recalculate sign
 //    each command even the data is continuing.
+//
+// We are not success with the binary define, we will use it later,
+// but now we just use string for quick developer to use.
+// string format like below.
+// header: version-id-direction-cmd-subcmd-transaction-sequence-sign-length-ret-retcode
+// direction : 0 for send command, 1 for response
+// header must 120 bytes, pad 0 if not enough. ret and retcode only effective when direction is 1
 //
 
 const (
@@ -80,12 +90,13 @@ type KFProtocolHeader struct {
 	Sign        [16]byte
 	Ret         bool
 	Code        int
-	Id          [6]byte
+	Id          [16]byte
+	IdStr       string
 	hlen        uint
 }
 
 var (
-	mixlen = 40
+	mixlen = 120
 )
 
 type KFProtocolBody struct {
@@ -121,9 +132,10 @@ func (p *KFProtocol) SetData(data []byte) {
 }
 
 func (p *KFProtocol) generateSign() [16]byte {
-	str := fmt.Sprintf("%s-%s-%d-%d-%d-%d-%s-%d", fmt.Sprintf("%2d", p.Header.Version),
-		string(p.Header.Id[:]), p.Header.Cmd,
+	str := fmt.Sprintf("%02d-%s-%d-%d-%d-%d-%s-%d", p.Header.Version,
+		p.Header.IdStr, p.Header.Cmd,
 		p.Header.SubCmd, p.Header.Transaction, p.Header.Sequence, kf_protocol_key, p.Header.Length)
+	jklog.L().Debugln("sign is ", str)
 	return kfmd5.Sum([]byte(str))
 }
 
@@ -168,6 +180,45 @@ func (p *KFProtocol) SetResponseCode(result bool, code int) error {
 	p.Header.Ret = result
 	p.Header.Code = code
 	return nil
+}
+
+func (p *KFProtocol) GenerateDataText(dir bool) ([]byte, error) {
+	ret := p.checkValid()
+	if !ret {
+		return nil, errors.New("Invalid args")
+	}
+	if dir {
+		p.Header.Direction = 1
+	}
+
+	p.generate()
+	jklog.L().Debugf("start to generate data of len %d\n", p.Header.Length+uint16(p.Header.hlen))
+
+	retvalue := "0"
+	if p.Header.Ret {
+		retvalue = "1"
+	}
+
+	//version-id-direction-cmd-subcmd-transaction-sequence-sign-length-ret-retcode
+	str := fmt.Sprintf("%d", p.Header.Version) + "-" +
+		p.Header.IdStr + "-" +
+		fmt.Sprintf("%d", p.Header.Direction) + "-" +
+		fmt.Sprintf("%d", p.Header.Cmd) + "-" +
+		fmt.Sprintf("%d", p.Header.SubCmd) + "-" +
+		fmt.Sprintf("%d", p.Header.Transaction) + "-" +
+		fmt.Sprintf("%d", p.Header.Sequence) + "-" +
+		fmt.Sprintf("%x", p.Header.Sign) + "-" +
+		fmt.Sprintf("%d", p.Header.Length) + "-" +
+		retvalue + "-" +
+		fmt.Sprintf("%d", p.Header.Code)
+
+	jklog.L().Debugf("header is %s\n", str)
+
+	d := make([]byte, p.Header.Length+uint16(p.Header.hlen))
+	copy(d[:], []byte(str))
+	copy(d[p.Header.hlen:], p.Body.Data)
+
+	return d, nil
 }
 
 func (p *KFProtocol) GenerateData(dir bool) ([]byte, error) {
@@ -282,6 +333,58 @@ func (p *KFProtocol) GenerateData(dir bool) ([]byte, error) {
 	jklog.L().Debugf("data string: %s, len copy: %d\n", string(d[dindex:]), n)
 
 	return d, nil
+}
+
+func KFProtocolParseText(data []byte) (*KFProtocol, error) {
+	p := NewKFProtocol()
+	jklog.L().Debugln("start to parse data of len: ", len(data))
+
+	if len(data) < mixlen {
+		return nil, errors.New("Not enough data")
+	}
+
+	p.Header.hlen = uint(mixlen)
+
+	strs := strings.Split(string(data), "-")
+	//version-id-direction-cmd-subcmd-transaction-sequence-sign-length-ret-retcode
+	if len(strs) < 11 {
+		return nil, errors.New("less command header")
+	}
+
+	vv, _ := strconv.Atoi(strs[0])
+	p.Header.Version = uint(vv)
+	p.Header.IdStr = strs[1]
+	vv, _ = strconv.Atoi(strs[2])
+	p.Header.Direction = uint8(vv)
+	vv, _ = strconv.Atoi(strs[3])
+	p.Header.Cmd = uint(vv)
+	vv, _ = strconv.Atoi(strs[4])
+	p.Header.SubCmd = uint(vv)
+	vv, _ = strconv.Atoi(strs[5])
+	p.Header.Transaction = uint64(vv)
+	vv, _ = strconv.Atoi(strs[6])
+	p.Header.Sequence = uint16(vv)
+	copy(p.Header.Sign[:], []byte(strs[7]))
+	vv, _ = strconv.Atoi(strs[8])
+	p.Header.Length = uint16(vv)
+	vv, _ = strconv.Atoi(strs[9])
+	if vv == 1 {
+		p.Header.Ret = true
+	} else {
+		p.Header.Ret = false
+	}
+	vv, _ = strconv.Atoi(strs[10])
+	p.Header.Code = vv
+
+	jklog.L().Debugf("version: %d, id: %s, direction: %d, cmd: %d, subcmd: %d, transaction: %d "+
+		", sequence: %d, sign: %s, length: %d, ret: %v, retcode: %d\n", p.Header.Version, string(p.Header.Id[:]),
+		p.Header.Direction, p.Header.Cmd, p.Header.SubCmd, p.Header.Transaction, p.Header.Sequence,
+		string(p.Header.Sign[:]), p.Header.Length, p.Header.Ret, p.Header.Code)
+
+	p.Body.Data = make([]byte, p.Header.Length)
+	copy(p.Body.Data[:], data[p.Header.hlen:uint16(p.Header.hlen)+p.Header.Length])
+
+	return p, nil
 }
 
 func KFProtocolParse(data []byte) (*KFProtocol, error) {

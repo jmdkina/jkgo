@@ -29,3 +29,5 @@ tmp/network/kfclient
 tmp/network/kfserver
 
 *.rar
+*.txt
+.idea

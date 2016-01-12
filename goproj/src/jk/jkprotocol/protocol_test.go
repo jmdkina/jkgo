@@ -9,13 +9,31 @@ import (
 func TestKFProtocol(t *testing.T) {
 	p := NewKFProtocol()
 	p.Init()
-	p.SetCmd(KF_CMD_QUERY, KF_SUBCMD_KEEPALIVE)
+	p.SetCmd(KF_CMD_QUERY, KF_SUBCMD_KEEPALIVE, []byte("1234"))
 	p.SetData([]byte("just for test"))
-	gd, err := p.GenerateData()
+	gd, err := p.GenerateData(false)
 	if err != nil {
 		t.Fatal("error fo generate data : ", err)
 	}
 	pp, err := KFProtocolParse(gd)
+	if err != nil {
+		t.Fatal("error of parse protocol: ", err)
+	}
+	if bytes.Compare(pp.Body.Data, []byte("just for test")) != 0 {
+		t.Fatal("error for data: ", string(pp.Body.Data))
+	}
+}
+
+func TestKFProtocolText(t *testing.T) {
+	p := NewKFProtocol()
+	p.Init()
+	p.SetCmd(KF_CMD_QUERY, KF_SUBCMD_KEEPALIVE, []byte("1234"))
+	p.SetData([]byte("just for test"))
+	gd, err := p.GenerateDataText(false)
+	if err != nil {
+		t.Fatal("error fo generate data : ", err)
+	}
+	pp, err := KFProtocolParseText(gd)
 	if err != nil {
 		t.Fatal("error of parse protocol: ", err)
 	}

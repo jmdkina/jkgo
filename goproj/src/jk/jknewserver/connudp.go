@@ -81,13 +81,16 @@ func (s *KFServerUDP) Recv() (*KFServerUDPItem, []byte, error) {
 		jklog.L().Infoln("New remote address is : ", item.RemoteAddr)
 		s.Item = append(s.Item, item)
 		go func() {
-			<-item.SendData
-			jklog.L().Debugln("will send data to ", item.c.String(), ", len: ", len(item.Data))
-			_, err := s.c.WriteToUDP(item.Data, item.c)
-			if err != nil {
-				item.Error <- errors.New("Error of send data")
-			} else {
-				item.Error <- nil
+			for {
+				<-item.SendData
+				jklog.L().Debugln("will send data to ", item.c.String(), ", len: ", len(item.Data))
+				_, err := s.c.WriteToUDP(item.Data, item.c)
+				if err != nil {
+					item.Error <- errors.New("Error of send data")
+					break
+				} else {
+					item.Error <- nil
+				}
 			}
 		}()
 		return item, item.Data, nil

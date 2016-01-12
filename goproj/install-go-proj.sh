@@ -12,6 +12,8 @@ FILES+=" github.com/jeffallen/mqtt github.com/surgemq/surgemq github.com/surgemq
 FILES+=" github.com/deckarep/gosx-notifier"
 FILES+=" jk/jkeasycrypto"
 
+FILES+=" kfconnect serverConnect"
+
 # go get golang.org/x/mobile/cmd/gomobile
 # gomobile init
 # go get -d golang.org/x/mobile/example/basic
