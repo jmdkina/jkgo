@@ -16,6 +16,7 @@ type KFProvideCommandItem struct {
 	seq            int
 	length         int
 	ret            int
+	header         string
 	data           string
 }
 
@@ -105,7 +106,7 @@ func (p *KFProvide) parseDealCommand(s *KFServer) ([]byte, error) {
 	case KF_PROVIDE_CMD_FILE:
 		break
 	case KF_PROVIDE_CMD_ONLINE_COUNTS:
-		return p.onlineDeviceLists(s)
+		return p.item.cmdItem.header + "\r\n" + p.onlineDeviceLists(s)
 		break
 	}
 	return nil, errors.New("unknow command")
@@ -117,6 +118,7 @@ func (p *KFProvide) parseInCmd(s *KFServer, data []byte) error {
 	if len(datas) < 1 {
 		return errors.New("not header")
 	}
+	p.item.cmdItem.header = datas[0]
 	err := p.item.cmdItem.parseCommandHeader(datas[0])
 	if err != nil {
 		return err
