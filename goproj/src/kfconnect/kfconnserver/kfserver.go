@@ -6,6 +6,7 @@ import (
 	pt "jk/jkprotocol"
 	"strings"
 	"time"
+	"github.com/quarnster/completion/util/errors"
 )
 
 type KFServerItem struct {
@@ -13,6 +14,7 @@ type KFServerItem struct {
 	Online     bool
 	lastOnline int64 // last online time, for max offline
 	offlineMax int   // how long offline make offline.
+	item       *ser.KFServerUDPItem
 }
 
 type KFServer struct {
@@ -20,7 +22,7 @@ type KFServer struct {
 	ServerHandle *ser.KFServerUDP
 }
 
-func (s *KFServer) addNewItem(id string) *KFServerItem {
+func (s *KFServer) addNewItem(id string, item *ser.KFServerUDPItem) *KFServerItem {
 	for _, v := range s.Item {
 		if strings.Compare(id, v.Id) == 0 {
 			v.lastOnline = time.Now().Unix()
@@ -31,6 +33,7 @@ func (s *KFServer) addNewItem(id string) *KFServerItem {
 	ditem.Id = id
 	ditem.Online = true
 	ditem.lastOnline = time.Now().Unix()
+	ditem.item = item
 	s.Item = append(s.Item, ditem)
 	return ditem
 }
@@ -51,6 +54,22 @@ func (s *KFServer) dealResponse(pro *pt.KFProtocol, ditem *KFServerItem, item *s
 		jklog.Lfile().Debugln("Success of the sended data")
 	}
 	return nil
+}
+
+func (s *KFServer) SendDataToClient(id string, data []byte) (*ser.KFServerUDPItem, error) {
+	for _, k := range s.Item {
+		if strings.Compare(k.Id, id) == 0 {
+			k.item.Data = data
+			k.item.SendData <- true
+			return k.item, nil
+		}
+	}
+	return nil, errors.New("id not exist")
+}
+
+func (s *KFServer) WaitClientResponse(id string) ([]byte, error) {
+
+	return nil, nil
 }
 
 func (s *KFServer) Recv(port int) error {
@@ -79,7 +98,7 @@ func (s *KFServer) Recv(port int) error {
 				return
 			}
 
-			ditem := s.addNewItem(string(pro.Header.Id[:]))
+			ditem := s.addNewItem(string(pro.Header.Id[:]), item)
 			s.dealResponse(pro, ditem, item)
 		}()
 	}
@@ -87,6 +106,13 @@ func (s *KFServer) Recv(port int) error {
 
 func main() {
 	s := &KFServer{}
+
+	p, _ := &NewKFProvide(23999)
+	go func() {
+		for {
+			p.ListenConnStart(s)
+		}
+	}()
 
 	s.Recv(9988)
 }

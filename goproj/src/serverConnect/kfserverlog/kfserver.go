@@ -6,7 +6,7 @@ import (
 	. "jk/jkprotocol"
 	// "os"
 	. "jk/jkcommon"
-	// "time"
+	 "time"
 	"flag"
 	daemon "github.com/tyranron/daemonigo"
 )
@@ -92,6 +92,10 @@ func (s *KFServer) startServer() bool {
 	for {
 		jklog.L().Infoln("wait accept. ")
 		jklog.Lfile().Infoln("wait accept. ")
+		if s.onlineCnts > 500 {
+			time.Sleep(time.Millisecond*1000)
+			continue
+		}
 		c := s.handle.Accept(&s.proc)
 		if c == nil {
 			jklog.Lfile().Errorln("accept failed.")

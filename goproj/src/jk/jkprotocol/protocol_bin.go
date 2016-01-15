@@ -66,8 +66,8 @@ const (
 )
 
 const (
-	KF_SUBCMD_REGISTER = 1 << iota
-	KF_SUBCMD_KEEPALIVE
+	KF_SUBCMD_REGISTER = 1
+	KF_SUBCMD_KEEPALIVE = 2
 
 	KF_SUBCMD_COMMAND = 0x100 // execute command
 	KF_SUBCMD_FILE    = 0x101 // Get file info (bidirectional)
