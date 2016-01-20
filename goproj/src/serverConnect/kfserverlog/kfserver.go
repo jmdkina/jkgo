@@ -4,10 +4,12 @@ import (
 	"jk/jklog"
 	sv "jk/jknewserver"
 	. "jk/jkprotocol"
-	// "os"
+	 "os"
 	. "jk/jkcommon"
 	 "time"
 	"flag"
+	"os/signal"
+	"syscall"
 	daemon "github.com/tyranron/daemonigo"
 )
 
@@ -129,9 +131,22 @@ func (s *KFServer) startServer() bool {
 }
 
 var (
-	signal     = flag.String("action", "start", "{quit|stop|reload}")
+	insignal     = flag.String("action", "start", "{quit|stop|reload}")
 	background = flag.Bool("d", false, "Background run")
 )
+
+func readySignal() {
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, syscall.SIGTERM, syscall.SIGINT,
+		syscall.SIGABRT, syscall.SIGQUIT, syscall.SIGIO, syscall.SIGSEGV)
+
+	s := <- c
+	jklog.Lfile().Errorln("get signal : ", s)
+	switch s {
+	case os.Interrupt:
+		os.Exit(1)
+	}
+}
 
 func main() {
 	flag.Parse()
@@ -141,10 +156,12 @@ func main() {
 
 	s := &KFServer{}
 
+	go readySignal()
+
 	// Daemonizing echo server application.
 	if *background {
 		jklog.L().Infoln("background run now.")
-		switch isDaemon, err := daemon.Daemonize(*signal); {
+		switch isDaemon, err := daemon.Daemonize(*insignal); {
 		case !isDaemon:
 			return
 		case err != nil:
