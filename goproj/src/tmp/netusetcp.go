@@ -23,7 +23,7 @@ func connect_out_tcp(addr string, port int) {
 	}
 	defer sendto.Close()
 
-	outdata := "Send to data with tcp for test"
+	outdata := "Send to data with tcp for test\n"
 	n, _ := sendto.Write([]byte(outdata))
 	jklog.L().Infoln("Write out data len ", n)
 }
@@ -75,17 +75,19 @@ func listenLocalTcp(port int) {
 }
 
 func main() {
-	jk_connect_out := false
+	jk_connect_out := true
 
-	listenLocalTcp(0xade)
+	//listenLocalTcp(0xade)
 
 	time.Sleep(5000 * time.Millisecond)
 	// jk_connect_out = true
 	if jk_connect_out {
-		connect_out_tcp("192.168.0.153", 10044)
+		//connect_out_tcp("192.168.0.153", 10044)
+		connect_out_tcp("192.168.99.144", 44444)
 	}
 
 	for {
-		time.Sleep(200 * time.Millisecond)
+		time.Sleep(2000 * time.Millisecond)
+		connect_out_tcp("192.168.99.144", 44444)
 	}
 }
