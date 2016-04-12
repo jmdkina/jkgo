@@ -2,8 +2,11 @@ package main
 
 import (
 	"io"
+	// crypto "jk/jkeasycrypto"
+	// "io/ioutil"
 	"jk/jklog"
 	"net"
+	"os"
 	"strconv"
 	"time"
 )
@@ -42,6 +45,7 @@ func listenLocalTcp(port int) {
 	}
 
 	jklog.L().Infoln("Start to listen with tcp of ", port)
+	f, _ := os.OpenFile("/tmp/recvdata.log", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, os.ModePerm)
 	go func() {
 		for {
 			jklog.L().Infoln("start to accept from remote ...")
@@ -62,7 +66,11 @@ func listenLocalTcp(port int) {
 						jklog.L().Infoln("read error ", err)
 						break
 					}
-					jklog.L().Infoln("read out data ", n, " of ", string(buf[0:n]))
+					// plain := crypto.JKAESDecrypt([]byte("32bitstringtofor"), string(buf[0:n]))
+					plain := string(buf[0:n])
+					f.WriteString(plain)
+					f.WriteString("\n")
+					jklog.L().Infoln("read out data ", n, " of ", plain)
 
 					jklog.L().Infoln("read out data from ", from.RemoteAddr().String())
 					from.Write([]byte("I have received your data."))
@@ -75,19 +83,19 @@ func listenLocalTcp(port int) {
 }
 
 func main() {
-	jk_connect_out := true
+	jk_connect_out := false
 
-	//listenLocalTcp(0xade)
+	listenLocalTcp(22224)
 
 	time.Sleep(5000 * time.Millisecond)
 	// jk_connect_out = true
 	if jk_connect_out {
-		//connect_out_tcp("192.168.0.153", 10044)
-		connect_out_tcp("192.168.99.144", 44444)
+		connect_out_tcp("192.168.0.153", 10044)
+		// connect_out_tcp("192.168.99.144", 44444)
 	}
 
 	for {
 		time.Sleep(2000 * time.Millisecond)
-		connect_out_tcp("192.168.99.144", 44444)
+		// connect_out_tcp("192.168.99.144", 44444)
 	}
 }

@@ -18,7 +18,7 @@ func TestJKCrypt(t *testing.T) {
 	t.Log("restore string is : ", resStr)
 
 	if strings.Compare(oldstr, resStr) != 0 {
-		t.Errorf("Error with newstr: %s, restore string %s", newstr, resStr)
+		t.Errorf("Error with newstr: %s, restore string: %s", newstr, resStr)
 	}
 	t.Fatal("error")
 }

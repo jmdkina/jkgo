@@ -3,40 +3,37 @@ package jkeasycrypto
 import (
 	"crypto/aes"
 	"crypto/cipher"
-	// "crypto/rand"
+	"crypto/rand"
 	"encoding/base64"
 	// "encoding/hex"
-	// "io"
-	// "jk/jklog"
+	// "fmt"
+	"io"
+	"jk/jklog"
 )
 
 func JKAESEncrypt(key, text []byte) string {
-	// jklog.L().Infoln("Text len ", len(text), "orign text: ", text)
-	// if len(text)%aes.BlockSize != 0 {
-	// jklog.L().Infoln("plaintext is not a multiple of blocksize")
-	// }
 	block, err := aes.NewCipher(key)
 	if err != nil {
 		return ""
 	}
-	ciphertext := make([]byte, len(text))
-	// iv := ciphertext[:aes.BlockSize]
+	ciphertext := make([]byte, len(text)+aes.BlockSize)
+	iv := ciphertext[:aes.BlockSize]
 
-	iv := []byte{
-		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
-		0x07, 0x08, 0x09, 0x0A, 0x0B,
-		0x0C, 0x0D, 0x0E, 0x0F,
-	}
-
-	// if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-	// return ""
+	// iv := []byte{
+	// 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+	// 0x07, 0x08, 0x09, 0x0A, 0x0B,
+	// 0x0C, 0x0D, 0x0E, 0x0F,
 	// }
+
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+		return ""
+	}
 	// jklog.L().Infof("cipher text: %v\n", iv)
 
 	cfb := cipher.NewCFBEncrypter(block, iv)
 	// cfb := cipher.NewCBCEncrypter(block, iv)
 	// cfb.CryptBlocks(ciphertext, text)
-	cfb.XORKeyStream(ciphertext, text)
+	cfb.XORKeyStream(ciphertext[aes.BlockSize:], text)
 
 	// jklog.L().Infof("ciphertext: %v , len %d\n", ciphertext, len(ciphertext))
 
@@ -46,11 +43,15 @@ func JKAESEncrypt(key, text []byte) string {
 
 func JKAESDecrypt(key []byte, b64 string) string {
 	text, err := base64.StdEncoding.DecodeString(b64)
+
 	// text, err := hex.DecodeString(b64)
 	if err != nil {
+		jklog.L().Errorln("decode failed : ", err)
 		return ""
 	}
-	// jklog.L().Infoln("decode data len: ", len(text), " text: ", text)
+
+	// text := []byte(b64)
+	jklog.L().Infoln("decode data len: ", len(text))
 
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -61,13 +62,12 @@ func JKAESDecrypt(key []byte, b64 string) string {
 	}
 
 	// iv := text[:aes.BlockSize]
-	iv := []byte{
-		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
-		0x07, 0x08, 0x09, 0x0A, 0x0B,
-		0x0C, 0x0D, 0x0E, 0x0F,
-	}
-	// iv := make([]byte, aes.BlockSize)
-	// jklog.L().Infof("iv %v\n", iv)
+	// iv := []byte{
+	// 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06,
+	// 0x07, 0x08, 0x09, 0x0A, 0x0B,
+	// 0x0C, 0x0D, 0x0E, 0x0F,
+	// }
+	iv := make([]byte, aes.BlockSize)
 	// text = text[aes.BlockSize:]
 
 	// jklog.L().Infoln("real data: ", text)
