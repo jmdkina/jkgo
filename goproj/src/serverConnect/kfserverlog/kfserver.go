@@ -94,14 +94,15 @@ func (s *KFServer) startServer() bool {
 	for {
 		jklog.L().Infoln("wait accept. ")
 		jklog.Lfile().Infoln("wait accept. ")
-		if s.onlineCnts > 500 {
+		if s.onlineCnts > 300 {
 			time.Sleep(time.Millisecond*1000)
 			continue
 		}
 		c := s.handle.Accept(&s.proc)
 		if c == nil {
 			jklog.Lfile().Errorln("accept failed.")
-			return false
+			time.Sleep(time.Millisecond *5000)
+			continue
 		}
 
 		s.onlineCnts = s.onlineCnts+1
