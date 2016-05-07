@@ -63,9 +63,9 @@ func (newser *JKNewServer) Read(proc *JKServerProcess, procItem *JKServerProcess
 	}
 	datalen := int(BytesToInt32(buflen))
 	jklog.L().Debugf("%x,%x,%x,%x\n", buflen[0], buflen[1], buflen[2], buflen[3])
-	if datalen > (2000000) {
+	if datalen > (5000000) {
 		jklog.Lfile().Errorln("Data is too long, I only receive some of them.")
-		datalen = 2000000
+		datalen = 5000000
 	}
 	jklog.Lfile().Debugln("Will read the data of length: ", datalen)
 
@@ -78,16 +78,17 @@ func (newser *JKNewServer) Read(proc *JKServerProcess, procItem *JKServerProcess
 			procItem.ReadDone <- true
 			break
 		}
-		buf := make([]byte, 1024)
+		buf := make([]byte, 10240)
 		n, err := procItem.Conn.Read(buf)
 		if err == io.EOF {
 			jklog.Lfile().Infoln("EOF of read.")
 			break
 		}
 		// jklog.L().Debugln("The length read len :", n)
-		if n > datalen {
+		if n+lenbuf > datalen {
 			// More data, just cut it.
-			n = datalen
+			n = datalen - lenbuf
+			jklog.Lfile().Warnf("data is to long %d, n %d, datalen, %d\n", lenbuf, n, datalen)
 		}
 		if err != nil {
 			jklog.Lfile().Errorln("read data failed: ", err)
