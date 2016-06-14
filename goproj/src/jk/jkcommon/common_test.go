@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"strings"
 	"testing"
+	"io/ioutil"
+	"os"
 )
 
 func TestJKFileLists(t *testing.T) {
@@ -24,11 +26,13 @@ func TestJKFileLists(t *testing.T) {
 
 func TestJKWriteFileData(t *testing.T) {
 	filename := "/tmp/test1"
+	ioutil.WriteFile(filename, []byte("test1test2test3test4test5test6\n"), os.ModeType)
 	err := JKSaveDataToFile(filename, []byte("test1test2test3test4test5test6\n"), true)
 	if err != nil {
 		t.Fatalf("error :", err)
 	}
 	filename = "/tmp/test2"
+	ioutil.WriteFile(filename, []byte("test1\ntest2\n"), os.ModeType)
 	err = JKSaveDataToFile(filename, []byte("test1\ntest2\n"), true)
 	if err != nil {
 		t.Fatalf("error:", err)
@@ -38,7 +42,7 @@ func TestJKWriteFileData(t *testing.T) {
 func TestJKReadFileData(t *testing.T) {
 	filename := "/tmp/test1"
 	str, err := JKReadFileData(filename)
-	strcmp := "test1test2test3test4test5test6"
+	strcmp := "test1test2test3test4test5test6\n"
 
 	if err != nil || strings.Compare(str, strcmp) != 0 {
 		t.Fatalf("need string %s, but real is %s, (%d)?=(%d)\n", strcmp, str, len(str), len(strcmp))
@@ -46,7 +50,7 @@ func TestJKReadFileData(t *testing.T) {
 
 	filename1 := "/tmp/test2"
 	str, _ = JKReadFileData(filename1)
-	if strings.Compare(str, "test1\ntest2") != 0 {
+	if strings.Compare(str, "test1\ntest2\n") != 0 {
 		t.Fatalf("need string test1\\ntest2, but real is %s\n", str)
 	}
 }
@@ -54,7 +58,7 @@ func TestJKReadFileData(t *testing.T) {
 func TestInt32ToBytes(t *testing.T) {
 	v := 12
 	b := Int32ToBytes(int32(v))
-	bold := []byte{0xc, 0, 0, 0}
+	bold := []byte{0xc, 0, 0x0, 0}
 	if bytes.Compare(bold, b) != 0 {
 		t.Fatalf("need %v, but real is %v\n", bold, b)
 	}
@@ -77,10 +81,10 @@ func TestBytesInt(t *testing.T) {
 		t.Fatalf("need %v, buf real is %v\n", obuf, buf)
 	}
 
-	buf = []byte{22, 0, 0, 0}
+	buf = []byte{0xc, 0x0, 0x0, 0x0}
 	v1 := BytesToInt(buf)
 	if int(v1) != v {
-		t.Fatalf("need %d, but real is %d\n", v, v1)
+		t.Fatalf("need %v, but real is %v\n", v, v1)
 	}
 }
 
