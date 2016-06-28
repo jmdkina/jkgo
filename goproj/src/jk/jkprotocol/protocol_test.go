@@ -6,6 +6,46 @@ import (
 	"testing"
 )
 
+func TestJKProtocolV4(t *testing.T) {
+	p, _ := JKProtoV4New()
+	str := "doityour self"
+	p.GenerateHeader(0, false, uint32(len(str)))
+	p.GenerateBody(str)
+	d, err := p.ToByte()
+	if err != nil {
+		t.Fatalf("error: %v", err)
+	}
+
+	pn, _ := JKProtoV4New()
+	err = pn.Parse(d)
+	if err != nil {
+		t.Fatalf("error: %v", err)
+	}
+}
+
+func TestJKProtoUp(t *testing.T) {
+	p, _ := JKProtoUpNew(JK_PROTOCOL_VERSION_4, "123444")
+	data, err := p.JKProtoUpRegister()
+	if err != nil {
+		t.Fatalf("error: %v", err)
+	}
+
+	pn, _ := JKProtoUpNew(JK_PROTOCOL_VERSION_4, "123444")
+	err = pn.JKProtoUpParse(data)
+	if err != nil {
+		t.Fatalf("error: %v", err)
+	}
+	if strings.Compare(pn.Info.Id, "123444") != 0 {
+		t.Fatalf("expect id 123444, but real is %s", pn.Info.Id)
+	}
+	if strings.Compare(pn.Info.Cmd, "Register") != 0 {
+		t.Fatalf("expect cmd Register, but real is %s", pn.Info.Cmd)
+	}
+	if pn.Info.Seq != 1 {
+		t.Fatalf("expect seq 1, but real is %d", pn.Info.Seq)
+	}
+}
+
 func TestKFProtocol(t *testing.T) {
 	p := NewKFProtocol()
 	p.Init()

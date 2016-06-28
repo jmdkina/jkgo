@@ -170,6 +170,11 @@ func BytesToInt32(buf []byte) int32 {
 	return n
 }
 
+func BytesToUInt32(buf []byte) uint32 {
+	n := binary.LittleEndian.Uint32(buf)
+	return n
+}
+
 func JKSaveFileData(id, filename, data string) bool {
 	filepath := "./" + JK_SERVER_FILE_POSITION + "/" + id + "/" + filename
 	prefix := os.Getenv("HOME")
