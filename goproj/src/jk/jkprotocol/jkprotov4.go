@@ -102,7 +102,7 @@ func (p *JKProtoV4) ToByte() ([]byte, error) {
 
 	copy(data[8:], p.Body.Data[:])
 
-	jklog.L().Debugf("%v \n", data)
+	// jklog.L().Debugf("%v \n", data)
 
 	return data, nil
 }
@@ -119,7 +119,7 @@ func (p *JKProtoV4) Parse(data []byte) error {
 	}
 
 	v := cm.JKBitValueByte(data[0], 8, 4)
-	jklog.L().Debugf("version: %d\n", v)
+	// jklog.L().Debugf("version: %d\n", v)
 	if v <= 0 || v >= 1<<4 {
 		return errors.New("parse version error")
 	}
@@ -127,7 +127,7 @@ func (p *JKProtoV4) Parse(data []byte) error {
 	p.Header.Version = uint(v)
 
 	crypt := cm.JKBitValueByte(data[0], 4, 2)
-	jklog.L().Debugf("crypte value: %d , %v\n", crypt, data[0])
+	// jklog.L().Debugf("crypte value: %d , %v\n", crypt, data[0])
 	if crypt < 0 || crypt >= 1<<2 {
 		return errors.New("parse crypt error")
 	}
@@ -138,12 +138,12 @@ func (p *JKProtoV4) Parse(data []byte) error {
 		p.Header.ACK = true
 	}
 
-	jklog.L().Debugf("data: %v\n", data)
+	// jklog.L().Debugf("data: %v\n", data)
 
 	dataLen := make([]byte, 4)
 	copy(dataLen[:], data[4:8])
 	length := cm.BytesToUInt32(dataLen)
-	jklog.L().Debugf("length: %d\n", length)
+	// jklog.L().Debugf("length: %d\n", length)
 	if length < 0 || length > (1<<32-1) {
 		return errors.New("parse length too long")
 	}
@@ -153,7 +153,7 @@ func (p *JKProtoV4) Parse(data []byte) error {
 	p.Body.Data = make([]byte, p.Header.Length)
 	copy(p.Body.Data[:], data[8:p.Header.Length+8])
 
-	p.Debug()
+	// p.Debug()
 
 	return nil
 }

@@ -1,6 +1,7 @@
-package jkmng
+package main
 
 import (
+	"flag"
 	"jk/jklog"
 	"time"
 )
@@ -12,15 +13,10 @@ type ProcConfig struct {
 	UpdateInterval int64
 }
 
-func Process() bool {
+func (pc *ProcConfig) Process() bool {
 	jklog.L().Infoln("Program start here")
 
-	conf := &ProcConfig{
-		Address:        "",
-		Port:           24433,
-		UseMongo:       true,
-		UpdateInterval: 60,
-	}
+	conf := pc
 
 	mng, err := JKMNGInit(conf.UseMongo, conf.UpdateInterval)
 	if err != nil {
@@ -28,7 +24,7 @@ func Process() bool {
 		return false
 	}
 
-	jklog.L().Infoln("Start listen")
+	jklog.L().Infof("Start listen [%s:%d]\n", conf.Address, conf.Port)
 
 	mng.Listen(conf.Address, conf.Port)
 
@@ -37,8 +33,9 @@ func Process() bool {
 		last := time.Now().Unix()
 		for {
 			now := time.Now().Unix()
-			if now-last > 30 {
+			if now-last > pc.UpdateInterval {
 				last = now
+				jklog.L().Debugln("Check if need remove")
 				mng.CliCtl.ItemCheckAndRemove()
 			}
 			time.Sleep(1000 * time.Millisecond)
@@ -50,4 +47,22 @@ func Process() bool {
 	}
 
 	return false
+}
+
+var (
+	address = flag.String("local_address", "0.0.0.0", "Listen local address")
+	port    = flag.Int("local_port", 24433, "Listen local port")
+)
+
+func main() {
+	flag.Parse()
+
+	pc := &ProcConfig{
+		Address:        *address,
+		Port:           *port,
+		UseMongo:       true,
+		UpdateInterval: 10,
+	}
+
+	pc.Process()
 }

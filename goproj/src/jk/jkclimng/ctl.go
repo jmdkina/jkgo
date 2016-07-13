@@ -1,6 +1,7 @@
 package jkclimng
 
 import (
+	"jk/jklog"
 	"strings"
 )
 
@@ -51,7 +52,14 @@ func (cc *JKClientCtrl) ItemCounts() int {
 func (cc *JKClientCtrl) ItemCheckAndRemove() {
 	for k, v := range cc.Items {
 		if v.OfflineCheck(cc.Conf.UpdateInterval) {
-			cc.Items = append(cc.Items[:k-1], cc.Items[k+1:]...)
+			jklog.L().Infof("Dev [ %s ] offline, need remove\n", v.Id)
+			if k == 0 {
+				cc.Items = append(cc.Items[k+1:])
+			} else if k == len(cc.Items)-1 {
+				cc.Items = append(cc.Items[:k-1])
+			} else {
+				cc.Items = append(cc.Items[:k-1], cc.Items[k+1:]...)
+			}
 		}
 	}
 }

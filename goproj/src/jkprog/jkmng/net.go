@@ -1,4 +1,4 @@
-package jkmng
+package main
 
 import (
 	"errors"
@@ -52,6 +52,7 @@ func (mng *JKMNG) Listen(addr string, port int) error {
 			go func() {
 				for {
 					data := make([]byte, 1<<12)
+					jklog.L().Debugln("return for read again...")
 
 					n, err := c.Read(data)
 					if err != nil {
@@ -60,7 +61,7 @@ func (mng *JKMNG) Listen(addr string, port int) error {
 						}
 					}
 
-					jklog.L().Infoln("Get data of length: ", n)
+					// jklog.L().Infoln("Get data of length: ", n)
 
 					pUP, _ := jkp.JKProtoUpNew(jkp.JK_PROTOCOL_VERSION_4, "")
 					err = pUP.JKProtoUpParse(data[:n])
@@ -76,10 +77,12 @@ func (mng *JKMNG) Listen(addr string, port int) error {
 					ret, fItem := mng.CliCtl.ItemExist(findItem)
 					if !ret {
 						// First comming add it
+						jklog.L().Debugf("New dev [ %s ] come in", pUP.Info.Id)
 						newItem, _ := jkmng.JKClientItemNew(pUP.Info.Id)
 						mng.CliCtl.ItemAdd(*newItem)
 					} else {
 						// Has exist update it
+						jklog.L().Debugf("Dev [ %s ] update", fItem.Id)
 						fItem.UpdateUp()
 					}
 				}
