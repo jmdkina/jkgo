@@ -28,6 +28,9 @@ tmp/network/kfclient
 
 tmp/network/kfserver
 
+bin/
+pkg/
+
 *.rar
 *.txt
 .idea
