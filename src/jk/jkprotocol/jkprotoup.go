@@ -4,6 +4,13 @@ import (
 	"encoding/json"
 )
 
+const (
+	JK_PROTOCOL_VERSION_1 = 1 << iota
+	JK_PROTOCOL_VERSION_2
+	JK_PROTOCOL_VERSION_3
+	JK_PROTOCOL_VERSION_4
+)
+
 type JKProtoUp struct {
 	PType int // proto type
 	Proto *JKProtoV4
