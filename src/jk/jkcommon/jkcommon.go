@@ -14,7 +14,7 @@ import (
 
 const (
 	JK_RESULT_SUCCESS = 0
-	JK_RESULT_E_FAIL  = -100 << iota
+	JK_RESULT_E_FAIL  = -100 - iota
 	JK_RESULT_E_PARAM_ERROR
 	JK_RESULT_E_PARSE_ERROR
 	JK_RESULT_E_DATABASE_QUERY_ERROR
@@ -86,6 +86,10 @@ func (rs *ResultStatus) SetItemDelFail() {
 
 func (rs *ResultStatus) SetItemNotExist() {
 	rs.setStatus(JK_RESULT_E_NOT_EXIST, "ItemNotExist")
+}
+
+func (rs *ResultStatus) SetArgsInvalid() {
+	rs.setStatus(JK_RESULT_E_PARAM_ERROR, "ArgsInvalid")
 }
 
 func JKReadFileData(filename string) (string, error) {
