@@ -1,26 +1,26 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
-	"helper"
 	. "golanger.com/middleware"
 	"golanger.com/utils"
-	"time"
-	"jk/jklog"
-	"encoding/json"
+	"helper"
 	"io/ioutil"
+	"jk/jklog"
+	"time"
 )
 
 func insertItem(db, coll string, content interface{}) error {
-    m := Middleware.Get("db").(*helper.Mongo)
-	c := m.C(utils.M{"name":coll})
+	m := Middleware.Get("db").(*helper.Mongo)
+	c := m.C(utils.M{"name": coll})
 
 	return c.Insert(content)
 }
 
 var (
-	dab = flag.String("db", "proj", "data base name")
-	coll = flag.String("coll", "test", "collection name")
+	dab      = flag.String("db", "proj", "data base name")
+	coll     = flag.String("coll", "test", "collection name")
 	filepath = flag.String("filepath", "/opt/data/proj/ConfigDemo/sql", "file path")
 	filename = flag.String("filename", "zy.json", "filename")
 )
@@ -28,7 +28,7 @@ var (
 func main() {
 	flag.Parse()
 
-	data,err := ioutil.ReadFile(*filepath+"/"+*filename)
+	data, err := ioutil.ReadFile(*filepath + "/" + *filename)
 	if err != nil {
 		jklog.L().Error("error read data\n")
 		return
@@ -45,7 +45,7 @@ func main() {
 	defer m.Close()
 	Middleware.Add("db", m)
 
-	for j:=0; j< len(i);j++ {
+	for j := 0; j < len(i); j++ {
 		i[j]["createtime"] = time.Now().Unix()
 		i[j]["updatetime"] = time.Now().Unix()
 		rt := i[j]["recordtime"].(string)
@@ -61,7 +61,7 @@ func main() {
 
 		mm := Middleware.Get("db").(*helper.Mongo)
 		c := mm.C(utils.M{"name": *coll})
-		if n, _ := c.Find(utils.M{"content":i[j]["content"].(string), "title":i[j]["title"].(string)}).Count(); n > 0 {
+		if n, _ := c.Find(utils.M{"content": i[j]["content"].(string), "title": i[j]["title"].(string)}).Count(); n > 0 {
 			jklog.L().Warnln("item exist. ")
 			continue
 		}

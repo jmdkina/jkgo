@@ -1,14 +1,14 @@
 package main
 
 import (
-	"time"
 	"flag"
-	"strconv"
 	"jk/jklog"
+	"strconv"
+	"time"
 )
 
 func ts_to_string(ts int64) string {
-	tt:= time.Unix(ts, 0)
+	tt := time.Unix(ts, 0)
 	return tt.Format("2006-01-02-15-04-05 Z0700")
 }
 

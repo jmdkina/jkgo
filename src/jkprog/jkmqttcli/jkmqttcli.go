@@ -13,7 +13,7 @@ import (
   "password":"",
   "
 }
- */
+*/
 var (
 	conffile = flag.String("conf", "./config.json", "Configure file")
 )
@@ -50,27 +50,27 @@ func main() {
 	// Publish
 	//
 	/*
-	jklog.L().Debugln("Start to init publish")
-	// When we need publish
-	err = mq.Init()
-	if err != nil {
-		jklog.L().Errorln("publish failed ", err)
-	}
+		jklog.L().Debugln("Start to init publish")
+		// When we need publish
+		err = mq.Init()
+		if err != nil {
+			jklog.L().Errorln("publish failed ", err)
+		}
 	*/
 
 	/*
-	for {
-		time.Sleep(time.Millisecond * 4000)
-		jklog.L().Debugln("Send publish")
-		// we can send data now if ok
-		publish := [2]string{
-			"api", "this is test",
+		for {
+			time.Sleep(time.Millisecond * 4000)
+			jklog.L().Debugln("Send publish")
+			// we can send data now if ok
+			publish := [2]string{
+				"api", "this is test",
+			}
+			mq.Pub.Data <- publish
 		}
-		mq.Pub.Data <- publish
-	}
 	*/
 
 	for {
-		time.Sleep(time.Millisecond*500)
+		time.Sleep(time.Millisecond * 500)
 	}
 }

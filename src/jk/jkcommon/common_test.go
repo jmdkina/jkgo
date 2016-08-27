@@ -2,10 +2,10 @@ package jkcommon
 
 import (
 	"bytes"
-	"strings"
-	"testing"
 	"io/ioutil"
 	"os"
+	"strings"
+	"testing"
 )
 
 func TestJKFileLists(t *testing.T) {

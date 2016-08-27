@@ -52,4 +52,3 @@ func (m *Modular) BaseExpansion(n, b int) error {
 	m.printBaseExpansionResult(ret)
 	return nil
 }
-

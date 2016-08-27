@@ -61,7 +61,7 @@ func main() {
 		Address:        *address,
 		Port:           *port,
 		UseMongo:       true,
-		UpdateInterval: 10,
+		UpdateInterval: 30,
 	}
 
 	pc.Process()

@@ -87,7 +87,8 @@ func (pc *ProcConfig) NetConnect() {
 		}
 
 		jklog.L().Debugln("Start to register : ", pc.Id)
-		data, _ := pc.Register()
+		//data, _ := pc.Register()
+		data := []byte("{ \"Header\":{ \"ID\":\"1234\", \"Cmd\":\"Register\"}, \"Body\":{ \"Count\": 1}  }")
 		_, err = pc.NetSend(data)
 
 		if err != nil {
@@ -97,6 +98,16 @@ func (pc *ProcConfig) NetConnect() {
 			break
 		}
 	}
+}
+
+func (pc *ProcConfig) SendGetItem() (error, []byte) {
+	pp, _ := p.JKProtoUpNew(p.JK_PROTOCOL_VERSION_4, "special")
+	data := "{ \"Header\":{ \"ID\":\"1234\", \"Cmd\":\"GetItem\"}, \"Body\":{ \"Count\": 1}  }"
+	rdata, err := pp.JKProtoUpInit(false, uint32(len(data)), []byte(data))
+	if err != nil {
+		return err, nil
+	}
+	return nil, rdata
 }
 
 var (
@@ -117,7 +128,7 @@ func main() {
 
 	pc := &ProcConfig{
 		Id:           *id,
-		KeepInterval: 10,
+		KeepInterval: 30,
 	}
 	pc.Init(*address, *port)
 
@@ -142,7 +153,8 @@ func main() {
 			}
 			last_keep = now
 			jklog.L().Debugln("need to keepalive : ", pc.Id)
-			data, _ := pc.Keepalive()
+			//data, _ := pc.Keepalive()
+			data := []byte("{ \"Header\":{ \"ID\":\"1234\", \"Cmd\":\"Keepalive\"}, \"Body\":{ \"Count\": 1}  }")
 			_, err := pc.NetSend(data)
 			if err != nil {
 				jklog.L().Errorln("Send keepalive failed : ", err)
@@ -152,6 +164,26 @@ func main() {
 			}
 		}
 	}()
+
+	time.Sleep(time.Millisecond*1000)
+	err, sdata := pc.SendGetItem()
+	if err != nil {
+		jklog.L().Infoln("Generate data send failed: ", err)
+	}
+	nn, err := pc.NetSend(sdata)
+	if err != nil {
+		jklog.L().Infoln("Send data out error: ", err)
+	} else {
+		jklog.L().Infoln("Send data out len ", nn)
+	}
+
+	readdata := make([]byte, 1024)
+	nnn, err := pc.Conn.Read(readdata)
+	if err != nil {
+		jklog.L().Infoln("wait response failed ", err)
+	} else {
+		jklog.L().Infoln("Get response of len ", nnn, ", the data is : ", string(readdata[20:]))
+	}
 
 	for {
 		time.Sleep(time.Millisecond * 500)

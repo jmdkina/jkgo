@@ -66,7 +66,7 @@ const (
 )
 
 const (
-	KF_SUBCMD_REGISTER = 1
+	KF_SUBCMD_REGISTER  = 1
 	KF_SUBCMD_KEEPALIVE = 2
 
 	KF_SUBCMD_COMMAND = 0x100 // execute command

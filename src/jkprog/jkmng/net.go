@@ -70,7 +70,13 @@ func (mng *JKMNG) Listen(addr string, port int) error {
 						continue
 					}
 
+					// Parse out data and set id.
+					gen := jkmng.AIGeneral{}
+					gen.Parse(pUP.Proto.Body.Data)
+					pUP.Info.Id = gen.Header.ID
+
 					// Find from items
+					// Need Id need remove, use another method to get it.
 					findItem := jkmng.JKClientItem{
 						Id: pUP.Info.Id,
 					}
@@ -84,6 +90,26 @@ func (mng *JKMNG) Listen(addr string, port int) error {
 						// Has exist update it
 						jklog.L().Debugf("Dev [ %s ] update", fItem.Id)
 						fItem.UpdateUp()
+					}
+
+					jklog.L().Debugln("Start to parse command and give response")
+					ai := jkmng.ActionInfo{}
+					err, rdata := ai.Action(pUP.Proto.Body.Data)
+					if rdata == nil {
+						jklog.L().Warnln("unsupported command")
+						continue
+					}
+					if err != nil {
+						jklog.L().Errorln("action command failed.")
+					} else {
+						pRet, _ := jkp.JKProtoUpNew(jkp.JK_PROTOCOL_VERSION_4, "")
+						rsdata, err := pRet.JKProtoUpInit(true, uint32(len(rdata)), rdata)
+						if err != nil {
+							jklog.L().Errorln("Generate data fail")
+						} else {
+							//jklog.L().Infoln("Start to give response ", string(rsdata[:20]))
+							c.Write(rsdata)
+						}
 					}
 				}
 			}()
