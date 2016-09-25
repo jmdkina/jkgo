@@ -30,6 +30,7 @@ func GlobalDataControl() *DataControl {
 		return DC
 	}
 	mServer := helper.NewMongo("mongodb://127.0.0.1/mryz")
+	// TODO: don't add it, it will fail. Need give a close function
 	//defer mServer.Close()
 	middleware.Middleware.Add("mrzy", mServer)
 	DC = &DataControl{}

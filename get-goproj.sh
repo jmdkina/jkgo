@@ -8,3 +8,6 @@ do
    echo "$do"
    go get $i
 done
+
+git clone https://github.com/golang/protobuf.git src/github.com/golang/protobuf
+git clone https://github.com/gorilla/websocket.git src/github.com/gorilla/websocket

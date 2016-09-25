@@ -92,13 +92,17 @@ func (mng *JKMNG) Listen(addr string, port int) error {
 						fItem.UpdateUp()
 					}
 
+					// Go to deal action
+					// pares data and give response.
 					jklog.L().Debugln("Start to parse command and give response")
 					ai := jkmng.ActionInfo{}
 					err, rdata := ai.Action(pUP.Proto.Body.Data)
+					// needn't give response
 					if rdata == nil {
 						jklog.L().Warnln("unsupported command")
 						continue
 					}
+					// TODO: never give nil err when rdata is not nil
 					if err != nil {
 						jklog.L().Errorln("action command failed.")
 					} else {

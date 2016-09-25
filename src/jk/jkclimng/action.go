@@ -19,6 +19,7 @@ func (ai *ActionInfo) Action(data []byte) (error, []byte) {
 	gen := AIGeneral{}
 	err := gen.Parse(data)
 	if err != nil {
+		// TODO: give fail response
 		return err, nil
 	}
 
@@ -28,6 +29,7 @@ func (ai *ActionInfo) Action(data []byte) (error, []byte) {
 	    req := AIGetItemRequest{}
 		err := req.Parse(data)
 		if err != nil {
+			// TODO: Give fail response
 			return err, nil
 		}
 		cnts := req.Body.Count
@@ -35,12 +37,13 @@ func (ai *ActionInfo) Action(data []byte) (error, []byte) {
 		//data := []byte("{ \"Header\":{ \"ID\":\"1234\", \"Cmd\":\"GetItem\"}, \"Body\":{ \"Count\": 1, \"Result\": \"success\", \"Data\":[{ \"Content\":\"doning\", \"Author\":\"jmd\" }]}  }")
 		ret, err := json.Marshal(data)
 		if err != nil {
+			// TODO: give fail response
 			return err, nil
 		} else {
 			return nil, ret
 		}
 	case "Keepalive":
-		
+
 	}
 
 	return nil, nil
