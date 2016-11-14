@@ -102,10 +102,14 @@ func (td *TerminalDisplay) checkRelease(release string) bool {
 
 func (td *TerminalDisplay) checkInstallTo(installto string) bool {
 	if len(installto) == 0 {
-		return true
+		return false
 	}
-	// Check directory exist.
-	td.BArgs.InstallTo = installto
+	if installto[len(installto) - 1] != '/' {
+		// Check directory exist.
+		td.BArgs.InstallTo = installto + "/"
+	} else {
+		td.BArgs.InstallTo = installto
+	}
 	return true
 }
 
@@ -148,8 +152,10 @@ func (td *TerminalDisplay) TipsCompileArgs() error {
 	if err != nil {
 		return errors.New("Error InstallTo")
 	}
+	// You must give install to because we don't know what the name of
+	// the project name in public libs name.
 	if len(install) == 0 {
-		td.BArgs.InstallTo = installto
+		return errors.New("You must give a Install To")
 	} else {
 		ret = td.checkInstallTo(install)
 		if !ret {

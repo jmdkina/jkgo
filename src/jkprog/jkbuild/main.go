@@ -15,18 +15,26 @@ func main() {
 	os.Remove("/tmp/jkbuild.log")
 	jklog.SetLogFileName("/tmp/jkbuild.log")
 
+	// Init config
+	conf, err := NewGlobalConfig("./JKBuild.json")
+	if err != nil {
+		jklog.Lfile().Errorln("Configure file error ", err)
+		return
+	}
+
+	jklog.Lfile().Debugln("Source dir is : ", conf.baseDir)
+
+	// Init for display
 	pd, err := NewTerminalDisplay()
 	if err != nil {
 		jklog.L().Errorln("failed to init terminal display: ", err)
 		return
 	}
+	pd.Conf = conf
 
 	jklog.Lfile().Debugln("Start to build.")
 
-	conf, _ := NewGlobalConfig("./Config.jk")
-	pd.Conf = conf
-	jklog.Lfile().Debugln("Source dir is : ", conf.baseDir)
-
+	// Start build args for leater use
 	ba, _ := NewBuildArgs()
 	pd.BArgs = ba
 
