@@ -1,6 +1,6 @@
 #!/bin/bash
 
-goget="github.com/astaxie/beego github.com/beego/bee"
+goget="github.com/astaxie/beego github.com/beego/bee github.com/Unknwon/goconfig github.com/rthornton128/goncurses"
 
 for i in $goget
 do

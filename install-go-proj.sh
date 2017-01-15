@@ -22,6 +22,7 @@ FILES+=" kfconnect serverConnect"
 # gomobile build -target=ios golang.org/x/mobile/example/basic
 # ios-deploy -b basic.app
 # go get -d golang.org/x/mobile/example/bind/...
+# git clone https://github.com/beego/i18n.git
 
 for i in $FILES
 do

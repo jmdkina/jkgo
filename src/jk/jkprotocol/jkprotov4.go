@@ -6,6 +6,29 @@ import (
 	"jk/jklog"
 )
 
+//I don't know how to design the protocol, but I will try.
+//
+//Each line with 32bits, 4bytes
+//+--------------------------------------------------------------+
+//| version(4bits) | crypt(2bits) | command(6bits) | subcommand(8bits) | reserve(12bits)
+//+--------------------------------------------------------------+
+//| length(32bits)
+//+--------------------------------------------------------------+
+//| data
+//+--------------------------------------------------------------+
+//
+//version: start from 0001
+//crypt: 00 - not crypt, 01 - aes, 10,11 - reserved (only effect to the data
+//command, subcommand (below)
+//length: what the hole length of the data
+//Command, SubCommand:
+//| bits(Command) | bits(SubCommand) | Command mean |
+//| - | - | - |
+//| 000 000 | 0000 0000 | SubCommand |
+//| 000 001 | 0000 0000 | Register |
+//| 000 001 | 0000 0001 | Close |
+//For now, we only support TCP
+
 type JKProtoV4Header struct {
 	Version uint
 	Crypt   uint
