@@ -90,7 +90,7 @@ func (pup *JKProtoUp) JKProtoUpSeqAdd(v int32) error {
 		return nil
 	}
 	jk_p_seq = int(v)
-	if jk_p_seq >= 2<<32 {
+	if jk_p_seq >= 2<<30-1 {
 		jk_p_seq = 1
 	}
 

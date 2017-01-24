@@ -8,7 +8,7 @@ import (
 //   "body": { "data":"xxx" } }
 
 type V5Header struct {
-	version     int
+	version     float64
 	Cmd         string
 	SubCmd      string
 	Crypt       int
