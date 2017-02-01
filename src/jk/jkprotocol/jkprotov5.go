@@ -60,6 +60,13 @@ func NewV5Register(data string) (V5Register, error) {
 	return v5reg, nil
 }
 
+func NewV5RegisterResponse(data string) (V5Register, error) {
+	v5reg := V5Register{}
+	v5reg.base("Register", "", true)
+	v5reg.Body.Data = data
+	return v5reg, nil
+}
+
 func (reg *V5Register) String() (string, error) {
 	d, err := json.Marshal(reg)
 	if err != nil {
@@ -81,6 +88,14 @@ func NewV5Keepalive(data string) (V5Keepalive, error) {
 	return v5keep, nil
 }
 
+func NewV5KeepaliveResponse(data string) (V5Keepalive, error) {
+	v5keep := V5Keepalive{}
+	v5keep.base("Keepalive", "", true)
+
+	v5keep.Body.Data = data
+	return v5keep, nil
+}
+
 func (keep *V5Keepalive) String() (string, error) {
 	d, err := json.Marshal(keep)
 	if err != nil {
@@ -97,6 +112,14 @@ type V5Leave struct {
 func NewV5Leave(data string) (V5Leave, error) {
 	leave := V5Leave{}
 	leave.base("Leave", "", false)
+	leave.Body.Data = data
+
+	return leave, nil
+}
+
+func NewV5LeaveResponse(data string) (V5Leave, error) {
+	leave := V5Leave{}
+	leave.base("Leave", "", true)
 	leave.Body.Data = data
 
 	return leave, nil
