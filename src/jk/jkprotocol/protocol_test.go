@@ -49,7 +49,7 @@ func TestJKProtoUp(t *testing.T) {
 func TestKFProtocol(t *testing.T) {
 	p := NewKFProtocol()
 	p.Init()
-	p.SetCmd(KF_CMD_QUERY, KF_SUBCMD_KEEPALIVE, []byte("1234"))
+	p.SetCmd(KF_CMD_QUERY, KF_SUBCMD_KEEPALIVE, []byte("123456"))
 	p.SetData([]byte("just for test"))
 	gd, err := p.GenerateData(false)
 	if err != nil {
@@ -67,7 +67,7 @@ func TestKFProtocol(t *testing.T) {
 func TestKFProtocolText(t *testing.T) {
 	p := NewKFProtocol()
 	p.Init()
-	p.SetCmd(KF_CMD_QUERY, KF_SUBCMD_KEEPALIVE, []byte("1234"))
+	p.SetCmd(KF_CMD_QUERY, KF_SUBCMD_KEEPALIVE, []byte("123456"))
 	p.SetData([]byte("just for test"))
 	gd, err := p.GenerateDataText(false)
 	if err != nil {
