@@ -60,6 +60,7 @@ func (cc *CenterControl) Recv() error {
 					jklog.L().Errorln("Parse error ", err)
 					continue
 				}
+				jklog.L().Debugln("lllll ", str)
 
 				// transfer to other depends on cmd
 
@@ -70,7 +71,7 @@ func (cc *CenterControl) Recv() error {
 				jklog.L().Infof("Got command of [ %d ]\n", cc.proto.CmdType)
 
 				// Exit
-				if cc.proto.CmdType == jkprotocol.JK_PROTOCOL_V5_LEAVE {
+				if cc.proto.CmdType == jkprotocol.JK_PROTOCOL_C_LEAVE {
 					break
 				}
 			} // recv

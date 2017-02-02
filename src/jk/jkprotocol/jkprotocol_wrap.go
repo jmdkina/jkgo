@@ -2,9 +2,16 @@ package jkprotocol
 
 import "errors"
 
+const (
+	JK_PROTOCOL_C_REGISTER = 1 << iota
+	JK_PROTOCOL_C_LEAVE
+	JK_PROTOCOL_C_KEEPALIVE
+)
+
 type JKProtocolWrap struct {
-	Type    int   // protocol type
+	Type     int   // protocol type
 	CmdType  int
+	Base     V5Base
 }
 
 func NewJKProtocolWrap(ptype int) (*JKProtocolWrap, error) {
@@ -12,18 +19,15 @@ func NewJKProtocolWrap(ptype int) (*JKProtocolWrap, error) {
 		Type: ptype,
 	}
 
+	wrap.Base = V5Base{}
 	return wrap, nil
 }
 
 func (wrap *JKProtocolWrap) Register(data string) (string, error ) {
 	switch wrap.Type {
 	case JK_PROTOCOL_VERSION_5:
-		reg, err := NewV5Register(data)
-		if err != nil {
-			return "", err
-		}
-		return reg.String()
-		break;
+		reg, err := wrap.Base.Register(data)
+		return reg, err
 	default:
 		break;
 	}
@@ -33,11 +37,8 @@ func (wrap *JKProtocolWrap) Register(data string) (string, error ) {
 func (wrap *JKProtocolWrap) RegisterResponse(data string) (string, error ) {
 	switch wrap.Type {
 	case JK_PROTOCOL_VERSION_5:
-		reg, err := NewV5RegisterResponse(data)
-		if err != nil {
-			return "", err
-		}
-		return reg.String()
+		reg, err := wrap.Base.RegisterReponse(data)
+		return reg, err
 		break;
 	default:
 		break;
@@ -48,11 +49,8 @@ func (wrap *JKProtocolWrap) RegisterResponse(data string) (string, error ) {
 func (wrap *JKProtocolWrap) Keepalive(data string) (string, error) {
 	switch wrap.Type {
 	case JK_PROTOCOL_VERSION_5:
-		keep, err := NewV5Keepalive(data)
-		if err != nil {
-			return "", err
-		}
-		return keep.String()
+		keep, err := wrap.Base.Keepalive(data)
+		return keep, err
 		break;
 	default:
 		break;
@@ -63,11 +61,8 @@ func (wrap *JKProtocolWrap) Keepalive(data string) (string, error) {
 func (wrap *JKProtocolWrap) KeepaliveResponse(data string) (string, error) {
 	switch wrap.Type {
 	case JK_PROTOCOL_VERSION_5:
-		keep, err := NewV5KeepaliveResponse(data)
-		if err != nil {
-			return "", err
-		}
-		return keep.String()
+		keep, err := wrap.Base.KeepaliveResponse(data)
+		return keep, err
 		break;
 	default:
 		break;
@@ -78,11 +73,8 @@ func (wrap *JKProtocolWrap) KeepaliveResponse(data string) (string, error) {
 func (wrap *JKProtocolWrap) Leave(data string) (string, error) {
 	switch wrap.Type {
 	case JK_PROTOCOL_VERSION_5:
-		leave, err := NewV5Leave(data)
-		if err != nil {
-			return "", err
-		}
-		return leave.String()
+		leave, err := wrap.Base.Leave(data)
+		return leave, err
 		break;
 	default:
 		break;
@@ -93,11 +85,8 @@ func (wrap *JKProtocolWrap) Leave(data string) (string, error) {
 func (wrap *JKProtocolWrap) LeaveResponse(data string) (string, error) {
 	switch wrap.Type {
 	case JK_PROTOCOL_VERSION_5:
-		leave, err := NewV5LeaveResponse(data)
-		if err != nil {
-			return "", err
-		}
-		return leave.String()
+		leave, err := wrap.Base.LeaveResponse(data)
+		return leave, err
 		break;
 	default:
 		break;
@@ -105,6 +94,8 @@ func (wrap *JKProtocolWrap) LeaveResponse(data string) (string, error) {
 	return "", errors.New("Unsupported protocol type")
 }
 
+// Set cmd type for which command
+// Give common response of the sender
 func (wrap *JKProtocolWrap) Parse(data string) (string, error) {
 	switch wrap.Type {
 	case JK_PROTOCOL_VERSION_5:
@@ -114,29 +105,26 @@ func (wrap *JKProtocolWrap) Parse(data string) (string, error) {
 			return "", e
 		}
 		switch t {
-		case JK_PROTOCOL_V5_REGESTER:
-			v5regres, err := NewV5RegisterResponse("OK")
-			if err != nil {
-				return "", err
-			}
-			wrap.CmdType = JK_PROTOCOL_V5_REGESTER
-			return v5regres.String()
+		case JK_PROTOCOL_C_REGISTER:
+			v5regres, err := wrap.Base.RegisterReponse("RegisterResponse")
+			wrap.CmdType = JK_PROTOCOL_C_REGISTER
+			return v5regres, err
 			break;
-		case JK_PROTOCOL_V5_KEEPALIVE:
-			v5keep, err := NewV5KeepaliveResponse("OK")
+		case JK_PROTOCOL_C_KEEPALIVE:
+			v5keep, err := wrap.Base.KeepaliveResponse("KeepaliveResponse")
 			if err != nil {
 				return "", err
 			}
-			wrap.CmdType = JK_PROTOCOL_V5_KEEPALIVE
-			return v5keep.String()
+			wrap.CmdType = JK_PROTOCOL_C_KEEPALIVE
+			return v5keep, err
 			break;
-		case JK_PROTOCOL_V5_LEAVE:
-			v5leave, err := NewV5LeaveResponse("OK")
+		case JK_PROTOCOL_C_LEAVE:
+			v5leave, err := wrap.Base.LeaveResponse("LeaveResponse")
 			if err != nil {
 				return "", err
 			}
-			wrap.CmdType = JK_PROTOCOL_V5_LEAVE
-			return v5leave.String()
+			wrap.CmdType = JK_PROTOCOL_C_LEAVE
+			return v5leave, err
 			break;
 		default:
 			return "", errors.New("Unsupported command type")

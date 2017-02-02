@@ -6,13 +6,10 @@ import (
 )
 
 func TestJKProtoV5Reg(t *testing.T) {
-	v5reg, err := NewV5Register("FromRegister")
+	v5base := V5Base{}
+	str, err := v5base.Register("FromRegister")
 	if err != nil {
 		t.Fatalf("make register command failed, %v\n", err)
-	}
-	str, err := v5reg.String()
-	if err != nil {
-		t.Fatalf("error generate string %v\n", err)
 	}
 	needstr := "{\"PreHeader\":{\"Version\":0.1,\"Crypto\":0}," +
 	           "\"Header\":{\"Cmd\":\"Register\",\"SubCmd\":\"\",\"Id\":\"jkprotov5\"," +

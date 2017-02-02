@@ -10,12 +10,13 @@ import (
 )
 
 var (
-	address = flag.String("local_address", "0.0.0.0", "Listen local address")
-	port    = flag.Int("local_port", 24433, "Listen local port")
+	address = flag.String("address", "0.0.0.0", "address to connect")
+	port    = flag.Int("port", 24433, "port to connect")
 )
 
 type ClientInfo struct {
     conn      net.Conn
+	base      *jkprotocol.JKProtocolWrap
 }
 
 func (ci *ClientInfo) Connect(addr string, port int) error {
@@ -43,12 +44,11 @@ func (ci *ClientInfo) Close() error {
 func (ci *ClientInfo) Keepalive() error {
 	go func() {
 		for {
-			keep, err := jkprotocol.NewV5Keepalive("Keepalive")
+			str, err := ci.base.Keepalive("Keepalive")
 			if err != nil {
 				jklog.L().Errorln("Generate keepalive failed ", err)
 				return
 			}
-			str, _ := keep.String()
 			_, err = ci.Send(str)
 			jklog.L().Debugf("Give keepalive response  [%s]\n", str)
 			if err != nil {
@@ -69,12 +69,13 @@ func main() {
 	ci.Connect(*address, *port)
 	defer ci.Close()
 
-    reg, err := jkprotocol.NewV5Register("Register")
+	ci.base, _ = jkprotocol.NewJKProtocolWrap(jkprotocol.JK_PROTOCOL_VERSION_5)
+
+    str, err := ci.base.Register("Register")
 	if err != nil {
 		jklog.L().Errorln("Generate Register failed ", err)
 		return
 	}
-	str, _ := reg.String()
 	n, err := ci.Send(str)
 	if err != nil {
 		jklog.L().Errorln("Send register failed ", err)
@@ -89,12 +90,11 @@ func main() {
 		time.Sleep(500*time.Millisecond)
 	}
 
-	leave, err := jkprotocol.NewV5Leave("Leave")
+	str, err = ci.base.Leave("Leave")
 	if err != nil {
 		jklog.L().Errorln("Generate leave failed ", err)
 		return
 	}
-	str, _ =  leave.String()
 	ci.Send(str)
 	ci.Close()
 }
