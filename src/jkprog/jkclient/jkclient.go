@@ -5,7 +5,7 @@ import (
 	"net"
 	"strconv"
 	"jk/jkprotocol"
-	"jk/jklog"
+	l4g "github.com/alecthomas/log4go"
 	"time"
 )
 
@@ -46,13 +46,13 @@ func (ci *ClientInfo) Keepalive() error {
 		for {
 			str, err := ci.base.Keepalive("Keepalive")
 			if err != nil {
-				jklog.L().Errorln("Generate keepalive failed ", err)
+				l4g.Error("Generate keepalive failed ", err)
 				return
 			}
 			_, err = ci.Send(str)
-			jklog.L().Debugf("Give keepalive response  [%s]\n", str)
+			l4g.Debug("Give keepalive response  [%s]\n", str)
 			if err != nil {
-				jklog.L().Errorln("Send keepalive failed ", err)
+				l4g.Error("Send keepalive failed ", err)
 				return
 			}
 			time.Sleep(60000 * time.Millisecond)
@@ -73,15 +73,15 @@ func main() {
 
     str, err := ci.base.Register("Register")
 	if err != nil {
-		jklog.L().Errorln("Generate Register failed ", err)
+		l4g.Error("Generate Register failed ", err)
 		return
 	}
 	n, err := ci.Send(str)
 	if err != nil {
-		jklog.L().Errorln("Send register failed ", err)
+		l4g.Error("Send register failed ", err)
 		return
 	}
-	jklog.L().Debugf("send register success %d\n", n)
+	l4g.Debug("send register success %d\n", n)
 
 
 	ci.Keepalive()
@@ -92,7 +92,7 @@ func main() {
 
 	str, err = ci.base.Leave("Leave")
 	if err != nil {
-		jklog.L().Errorln("Generate leave failed ", err)
+		l4g.Error("Generate leave failed ", err)
 		return
 	}
 	ci.Send(str)

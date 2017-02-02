@@ -2,10 +2,10 @@ package jkcenter
 
 import (
 	"io"
-	"jk/jklog"
 	"jk/jkprotocol"
 	"net"
 	"strconv"
+	l4g "github.com/alecthomas/log4go"
 )
 
 type CenterControl struct {
@@ -27,7 +27,7 @@ func InitCenter(laddr string, lport int, nettype int) (*CenterControl, error) {
 	if err != nil {
 		return nil, err
 	}
-	jklog.L().Debugf("Now list [%s]\n", laddr + ":" + strconv.Itoa(lport))
+	l4g.Debug("Now list [%s]\n", laddr + ":" + strconv.Itoa(lport))
 	cc.lis = lis
 	cc.proto, err = jkprotocol.NewJKProtocolWrap(jkprotocol.JK_PROTOCOL_VERSION_5)
 	if err != nil {
@@ -43,24 +43,23 @@ func (cc *CenterControl) Recv() error {
 		if err != nil {
 			return err
 		}
-		jklog.L().Debugf("accept one connection from [%s]\n", conn.RemoteAddr().String())
+		l4g.Debug("accept one connection from [%s]\n", conn.RemoteAddr().String())
 		go func() {
 			for {
 				// Recv data
 				rdata := make([]byte, 2 << 15)
 				n, err := conn.Read(rdata)
 				if err == io.EOF {
-					jklog.L().Errorf("has EOF")
+					l4g.Error("has EOF")
 					break
 				}
 
 				// Parse
 				str, err := cc.proto.Parse(string(rdata[:n]))
 				if err != nil {
-					jklog.L().Errorln("Parse error ", err)
+					l4g.Error("Parse error ", err)
 					continue
 				}
-				jklog.L().Debugln("lllll ", str)
 
 				// transfer to other depends on cmd
 
@@ -68,7 +67,7 @@ func (cc *CenterControl) Recv() error {
 				item.conn = conn
 				item.resp = str
 				cc.lists = append(cc.lists, item)
-				jklog.L().Infof("Got command of [ %d ]\n", cc.proto.CmdType)
+				l4g.Info("Got command of [ %d ]\n", cc.proto.CmdType)
 
 				// Exit
 				if cc.proto.CmdType == jkprotocol.JK_PROTOCOL_C_LEAVE {
