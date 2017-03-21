@@ -1,7 +1,7 @@
-#!/bin/bash
-
+#!/bin/bash 
 goget="github.com/astaxie/beego github.com/beego/bee github.com/Unknwon/goconfig github.com/rthornton128/goncurses"
 goget+=" github.com/gogap/logs"
+goget+=" github.com/henrylee2cn/faygo github.com/henrylee2cn/fay"
 
 for i in $goget
 do
@@ -16,17 +16,20 @@ done
 CUR=`pwd`
 
 srcs="github.com/alecthomas/log4go.git"
-srcs+="github.com/golang/protobuf.git"
-srcs+="github.com/gorilla/websocket.git"
+srcs+=" github.com/golang/protobuf.git"
+srcs+=" github.com/gorilla/websocket.git"
 
 for src in $srcs
 do
-    dir=${log4go%.*}
+    log4godir=${src%.*}
     if [ ! -d src/$log4godir ]; then
-        pre=${log4go%/*} 
+        pre=${log4godir%/*} 
         mkdir -p src/$pre
         cd src/$pre
-        git clone https://$log4go
+        echo "git clone https://$src"
+        git clone https://$src
         cd $CUR
+        echo "go install $log4godir"
+        go install $log4godir
     fi
 done
