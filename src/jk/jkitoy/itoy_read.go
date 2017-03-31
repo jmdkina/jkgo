@@ -6,6 +6,7 @@ import (
 	"errors"
 	"io"
 	"jk/jklog"
+	"fmt"
 )
 
 func (itoy *ItoY) check_create_dir(dirname string) error {
@@ -19,6 +20,17 @@ func (itoy *ItoY) check_create_dir(dirname string) error {
 func (itoy *ItoY) SetTraversPosition(saveposition string, savefilename string) {
 	itoy.SaveDir = saveposition
 	itoy.SaveFileName = savefilename
+}
+
+func (itoy *ItoY) CToGoString(c []byte) string {
+	n := -1
+	for i, b := range c {
+		if b == 0 {
+			break
+		}
+		n = i
+	}
+	return string(c[:n+1])
 }
 
 func (itoy *ItoY) Travers() error {
@@ -43,7 +55,7 @@ func (itoy *ItoY) Travers() error {
 	if err != nil {
 		return err
 	}
-	extname_s := string(extname[:n])
+	extname_s := itoy.CToGoString(extname)
 
 	dirname := itoy.SaveDir
 	err = itoy.check_create_dir(dirname)
@@ -51,16 +63,18 @@ func (itoy *ItoY) Travers() error {
 		return err
 	}
 
-	save_position := dirname + "/" + itoy.SaveFileName + "." + extname_s
-	jklog.L().Debugf("Save position %s\n", save_position)
+	save_file_name := dirname + "/" + itoy.SaveFileName + "." + extname_s
+	jklog.L().Debugf("Save position [%s] [%s]\n", save_file_name, extname_s)
 
-	fw, err := os.OpenFile(save_position, os.O_CREATE | os.O_WRONLY | os.O_TRUNC, os.ModePerm)
+	//fw, err := os.OpenFile("/Users/jmdvirus/Documents/item/item/1.jpg", os.O_WRONLY|os.O_CREATE| os.O_TRUNC, os.ModePerm)
+	fw, err := os.OpenFile(save_file_name, os.O_WRONLY|os.O_CREATE| os.O_TRUNC, os.ModePerm)
 	if err != nil {
 		return err
 	}
 	defer fw.Close()
 
 	for {
+		data = make([]byte, 4)
 		n, err := fr.Read(data)
 		if err != nil {
 			if io.EOF == err {
@@ -68,13 +82,15 @@ func (itoy *ItoY) Travers() error {
 			}
 			return err
 		}
-		data = make([]byte, n)
+		num := itoy.byteToInt(data[:n])
+		data = make([]byte, num)
 		nn, err := fr.Read(data)
 		if err != nil {
 			return err
 		}
-		if nn != n {
-			return errors.New("Read data less then need")
+		if uint32(nn) != num {
+			data := fmt.Sprintf("Read data [%d] less then [%d]", nn, num)
+			return errors.New(data)
 		}
         fw.Write(data[:nn])
 	}

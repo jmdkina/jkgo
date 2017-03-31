@@ -24,6 +24,4 @@ func TestItoY_Travers(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
-	t.Fatal("no")
 }
