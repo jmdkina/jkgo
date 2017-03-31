@@ -15,6 +15,16 @@ type ItoY struct {
 	SaveFilePrefix string // will add it to the new filename as prefix.
 	ExtName        string // Will replace old extern name
 	SaveDirPrefix  string // Prefix of the saved filename, only use when give dir
+	SaveDir        string
+	SaveFileName   string  // exclude suffix
+	SaveFileSuffix string
+	FilePath       string
+	FileName       string
+	FileSize       int64
+	SegInfo        map[int16]uint32
+	Magic          []byte
+
+	FileFullName   string
 }
 
 // init it
