@@ -28,14 +28,14 @@ func (nb *JKNetBaseRecv) New(addr string, port int, nettype int) error {
 	nb.port = port
 	nb.nettype = nettype
 
-	if nettype == 0 {
+	if nettype == 1 {
 		var err error
 		nb.listener, err = net.Listen("tcp", addr + ":" + strconv.Itoa(port))
 		if err != nil {
 			return err
 		}
 	} else {
-		return errors.New("Unsupported net")
+		return errors.New("Unsupported nettype")
 	}
 	return nil
 }
@@ -96,24 +96,20 @@ func (nb *JKNetBaseClient) New(addr string, port int, nettype int) error {
 	return nil
 }
 
-func (nb *JKNetBaseClient) Recv(data string) error {
+func (nb *JKNetBaseClient) Recv() ([]byte, error) {
 	rdata := make([]byte, 2<<15)
 	n, err := nb.conn.Read(rdata)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	data = string(rdata[0:n])
-	nb.recvdata = data
-	return nil
+	nb.recvdata = string(rdata[0:n])
+	return rdata[0:n], nil
 }
 
-func (nb *JKNetBaseClient) Send(data string) error {
+func (nb *JKNetBaseClient) Send(data string) int {
 	n, err := nb.conn.Write([]byte(data))
 	if err != nil {
-		return err
+		return -1
 	}
-	if n != len(data) {
-		return errors.New("Send length != data length")
-	}
-	return nil
+	return n
 }
