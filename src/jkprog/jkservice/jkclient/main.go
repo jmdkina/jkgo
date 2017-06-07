@@ -32,7 +32,6 @@ func main() {
 		return
 	}
 	for {
-		l4g.Info("-------------- start to do something")
 		n := c.Send("send data out demo")
         l4g.Info("send data out len %d", n)
         data, err := c.Recv()
@@ -40,7 +39,7 @@ func main() {
 			l4g.Error("recv error ", err)
 			break
 		}
-		l4g.Info("recv data ", data)
+		l4g.Info("recv data ", string(data))
 		time.Sleep(time.Millisecond*500)
 	}
 }

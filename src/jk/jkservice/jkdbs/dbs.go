@@ -10,16 +10,19 @@ type ServiceDBS struct {
 	jknetbase.JKNetBaseRecv
 }
 
+func handler_msg(conn net.Conn, data string) error {
+	l4g.Debug("handler msg of dbs")
+	conn.Write([]byte("Hello give you a response"))
+	return nil
+}
+
 func NewServiceDBS(addr string, port int) (*ServiceDBS, error) {
 	dbs := &ServiceDBS{}
 	err := dbs.New(addr, port, 1)
 	if (err != nil) {
 		return nil, err
 	}
-	return dbs, nil
-}
 
-func (dbs *ServiceDBS) handler_msg(conn net.Conn, data []string) error {
-	l4g.Debug("handler msg of dbs")
-	return nil
+	dbs.SetHandlerMsg(handler_msg)
+	return dbs, nil
 }

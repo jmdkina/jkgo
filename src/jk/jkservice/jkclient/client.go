@@ -1,6 +1,8 @@
 package jkclient
 
-import "jk/jknetbase"
+import (
+	"jk/jknetbase"
+)
 
 type DemoClient struct {
 	jknetbase.JKNetBaseClient
@@ -13,12 +15,4 @@ func NewDemoClient(addr string, port int) (*DemoClient, error) {
 		return nil, err
 	}
 	return c, nil
-}
-
-func (c *DemoClient) Send(data string) int {
-	return c.Send(data)
-}
-
-func (c *DemoClient) Recv() (string, error) {
-	return c.Recv()
 }

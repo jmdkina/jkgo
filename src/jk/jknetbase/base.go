@@ -5,7 +5,10 @@ import (
 	"errors"
 	"strconv"
 	"io"
+	"github.com/alecthomas/log4go"
 )
+
+type HandlerMsgCallback func(conn net.Conn, data string) error
 
 type JKNetBaseRecv struct {
 	listener   net.Listener
@@ -14,19 +17,22 @@ type JKNetBaseRecv struct {
 	port       int
 	nettype    int
 
+	handler_msg  HandlerMsgCallback
+
 	items      map[string](JKNetBaseRecvItem)
 }
 
 type JKNetBaseRecvItem struct {
 	conn        net.Conn
 	remoteaddr  string
-	data        []string
+	data        string
 }
 
 func (nb *JKNetBaseRecv) New(addr string, port int, nettype int) error {
 	nb.address = addr
 	nb.port = port
 	nb.nettype = nettype
+	nb.items = make(map[string](JKNetBaseRecvItem))
 
 	if nettype == 1 {
 		var err error
@@ -46,29 +52,31 @@ func (nb *JKNetBaseRecv) Recv() error {
 		if err != nil {
 			return err
 		}
+		log4go.Info("accept one client %s", conn.RemoteAddr().String())
 		go func() {
 			for {
 				rdata := make([]byte, 2 << 15)
 				n, err := conn.Read(rdata)
 				if err == io.EOF {
+					log4go.Error("IO EOF exit")
 					break
 				}
 
+				log4go.Debug("Recv data of length %d, from %s", n, conn.RemoteAddr().String())
 				item := JKNetBaseRecvItem{}
 				item.conn = conn
 				item.remoteaddr = conn.RemoteAddr().String()
-				item.data = append(item.data, string(rdata[0:n]))
+				item.data = string(rdata[0:n])
 				nb.items[item.remoteaddr] = item
-				nb.handle_msg(conn, item.data)
+				nb.handler_msg(conn, item.data)
 			}
 		}()
 	}
 	return nil
 }
 
-func (nb *JKNetBaseRecv) handle_msg(conn net.Conn, data []string) error {
-
-	return nil
+func (nb *JKNetBaseRecv) SetHandlerMsg(callback HandlerMsgCallback) {
+	nb.handler_msg = callback
 }
 
 type JKNetBaseClient struct {
