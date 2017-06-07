@@ -5,6 +5,7 @@ import (
 	"time"
 	"flag"
 	"jk/jknetbase"
+	"jk/jkservice/jkdbs"
 )
 
 var (
@@ -25,8 +26,13 @@ func main() {
 
 	jknetbase.InitDeamon(*bg)
 
-	p := Process{}
-	p.start(*address, *port)
+	dbs, err := jkdbs.NewServiceDBS(*address, *port)
+	if err != nil {
+		l4g.Debug("create dbs failed ", err)
+		return
+	}
+	l4g.Info("Start recv data")
+	dbs.Recv()
 	for {
 		time.Sleep(time.Millisecond*500)
 	}

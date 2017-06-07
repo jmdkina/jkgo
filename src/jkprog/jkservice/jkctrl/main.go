@@ -5,6 +5,7 @@ import (
 	"time"
 	"flag"
 	"jk/jknetbase"
+	"jk/jkservice/jkctrl"
 )
 
 var (
@@ -25,8 +26,13 @@ func main() {
 
 	jknetbase.InitDeamon(*bg)
 
-	p := Process{}
-	p.start(*address, *port)
+	ctrl, err := jkctrl.NewServiceCtrl(*address, *port)
+	if err != nil {
+		l4g.Debug("create service ctrl failed ", err)
+		return
+	}
+	l4g.Info("Start recv data")
+	ctrl.Recv()
 	for {
 		time.Sleep(time.Millisecond*500)
 	}
