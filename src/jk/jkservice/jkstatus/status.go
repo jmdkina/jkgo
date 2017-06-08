@@ -1,4 +1,4 @@
-package jkctrl
+package jkstatus
 
 import (
 	"jk/jknetbase"
@@ -6,7 +6,7 @@ import (
 	l4g "github.com/alecthomas/log4go"
 )
 
-type ServiceCtrl struct {
+type ServiceStatus struct {
 	jknetbase.JKNetBaseRecv
 }
 
@@ -16,8 +16,8 @@ func handler_msg(conn net.Conn, data string) error {
 	return nil
 }
 
-func NewServiceCtrl(addr string, port int) (*ServiceCtrl, error) {
-	ctrl := &ServiceCtrl{}
+func NewServiceStatus(addr string, port int) (*ServiceStatus, error) {
+	ctrl := &ServiceStatus{}
 	err := ctrl.New(addr, port, 1)
 	if (err != nil) {
 		return nil, err
