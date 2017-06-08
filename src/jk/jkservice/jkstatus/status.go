@@ -10,9 +10,10 @@ type ServiceStatus struct {
 	jknetbase.JKNetBaseRecv
 }
 
-func handler_msg(conn net.Conn, data string) error {
-	l4g.Debug("handler msg of ctrl")
-	conn.Write([]byte("ctrl service response"))
+func (ctrl *ServiceStatus) handler_msg(conn net.Conn, data string) error {
+	l4g.Debug("handler msg of jkstatus")
+	p, _ := ParseData(data, conn)
+	p.HandleMsg()
 	return nil
 }
 
@@ -23,6 +24,6 @@ func NewServiceStatus(addr string, port int) (*ServiceStatus, error) {
 		return nil, err
 	}
 
-	ctrl.SetHandlerMsg(handler_msg)
+	ctrl.SetHandlerMsg(ctrl.handler_msg)
 	return ctrl, nil
 }

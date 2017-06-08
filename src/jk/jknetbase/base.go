@@ -47,31 +47,34 @@ func (nb *JKNetBaseRecv) New(addr string, port int, nettype int) error {
 }
 
 func (nb *JKNetBaseRecv) Recv() error {
-	for {
-		conn, err := nb.listener.Accept()
-		if err != nil {
-			return err
-		}
-		log4go.Info("accept one client %s", conn.RemoteAddr().String())
-		go func() {
-			for {
-				rdata := make([]byte, 2 << 15)
-				n, err := conn.Read(rdata)
-				if err == io.EOF {
-					log4go.Error("IO EOF exit")
-					break
-				}
-
-				log4go.Debug("Recv data of length %d, from %s", n, conn.RemoteAddr().String())
-				item := JKNetBaseRecvItem{}
-				item.conn = conn
-				item.remoteaddr = conn.RemoteAddr().String()
-				item.data = string(rdata[0:n])
-				nb.items[item.remoteaddr] = item
-				nb.handler_msg(conn, item.data)
+	go func() {
+		for {
+			conn, err := nb.listener.Accept()
+			if err != nil {
+				log4go.Error("accept failed ", err)
+				return
 			}
-		}()
-	}
+			log4go.Info("accept one client %s", conn.RemoteAddr().String())
+			go func() {
+				for {
+					rdata := make([]byte, 2 << 15)
+					n, err := conn.Read(rdata)
+					if err == io.EOF {
+						log4go.Error("IO EOF exit")
+						break
+					}
+
+					log4go.Debug("Recv data of length %d, from %s", n, conn.RemoteAddr().String())
+					item := JKNetBaseRecvItem{}
+					item.conn = conn
+					item.remoteaddr = conn.RemoteAddr().String()
+					item.data = string(rdata[0:n])
+					nb.items[item.remoteaddr] = item
+					nb.handler_msg(conn, item.data)
+				}
+			}()
+		}
+	}()
 	return nil
 }
 
