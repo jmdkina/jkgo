@@ -49,6 +49,7 @@ func (nb *JKNetBaseRecv) New(addr string, port int, nettype int) error {
 func (nb *JKNetBaseRecv) Recv() error {
 	go func() {
 		for {
+			log4go.Debug("Start to accept ...")
 			conn, err := nb.listener.Accept()
 			if err != nil {
 				log4go.Error("accept failed ", err)

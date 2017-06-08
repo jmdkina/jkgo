@@ -1,4 +1,4 @@
-package jkdbs
+package jkbase
 
 import (
 	"jk/jknetbase"
@@ -43,4 +43,20 @@ func (c *ServiceClientCtrl) DoRun() error {
 	}
 
 	return nil
+}
+
+
+func ServiceBaseRun(client_addr string, client_port int) {
+	go func() {
+		for {
+			p, err := NewServiceClientCtrl(client_addr, client_port, 1)
+			if err != nil {
+				log4go.Error("service client ctrl failed ", err)
+				time.Sleep(time.Second * 5)
+			} else {
+				log4go.Info("Start service client ctrl with [%s, %d]", client_addr, client_port)
+				p.DoRun()
+			}
+		}
+	}()
 }
