@@ -10,7 +10,7 @@ function log() {
 
 if [ "$1" == "-h" ]; then
     log "Usage: $0 [type] [cross]"
-    log " type: linux windows"
+    log " type: linux windows darwin"
     log " cross: 386 amd64"
     exit 1
 fi
@@ -23,26 +23,28 @@ case $cross in
     OS=linux
     ARCH=amd64
     bin_path=$basepath/bin/simpleserver
-    CROSS_ENV="GOOS=linux GOARCH=amd64"
     ;;
     corei7|386)
     OS=linux
     ARCH=386
     bin_path=$basepath/bin/simpleserver
-    CROSS_ENV="GOOS=linux GOARCH=386"
     ;;
     windows)
     OS=windows
     ARCH=amd64
     bin_path=$basepath/bin/simpleserver.exe
     SUFFIX=".exe"
-    CROSS_ENV="GOOS=linux GOARCH=amd64"
+    ;;
+    darwin)
+    OS=darwin
+    ARCH=amd64
+    bin_path=$basepath/bin/simpleserver
     ;;
 esac
 
 case $type in
     simpleserver)
-    rm -rf $bin_path
+    rm -rf $basepath/bin/simpleserver*
     if [ ! -f $bin_path ]; then
         log "build GOOS=$OS GOARCH=$ARCH"
         cd $basepath/src/jkprog/simpleserver
@@ -55,6 +57,7 @@ case $type in
         exit 2
     fi
     tmp_path=/tmp/simpleserver
+    rm -rf $tmp_path
     mkdir -p $tmp_path $tmp_path/bin
     cp -r $basepath/html $tmp_path
     cp -r $bin_path $tmp_path/bin
