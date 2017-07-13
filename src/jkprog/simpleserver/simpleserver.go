@@ -19,7 +19,7 @@ func main() {
 	html_path := *path
 	if len(*path) == 0 {
 		curpath, _ := os.Getwd()
-		html_path = curpath + "/src/jkprog/simpleserver/html"
+		html_path = curpath + "/html"
 	}
 
 	http.Handle("/css/", http.FileServer(http.Dir(html_path)))
