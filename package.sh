@@ -8,6 +8,13 @@ function log() {
     echo "$*"
 }
 
+if [ "$1" == "-h" ]; then
+    log "Usage: $0 [type] [cross]"
+    log " type: linux windows"
+    log " cross: 386 amd64"
+    exit 1
+fi
+
 VERSION=`date +%Y%m%d%H%M%S`
 PKG_NAME=$type-$cross-$VERSION.tar.bz2
 
@@ -27,7 +34,8 @@ case $cross in
     windows)
     OS=windows
     ARCH=amd64
-    bin_path=$basepath/bin/simpleserver
+    bin_path=$basepath/bin/simpleserver.exe
+    SUFFIX=".exe"
     CROSS_ENV="GOOS=linux GOARCH=amd64"
     ;;
 esac
@@ -40,7 +48,7 @@ case $type in
         cd $basepath/src/jkprog/simpleserver
         GOOS=$OS GOARCH=$ARCH go build simpleserver.go
         cd -
-        mv $basepath/src/jkprog/simpleserver/simpleserver $bin_path
+        mv $basepath/src/jkprog/simpleserver/simpleserver$SUFFIX $bin_path
     fi
     if [ ! -f $bin_path ]; then
         log "Error: simpleserver not build, check it"
