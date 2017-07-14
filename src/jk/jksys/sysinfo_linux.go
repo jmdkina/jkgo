@@ -15,6 +15,7 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
+	"io/ioutil"
 )
 
 // Get CPU info
@@ -24,6 +25,7 @@ type ProcessCPU struct {
 }
 
 type KFSystemInfo struct {
+	OSName   string
 	TotalRam uint64
 	FreeRam  uint64
 
@@ -36,11 +38,27 @@ type KFSystemInfo struct {
 
 // Someday this name will get from file with different location
 const (
-	// TotalName = "Total"
-	TotalName = "总计"
-	// FreeName  = "Free"
-	FreeName = "剩余"
+	 TotalName = "Total"
+	 FreeName  = "Free"
 )
+
+func NewSystemInfo() *KFSystemInfo {
+	si := &KFSystemInfo{}
+	si.KFCPUInfo()
+	si.KFDiskInfo()
+	si.KFMemInfo()
+	si.KFSysBase()
+	return si
+}
+
+func (si *KFSystemInfo) KFSysBase() error {
+        d, err := ioutil.ReadFile("/etc/issue")
+	if err != nil {
+		return err
+	}
+	si.OSName = string(d)
+	return nil
+}
 
 func (si *KFSystemInfo) KFMemInfo() (uint64, uint64) {
 	var sys syscall.Sysinfo_t

@@ -6,6 +6,11 @@
     <link rel="stylesheet" href="css/index.css" />
 </head>
 <body>
-<p>Start from here : {{.Basepath}}</p>
+{{ with .Sysinfo }}
+<p>OS: <strong>{{ .OSName }}</strong></p>
+<p>Disk: <strong>{{ .FreeDisk }}/{{.TotalDisk}}</strong></p>
+<p>Mem: <strong>{{ .FreeRam }}/{{.TotalRam}}</strong></p>
+<p>CPU: <strong>{{ .CPUUsage}}</strong></p>
+{{ end }}
 </body>
 </html>

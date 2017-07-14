@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"jk/jklog"
 	"os"
+	"jk/jksys"
 )
 
 type Base struct {
@@ -47,7 +48,7 @@ type Index struct {
 }
 
 type IndexInfo struct {
-	Basepath     string
+	Sysinfo      jksys.KFSystemInfo
 }
 
 func NewIndex(path string) *Index {
@@ -63,7 +64,7 @@ func (b *Index) ServeHttp(w http.ResponseWriter, r *http.Request) {
 	jklog.L().Debugf("Get html [%s]\n", filename)
 
 	ii := IndexInfo{
-		Basepath: b.path,
+		Sysinfo: *jksys.NewSystemInfo(),
 	}
 
 	sp.Parse(w, filename, ii)
