@@ -18,6 +18,7 @@ CUR=`pwd`
 srcs="github.com/alecthomas/log4go.git"
 srcs+=" github.com/golang/protobuf.git"
 srcs+=" github.com/gorilla/websocket.git"
+srcs+="  github.com/matishsiao/goInfo"
 
 for src in $srcs
 do

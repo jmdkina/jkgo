@@ -6,6 +6,7 @@ go get github.com/sbinet/go-config/config
 
 #https://github.com/golangers/session.git
 #https://github.com/golangers/utils.git
+#https://github.com/matishsiao/goInfo.git
 
 #https://github.com/golangers/webrouter.git
 #https://github.com/golangers/config.git
