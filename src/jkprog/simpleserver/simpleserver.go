@@ -30,6 +30,6 @@ func main() {
 
 	lport := *port
 
-	jklog.L().Debugf("Listen port %d\n", lport)
+	jklog.L().Infof("Listen port %d\n", lport)
 	http.ListenAndServe(":" + strconv.Itoa(lport), nil)
 }

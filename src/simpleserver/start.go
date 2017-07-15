@@ -67,5 +67,8 @@ func (b *Index) ServeHttp(w http.ResponseWriter, r *http.Request) {
 		Sysinfo: *jksys.NewSystemInfo(),
 	}
 
-	sp.Parse(w, filename, ii)
+	err := sp.Parse(w, filename, ii)
+	if err != nil {
+		jklog.L().Errorln("Parse error ", err)
+	}
 }

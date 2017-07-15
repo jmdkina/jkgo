@@ -22,6 +22,5 @@ func (sp *SimpleParse) Parse(out io.Writer, file string, data interface{}) error
 	if err != nil {
 		return err
 	}
-	t.Execute(out, data)
-	return nil
+	return t.Execute(out, data)
 }

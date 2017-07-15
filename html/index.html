@@ -7,10 +7,17 @@
 </head>
 <body>
 {{ with .Sysinfo }}
-<p>OS: <strong>{{ .OSName }}</strong></p>
+<p>OS: <strong>{{ .Info.OS }}</strong></p>
+<p>Kernel: <strong>{{ .Info.Kernel }}</strong></p>
+<p>Core: <strong>{{ .Info.Core }}</strong></p>
+<p>Platform: <strong>{{ .Info.Platform }}</strong></p>
+<p>Hostname: <strong>{{ .Info.Hostname }}</strong></p>
+<p>IPAddress: <strong>{{ .IPAddr }}</strong></p>
+<p>Mac: <strong>{{ .Mac }}</strong></p>
 <p>Disk: <strong>{{ .FreeDisk }}/{{.TotalDisk}}</strong></p>
 <p>Mem: <strong>{{ .FreeRam }}/{{.TotalRam}}</strong></p>
-<p>CPU: <strong>{{ .CPUUsage}}</strong></p>
+<p>CPUsage: <strong>{{ .CPUUsage}}</strong></p>
+<p>CPUs: <strong>{{ .Info.CPUs }}</strong></p>
 {{ end }}
 </body>
 </html>
