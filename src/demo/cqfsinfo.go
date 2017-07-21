@@ -27,15 +27,15 @@ func NewCQFS(path string) (*CQFSInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	ci.Header.Magic = string(value[:3])
-	ii, _ := strconv.Atoi(string(value[3:4]))
+	ci.Header.Magic = string(value[:4])
+	ii, _ := strconv.Atoi(string(value[5]))
 	ci.Header.Version = uint32(ii)
-	ci.Header.Target = string(value[5:133])
+	ci.Header.Target = string(value[6:132])
 	return ci, nil
 }
 
 func (ci *CQFSInfo) PrintHeader() {
-	jklog.L().Printf("Header magic [%s] version [%d], Target [%s]\n",
+	jklog.L().Debugf("Header magic [%s] version [%d], Target [%s]\n",
 		ci.Header.Magic, ci.Header.Version, ci.Header.Target)
 }
 
