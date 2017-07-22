@@ -27,10 +27,17 @@
 </table>
 <div id="addfileserver">
     <label>Add New Server: </label>
-    <input class="text-info" type="text" placeholder="DirPath" v-model="path" /><br/>
-    <button class="btn btn-info btn-block" v-on:click="addfileserver">Add</button><br/>
+    <input class="form-control" type="text" placeholder="DirPath" v-model="path" /><br/>
+    <button class="btn btn-info btn-block" v-on:click="addfileserver">AddFileServer</button><br/>
     <p>Add result: ${ result } </p>
+    <div>
+        <hr/>
+        <label>Add Upload path: </label>
+        <input class="form-control" type="text" placeholder="UploadPath" v-model="uploadpath" /><br/>
+        <button class="btn btn-info btn-block" v-on:click="adduploadpath">AddUploadPath</button><br/>
+    </div>
 </div>
+
 </div>
 </body>
 </html>

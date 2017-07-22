@@ -29,6 +29,7 @@ func main() {
 	ss.NewNotFound(html_path)
 	ss.NewIndex(html_path)
 	ss.NewDirServer(html_path)
+	ss.NewUploadServer(html_path)
 
 	lport := *port
 

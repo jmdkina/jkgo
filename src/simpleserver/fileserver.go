@@ -11,10 +11,21 @@ type FileServerInfo struct {
 	Status    int
 }
 
+type FileUploadInfo struct {
+	Path     string
+	Enable   int
+}
+
+var file_upload_path FileUploadInfo
+
 var file_server_map map[string]*FileServerInfo
 
 func init() {
 	file_server_map = make(map[string]*FileServerInfo, 10)
+}
+
+func GetFileUploadPath() FileUploadInfo {
+	return file_upload_path
 }
 
 func GetFileServers() map[string]*FileServerInfo {
@@ -35,7 +46,11 @@ func AddFileServer(path string) error {
 		Path: path,
 		Status: 1,
 	}
-	n := strings.LastIndex(path, "\\")
+	n := strings.LastIndex(path, "\\") // windows
+	if n <= 0 {
+		// if in linux
+		n = strings.LastIndex(path, "/")
+	}
 	prefix := path[:n]
 	pathname := path[n+1:]
 	http.Handle("/" + pathname + "/", http.FileServer(http.Dir(prefix)))
@@ -47,4 +62,9 @@ func AddFileServer(path string) error {
 func DelFileServer(path string) error {
 
 	return nil
+}
+
+func SetFileUploadPath(path string) {
+	file_upload_path.Enable = 1
+	file_upload_path.Path = path
 }

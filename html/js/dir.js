@@ -8,6 +8,7 @@ $(function(){
        el: '#addfileserver',
        data: {
            path: "",
+           uploadpath: "",
            result:""
        },
        methods: {
@@ -22,6 +23,18 @@ $(function(){
                    success: function() {
                        console.log("addfileserver success");
                        add_fileserver.result = "success";
+                   }
+               });
+           },
+           adduploadpath: function() {
+               var str = "jk=adduploadpath&path=" + this.uploadpath;
+               console.log("adduploadpath " + str);
+               $.ajax({
+                   url: "dir",
+                   method:"POST",
+                   data: str,
+                   success: function() {
+                       console.log("add uploadpath success");
                    }
                })
            }

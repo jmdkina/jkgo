@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload file</title>
+</head>
+<body>
+<p>We only support upload one file once</p>
+<table border="1">
+    <tr>
+        <td>Path</td>
+        <td>Status</td>
+    </tr>
+    <tr>
+        <td>{{ .UploadInfo.Path }}</td>
+        <td>{{ .UploadInfo.Enable }}</td>
+    </tr>
+</table>
+<form enctype="multipart/form-data" action="/upload" method="post">
+    <input type="file" name="uploadfile" />
+    <input type="hidden" name="token" value="{{.}}"/>
+    <input type="submit" value="upload" />
+</form>
+</body>
+</html>
