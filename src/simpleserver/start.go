@@ -72,3 +72,48 @@ func (b *Index) ServeHttp(w http.ResponseWriter, r *http.Request) {
 		jklog.L().Errorln("Parse error ", err)
 	}
 }
+
+type DirServer struct {
+	Base
+}
+
+func NewDirServer(path string) *DirServer {
+	ds := &DirServer{}
+	ds.SetPath(path)
+	http.HandleFunc("/dir", ds.ServeHttp)
+	return ds
+}
+
+type DirServerInfo struct {
+	FSS  []FileServerInfo
+}
+
+func (b *DirServer) ServeHttp(w http.ResponseWriter, r *http.Request) {
+	sp := SimpleParse{}
+	if r.Method == "GET" {
+		filename := b.path + "/dir.html"
+		jklog.L().Debugf("filepath [%s]\n", filename)
+		dsi := DirServerInfo{}
+		fsss := GetFileServers()
+		for _,v := range fsss {
+                     dsi.FSS = append(dsi.FSS, *v)
+		}
+		err := sp.Parse(w, filename, dsi)
+		if err != nil {
+			jklog.L().Errorln("Parse error ", err)
+			return
+		}
+	} else if r.Method == "POST" {
+		cmd := r.FormValue("jk")
+		jklog.L().Debugf("addfileserver cmd: %s\n", cmd)
+		switch cmd {
+		case "addfileserver":
+                        path := r.FormValue("path")
+			if len(path) > 0 {
+				jklog.L().Debugf("add path [%s]\n", path)
+				AddFileServer(path)
+			}
+			break;
+		}
+	}
+}

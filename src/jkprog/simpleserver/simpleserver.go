@@ -24,9 +24,11 @@ func main() {
 
 	http.Handle("/css/", http.FileServer(http.Dir(html_path)))
 	http.Handle("/js/", http.FileServer(http.Dir(html_path)))
+	http.Handle("/addon/", http.FileServer(http.Dir(html_path)))
 
 	ss.NewNotFound(html_path)
 	ss.NewIndex(html_path)
+	ss.NewDirServer(html_path)
 
 	lport := *port
 

@@ -3,9 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Index</title>
+    <link rel="stylesheet" href="addon/bootstrap/bootstrap.min.css">
+    <script type="text/javascript" src="addon/jquery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="addon/vue/vue.min.js"></script>
+    <link rel="stylesheet" href="css/global.css" />
     <link rel="stylesheet" href="css/index.css" />
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/index.js" ></script>
 </head>
 <body>
+<div class="container-fluid">
 {{ with .Sysinfo }}
 <p>OS: <strong>{{ .Info.OS }}</strong></p>
 <p>Kernel: <strong>{{ .Info.Kernel }}</strong></p>
@@ -19,5 +26,6 @@
 <p>CPUsage: <strong>{{ .CPUUsage}}</strong></p>
 <p>CPUs: <strong>{{ .Info.CPUs }}</strong></p>
 {{ end }}
+</div>
 </body>
 </html>
