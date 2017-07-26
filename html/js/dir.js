@@ -3,7 +3,7 @@
  */
 
 $(function(){
-    Vue.config.delimiters = ['${', '}'];
+    Vue.config.delimiters = ['${', '}#'];
    var add_fileserver = new Vue({
        el: '#addfileserver',
        data: {

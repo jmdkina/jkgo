@@ -10,6 +10,7 @@ package jksys
 import (
 	"bytes"
 	"fmt"
+	ssi "github.com/matishsiao/goInfo"
 	"jk/jklog"
 	"os/exec"
 	"strconv"
@@ -23,6 +24,9 @@ type ProcessCPU struct {
 }
 
 type KFSystemInfo struct {
+	Info *ssi.GoInfoObject
+
+	OSName   string
 	TotalRam uint64
 	FreeRam  uint64
 
@@ -40,6 +44,27 @@ const (
 	// FreeName  = "Free"
 	FreeName = "剩余"
 )
+
+func NewSystemInfo() *KFSystemInfo {
+	si := &KFSystemInfo{}
+	si.Info = ssi.GetInfo()
+	si.GetAddrInfo()
+	si.KFCPUInfo()
+	si.KFDiskInfo()
+	si.KFMemInfo()
+	si.KFSysBase()
+	return si
+}
+
+func (si *KFSystemInfo) GetAddrInfo() error {
+
+	return nil
+}
+
+func (si *KFSystemInfo) KFSysBase() error {
+	si.OSName = "MacOS"
+	return nil
+}
 
 func (si *KFSystemInfo) KFMemInfo() (uint64, uint64) {
 	return 0, 0

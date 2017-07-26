@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="css/global.css" />
     <link rel="stylesheet" href="css/dir.css" />
     <script type="text/javascript" src="js/global.js"></script>
-    <script type="text/javascript" src="js/dir.js" ></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -29,7 +28,7 @@
     <label>Add New Server: </label>
     <input class="form-control" type="text" placeholder="DirPath" v-model="path" /><br/>
     <button class="btn btn-info btn-block" v-on:click="addfileserver">AddFileServer</button><br/>
-    <p>Add result: ${ result } </p>
+    <p>Add result: ${ result }# </p>
     <div>
         <hr/>
         <label>Add Upload path: </label>
@@ -40,4 +39,6 @@
 
 </div>
 </body>
+
+    <script type="text/javascript" src="js/dir.js" ></script>
 </html>
