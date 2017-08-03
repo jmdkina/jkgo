@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"os"
 	"flag"
+	"fmt"
 )
 
 var (
@@ -14,7 +15,14 @@ var (
 	path      = flag.String("htmlpath", "", "Html path")
 )
 
+var (
+	VERSION  string
+	BUILD_TIME  string
+	GOVERSION string
+)
+
 func main() {
+	fmt.Printf("VERSION: %s\nBUILD_TIME: %s\nGO_VERSION: %s\n", VERSION, BUILD_TIME, GOVERSION)
 	flag.Parse()
 	html_path := *path
 	if len(*path) == 0 {
@@ -30,6 +38,7 @@ func main() {
 	ss.NewIndex(html_path)
 	ss.NewDirServer(html_path)
 	ss.NewUploadServer(html_path)
+	ss.NewWebGL(html_path)
 
 	lport := *port
 

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebGL Start</title>
+    <style type="text/css">
+        canvas { background: blue; }
+    </style>
+    <script type="text/javascript" src="https://www.khronos.org/registry/webgl/sdk/demos/common/webgl-utils.js"></script>
+    <script type="text/javascript">
+        var canvas;
+        var gl;
+
+        window.onload = init;
+
+        function init() {
+            canvas = document.getElementById("gl-canvas");
+            gl = WebGLUtils.setupWebGL(canvas);
+            if (!gl) { alert("WebGL is not available"); }
+
+            gl.viewport(0, 0, canvas.width, canvas.height);
+            gl.clearColor(1.0, 0.0, 0.0, 1.0);
+            gl.clear(gl.COLOR_BUFFER_BIT);
+        }
+    </script>
+</head>
+<body>
+<canvas id="gl-canvas" width="512" height="512">
+    Choose a new browser, you must not stop the evolution of this world!!!
+</canvas>
+</body>
+</html>
