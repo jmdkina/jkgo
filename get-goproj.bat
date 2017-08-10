@@ -4,6 +4,7 @@ set INSTALL_PATH=srctmp
 go get code.google.com/p/goprotobuf
 go get github.com/sbinet/go-config/config
 go get github.com/Unknwon/goconfig
+go get github.com/gorilla/websocket
 
 ::git clone https://github.com/golangers/session.git
 ::git clone https://github.com/golangers/utils.git

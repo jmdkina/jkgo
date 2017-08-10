@@ -1,7 +1,7 @@
 #!/bin/bash 
 goget="github.com/astaxie/beego github.com/beego/bee github.com/Unknwon/goconfig github.com/rthornton128/goncurses"
 goget+=" github.com/gogap/logs"
-goget+=" github.com/henrylee2cn/faygo github.com/henrylee2cn/fay"
+goget+=" github.com/henrylee2cn/faygo github.com/henrylee2cn/fay github.com/gorilla/websocket"
 
 for i in $goget
 do
