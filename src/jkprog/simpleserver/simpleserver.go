@@ -1,24 +1,24 @@
 package main
 
 import (
-	ss "simpleserver"
-	"net/http"
-	"jk/jklog"
-	"strconv"
-	"os"
 	"flag"
 	"fmt"
+	"jk/jklog"
+	"net/http"
+	"os"
+	ss "simpleserver"
+	"strconv"
 )
 
 var (
-	port    = flag.Int("port", 12306, "Listen port")
-	path      = flag.String("htmlpath", "", "Html path")
+	port = flag.Int("port", 12306, "Listen port")
+	path = flag.String("htmlpath", "", "Html path")
 )
 
 var (
-	VERSION  string
-	BUILD_TIME  string
-	GOVERSION string
+	VERSION    string
+	BUILD_TIME string
+	GOVERSION  string
 )
 
 func main() {
@@ -39,9 +39,10 @@ func main() {
 	ss.NewDirServer(html_path)
 	ss.NewUploadServer(html_path)
 	ss.NewWebGL(html_path)
+	ss.NewWebSocket(html_path)
 
 	lport := *port
 
 	jklog.L().Infof("Listen port %d\n", lport)
-	http.ListenAndServe(":" + strconv.Itoa(lport), nil)
+	http.ListenAndServe(":"+strconv.Itoa(lport), nil)
 }

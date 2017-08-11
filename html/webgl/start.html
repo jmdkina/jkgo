@@ -7,27 +7,44 @@
         canvas { background: blue; }
     </style>
     <script type="text/javascript" src="https://www.khronos.org/registry/webgl/sdk/demos/common/webgl-utils.js"></script>
+    <link rel="stylesheet" href="addon/bootstrap/bootstrap.min.css">
+    <script type="text/javascript" src="addon/jquery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="addon/vue/vue.min.js"></script>
+
+    <script type="text/javascript" src="js/global.js"></script>
+
     <script type="text/javascript" src="js/webgl/webgl-utils.js"></script>
     <script type="text/javascript" src="js/webgl/webgl-debug.js"></script>
     <script type="text/javascript" src="js/webgl/cuon-utils.js"></script>
     <script type="text/javascript" src="js/webgl/webgl.js"></script>
+    <script type="text/javascript" ></script>
     <script type="text/javascript">
         var canvas;
         var gl;
+        log_enable(true);
 
         window.onload = init;
 
         function init() {
             canvas = document.getElementById("gl-canvas");
             var gl = getWebGLContext(canvas);
-            do_drawpointer(gl);
+            do_drawinit(gl);
+            do_set_position(gl);
+            do_draw(gl);
         }
-            
+
     </script>
 </head>
 <body>
 <canvas id="gl-canvas" width="512" height="512">
     Choose a new browser, you must not stop the evolution of this world!!!
 </canvas>
+<div id="ws">
+<label>Send One Message</label>
+<input class="form-control" type="text" placeholder="Message" v-model="message" /><br/>
+<button class="btn btn-info btn-block" v-on:click="send_msg">Send</button><br/>
+</div>
+
+    <script type="text/javascript" src="js/webgl/websocket.js"></script>
 </body>
 </html>
