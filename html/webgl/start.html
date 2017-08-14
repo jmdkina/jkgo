@@ -24,19 +24,22 @@
         log_enable(true);
 
         window.onload = init;
+        var g_points = [];
 
         function init() {
             canvas = document.getElementById("gl-canvas");
             var gl = getWebGLContext(canvas);
             do_drawinit(gl);
-            do_set_position(gl);
-            do_draw(gl);
+            // do_set_position(gl);
+            do_set_pointsize(gl, 50.0);
+            // do_draw(gl);
+            canvas.onmousedown = function(ev) { glclick(ev, gl, canvas, g_points); }
         }
 
     </script>
 </head>
 <body>
-<canvas id="gl-canvas" width="512" height="512">
+<canvas id="gl-canvas" width="812" height="512">
     Choose a new browser, you must not stop the evolution of this world!!!
 </canvas>
 <div id="ws">
