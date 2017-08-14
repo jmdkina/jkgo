@@ -8,8 +8,10 @@ function do_drawinit(gl) {
 	    ' gl_PointSize = a_PointSize;\n' +
 	    '}\n';
 	var FSHADER_SOURCE =
+        'precision mediump float;\n'+
+        'uniform vec4 u_FragColor;\n' +
 	    'void main() {\n' + 
-	    ' gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n' +
+	    ' gl_FragColor = u_FragColor;\n' +
 	    '}\n';
 
     if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
@@ -38,7 +40,7 @@ function do_draw(gl) {
     gl.drawArrays(gl.POINTS, 0, 1);
 }
 
-function glclick(ev, gl, canvas, g_points) {
+function glclick(ev, gl, canvas, g_points, u_rgba) {
     // var g_points = [];
 
     var x = ev.clientX;
@@ -46,14 +48,27 @@ function glclick(ev, gl, canvas, g_points) {
     var rect = ev.target.getBoundingClientRect();
     x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
     y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
-    g_points.push(x); g_points.push(y);
+    // g_points.push(x); g_points.push(y);
+    g_points.push([x,y]);
+
+    if (x >= 0.0 && y >= 0.0) {
+        u_rgba.push([1.0, 0.0, 0.0, 1.0]);
+    } else if (x < 0.0 && y < 0.0) {
+        u_rgba.push([0.0, 1.0, 0.0, 1.0]);
+    } else {
+        u_rgba.push([1.0, 1.0, 1.0, 1.0]);
+    }
 
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     var len = g_points.length;
     var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
-    for (var i = 0; i < len; i+=2) {
-        gl.vertexAttrib3f(a_Position, g_points[i], g_points[i+1], 0.0);
+    var u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
+    for (var i = 0; i < len; i++) {
+        var points = g_points[i];
+        var rgba = u_rgba[i];
+        gl.vertexAttrib3f(a_Position, points[0], points[1], 0.0);
+        gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
         gl.drawArrays(gl.POINTS, 0, 1);
     }
 }

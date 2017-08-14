@@ -25,6 +25,7 @@
 
         window.onload = init;
         var g_points = [];
+        var u_rgba = [];
 
         function init() {
             canvas = document.getElementById("gl-canvas");
@@ -33,7 +34,7 @@
             // do_set_position(gl);
             do_set_pointsize(gl, 50.0);
             // do_draw(gl);
-            canvas.onmousedown = function(ev) { glclick(ev, gl, canvas, g_points); }
+            canvas.onmousedown = function(ev) { glclick(ev, gl, canvas, g_points, u_rgba); }
         }
 
     </script>
