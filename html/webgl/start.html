@@ -24,17 +24,13 @@
         log_enable(true);
 
         window.onload = init;
-        var g_points = [];
-        var u_rgba = [];
 
         function init() {
             canvas = document.getElementById("gl-canvas");
             var gl = getWebGLContext(canvas);
             do_drawinit(gl);
-            // do_set_position(gl);
-            do_set_pointsize(gl, 50.0);
-            // do_draw(gl);
-            canvas.onmousedown = function(ev) { glclick(ev, gl, canvas, g_points, u_rgba); }
+            test_triangle(gl);
+            // test_click(gl);
         }
 
     </script>

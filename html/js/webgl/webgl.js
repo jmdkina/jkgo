@@ -20,6 +20,14 @@ function do_drawinit(gl) {
     }
 }
 
+function do_vertex_init(gl) {
+    var n = initVertexBuffers(gl);
+    if (n < 0) {
+        log_print("Failed to set vertex");
+        return ;
+    }
+}
+
 function do_set_position(gl, p1, p2, p3) {
 	var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
     if (a_Position < 0) {
@@ -34,10 +42,45 @@ function do_set_pointsize(gl, size) {
     gl.vertexAttrib1f(a_PointSize, size);
 }
 
+function initVertexBuffers(gl) {
+    var vertices = new Float32Array([
+        0.0, 0.5, -0.5, -0.5, 0.5, -0.5
+    ]);
+    var n = 3;
+
+    var vertexBuffer = gl.createBuffer();
+    if (!vertexBuffer) {
+        log_print("Failed to create buffer");
+        return -1;
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+    var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+
+    gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0);
+
+    gl.enableVertexAttribArray(a_Position);
+
+    return n;
+}
+
+function do_color(gl) {
+    var u_FragColor = gl.getUniformLocation(gl.program, 'u_FragColor');
+    var rgba = [1.0, 0.0, 1.0, 1.0];
+    gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
+}
+
 function do_draw(gl) {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.POINTS, 0, 1);
+}
+
+function do_draw_num(gl, num) {
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES, 0, num);
 }
 
 function glclick(ev, gl, canvas, g_points, u_rgba) {
@@ -71,4 +114,24 @@ function glclick(ev, gl, canvas, g_points, u_rgba) {
         gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
         gl.drawArrays(gl.POINTS, 0, 1);
     }
+}
+
+function test_base(gl) {
+    do_set_position(gl);
+    do_set_pointsize(gl, 50.0);
+    do_draw(gl);
+}
+
+function test_triangle(gl) {
+    do_vertex_init(gl);
+    do_set_pointsize(gl, 50.0);
+    do_color(gl);
+    do_draw_num(gl, 3);
+}
+
+var g_points = [];
+var u_rgba = [];
+function test_click(gl) {
+    do_set_pointsize(gl, 50.0);
+    canvas.onmousedown = function(ev) { glclick(ev, gl, canvas, g_points, u_rgba); }
 }
