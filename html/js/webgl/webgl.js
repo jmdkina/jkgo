@@ -3,8 +3,9 @@ function do_drawinit(gl) {
 	var VSHADER_SOURCE = 
 	    'attribute vec4 a_Position;\n' +
         'attribute float a_PointSize; \n'+
+        'uniform mat4 u_xformMatrix; \n' +
 	    'void main() {\n' +
-	    ' gl_Position = a_Position;\n' +
+	    ' gl_Position = a_Position * u_xformMatrix;\n' +
 	    ' gl_PointSize = a_PointSize;\n' +
 	    '}\n';
 	var FSHADER_SOURCE =
@@ -63,6 +64,50 @@ function initVertexBuffers(gl) {
     gl.enableVertexAttribArray(a_Position);
 
     return n;
+}
+
+function do_rotate(gl) {
+    var ANGLE = 90.0;
+    var radian = Math.PI * ANGLE /180.0;
+    var cosB = Math.cos(radian), sinB = Math.sin(radian);
+
+    var xformMatrix = new Float32Array ([
+        cosB, sinB, 0.0, 0.0,
+       -sinB, cosB, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0
+    ]);
+
+    var u_xformMatrix = gl.getUniformLocation(gl.program, 'u_xformMatrix');
+    gl.uniformMatrix4fv(u_xformMatrix, false, xformMatrix);
+}
+
+function do_move(gl) {
+    var tx = 0.5, ty = 0.5, tz = 0.0;
+
+    var xformMatrix = new Float32Array ([
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        tx, ty, tz, 1.0
+    ]);
+
+    var u_xformMatrix = gl.getUniformLocation(gl.program, 'u_xformMatrix');
+    gl.uniformMatrix4fv(u_xformMatrix, false, xformMatrix);
+}
+
+function do_zoom(gl) {
+    var tx = 1.5, ty = 1.5, tz = 0.5;
+
+    var xformMatrix = new Float32Array ([
+        tx, 0.0, 0.0, 0.0,
+        0.0, ty, 0.0, 0.0,
+        0.0, 0.0, tz, 0.0,
+        0.0, 0.0, 0.0, 1.0
+    ]);
+
+    var u_xformMatrix = gl.getUniformLocation(gl.program, 'u_xformMatrix');
+    gl.uniformMatrix4fv(u_xformMatrix, false, xformMatrix);
 }
 
 function do_color(gl) {
@@ -126,6 +171,15 @@ function test_triangle(gl) {
     do_vertex_init(gl);
     do_set_pointsize(gl, 50.0);
     do_color(gl);
+    do_draw_num(gl, 3);
+}
+
+function test_rotate(gl) {
+    do_vertex_init(gl);
+    do_color(gl);
+    // do_rotate(gl);
+    // do_move(gl);
+    do_zoom(gl);
     do_draw_num(gl, 3);
 }
 
