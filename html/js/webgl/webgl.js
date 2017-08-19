@@ -21,6 +21,10 @@ function do_drawinit(gl) {
     }
 }
 
+function do_clearcolor(gl) {
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+}
+
 function do_vertex_init(gl) {
     var n = initVertexBuffers(gl);
     if (n < 0) {
@@ -161,6 +165,43 @@ function glclick(ev, gl, canvas, g_points, u_rgba) {
     }
 }
 
+function do_todraw(gl, n, currentAngle, modelMratrix, u_ModelMatrix) {
+    modelMatrix.setRotate(currentAngle, 0, 0, 1);
+
+    gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
+
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    gl.drawArrays(gl.TRIANGLES, 0, n);
+}
+
+var g_last = Date.now();
+var ANGLE_STEP = 45.0;
+function animate(angle) {
+    var now = Date.now();
+    var elapsed = now - g_last;
+    g_last = now;
+    var newAngle = angle + (ANGLE_STEP * elapsed) / 1000.0;
+    return newAngle %= 360;
+}
+
+var currentAngle = 0.0;
+var modelMatrix = new Matrix4();
+
+var global_gl;
+var u_ModelMatrix;
+
+var tick = function() {
+    var n = 3;
+    currentAngle = animate(currentAngle);
+    do_todraw(global_gl, n, currentAngle, modelMatrix, u_ModelMatrix);
+    requestAnimationFrame(tick);
+}
+
+/*
+ * demo
+ */
+
 function test_base(gl) {
     do_set_position(gl);
     do_set_pointsize(gl, 50.0);
@@ -188,4 +229,13 @@ var u_rgba = [];
 function test_click(gl) {
     do_set_pointsize(gl, 50.0);
     canvas.onmousedown = function(ev) { glclick(ev, gl, canvas, g_points, u_rgba); }
+}
+
+function test_animate(gl) {
+    do_vertex_init(gl);
+    do_clearcolor(gl);
+
+    global_gl = gl;
+    u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_xformMatrix');
+    tick();
 }

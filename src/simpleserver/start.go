@@ -34,7 +34,7 @@ func (b *NotFound) ServeHttp(w http.ResponseWriter, r *http.Request) {
 
 	sp := SimpleParse{}
 	filename := b.path + "/404.html"
-	jklog.L().Debugf("Not found html [%s]\n", filename)
+	jklog.L().Debugf("Not found html [%s]\n", r.URL.Path)
     jklog.L().Debugf("Not found path [%s]\n", r.URL.Path)
 
 	if _, err := os.Stat(filename); err != nil && !os.IsExist(err) {

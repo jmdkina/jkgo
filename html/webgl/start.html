@@ -13,6 +13,7 @@
 
     <script type="text/javascript" src="js/global.js"></script>
 
+    <script type="text/javascript" src="js/webgl/cuon-matrix.js"></script>
     <script type="text/javascript" src="js/webgl/webgl-utils.js"></script>
     <script type="text/javascript" src="js/webgl/webgl-debug.js"></script>
     <script type="text/javascript" src="js/webgl/cuon-utils.js"></script>
@@ -29,7 +30,7 @@
             canvas = document.getElementById("gl-canvas");
             var gl = getWebGLContext(canvas);
             do_drawinit(gl);
-            test_rotate(gl);
+            test_animate(gl);
         }
 
     </script>
