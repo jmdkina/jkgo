@@ -1,5 +1,12 @@
 
 function do_drawinit(gl) {
+    var VSHADER_SOURCE_1 = 
+        'attribute vec4 a_Position;\n' +
+        'attribute float a_PointSize; \n'+
+        'void main() {\n' +
+        ' gl_Position = a_Position;\n' +
+        ' gl_PointSize = a_PointSize;\n' +
+        '}\n';
 	var VSHADER_SOURCE = 
 	    'attribute vec4 a_Position;\n' +
         'attribute float a_PointSize; \n'+
@@ -15,9 +22,33 @@ function do_drawinit(gl) {
 	    ' gl_FragColor = u_FragColor;\n' +
 	    '}\n';
 
-    if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
+    if (!initShaders(gl, VSHADER_SOURCE_1, FSHADER_SOURCE)) {
     	log_print("failed to initialize shaders");
     	return;
+    }
+}
+
+function do_drawinit_2(gl) {
+    var VSHADER_SOURCE_1 = 
+        'attribute vec4 a_Position;\n' +
+        'attribute vec4 a_Color; \n' +
+        'attribute float a_PointSize; \n'+
+        'varying vec4 v_Color;\n' +
+        'void main() {\n' +
+        ' gl_Position = a_Position;\n' +
+        ' gl_PointSize = a_PointSize;\n' +
+        ' v_Color = a_Color;\n' +
+        '}\n';
+    var FSHADER_SOURCE =
+        'precision mediump float;\n'+
+        'varying vec4 v_Color; \n'+
+        'void main() {\n' + 
+        ' gl_FragColor = v_Color;\n' +
+        '}\n';
+
+    if (!initShaders(gl, VSHADER_SOURCE_1, FSHADER_SOURCE)) {
+        log_print("failed to initialize shaders");
+        return;
     }
 }
 
@@ -29,8 +60,9 @@ function do_vertex_init(gl) {
     var n = initVertexBuffers(gl);
     if (n < 0) {
         log_print("Failed to set vertex");
-        return ;
+        return 0;
     }
+    return n;
 }
 
 function do_set_position(gl, p1, p2, p3) {
@@ -66,6 +98,66 @@ function initVertexBuffers(gl) {
     gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0);
 
     gl.enableVertexAttribArray(a_Position);
+
+    return n;
+}
+
+function initVertexBuffers_2(gl) {
+    // Put position and point size together
+    var vertices = new Float32Array([
+        0.0, 0.5, 10.0,
+       -0.5, -0.5, 20.0,
+        0.5, -0.5, 30.0
+    ]);
+    var n = 3;
+
+    var vertexBuffer = gl.createBuffer();
+    if (!vertexBuffer) {
+        log_print("Failed to create buffer");
+        return -1;
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+    var FSIZE = vertices.BYTES_PER_ELEMENT;
+
+    var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+    gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, FSIZE * 3, 0);
+    gl.enableVertexAttribArray(a_Position);
+
+    var a_PointSize = gl.getAttribLocation(gl.program, 'a_PointSize')
+    gl.vertexAttribPointer(a_PointSize, 1, gl.FLOAT, false, FSIZE*3, FSIZE * 2);
+    gl.enableVertexAttribArray(a_PointSize);
+
+    return n;
+}
+
+function initVertexBuffers_3(gl) {
+    // Put position and color together
+    var vertices = new Float32Array([
+        0.0, 0.5, 1.0, 0.0, 0.0,
+       -0.5, -0.5, 0.0, 1.0, 0.0,
+        0.5, -0.5, 0.0, 0.0, 1.0
+    ]);
+    var n = 3;
+
+    var vertexBuffer = gl.createBuffer();
+    if (!vertexBuffer) {
+        log_print("Failed to create buffer");
+        return -1;
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+    var FSIZE = vertices.BYTES_PER_ELEMENT;
+
+    var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+    gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, FSIZE * 5, 0);
+    gl.enableVertexAttribArray(a_Position);
+
+    var a_Color = gl.getAttribLocation(gl.program, 'a_Color');
+    gl.vertexAttribPointer(a_Color, 3, gl.FLOAT, false, FSIZE * 5, FSIZE * 2);
+    gl.enableVertexAttribArray(a_Color);
 
     return n;
 }
@@ -126,6 +218,12 @@ function do_draw(gl) {
     gl.drawArrays(gl.POINTS, 0, 1);
 }
 
+function do_draw_ext(gl, num) {
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.POINTS, 0, num);
+}
+
 function do_draw_num(gl, num) {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -164,6 +262,22 @@ function glclick(ev, gl, canvas, g_points, u_rgba) {
         gl.drawArrays(gl.POINTS, 0, 1);
     }
 }
+
+
+function do_set_pointsize_2(gl) {
+    // Only point size
+    var sizes = new Float32Array([
+        10.0, 20.0, 30.0
+    ]);
+
+    var sizeBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, sizeBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, sizes, gl.STATIC_DRAW);
+    var a_PointSize = gl.getAttribLocation(gl.program, 'a_PointSize')
+    gl.vertexAttribPointer(a_PointSize, 1, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(a_PointSize);
+}
+
 
 function do_todraw(gl, n, currentAngle, modelMratrix, u_ModelMatrix) {
     modelMatrix.setRotate(currentAngle, 0, 0, 1);
@@ -238,4 +352,31 @@ function test_animate(gl) {
     global_gl = gl;
     u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_xformMatrix');
     tick();
+}
+
+function test_diff_size_1(gl) {
+    var n = do_vertex_init(gl);
+    do_set_pointsize_2(gl);
+    log_print("draw with point " + n);
+    do_draw_ext(gl, n);
+}
+
+function test_diff_size(gl) {
+    var n = initVertexBuffers_2(gl);
+    log_print("draw with point " + n);
+    do_draw_ext(gl, n);
+}
+
+function test_color(gl) {
+    do_drawinit_2(gl);
+    var n = initVertexBuffers_3(gl);
+    do_set_pointsize(gl, 50.0);
+    log_print("Draw with point " + n);
+    // do_draw_ext(gl, n);
+    do_draw_num(gl, n);
+}
+
+function test_functions(gl) {
+    // test_diff_size(gl);
+    test_color(gl);
 }

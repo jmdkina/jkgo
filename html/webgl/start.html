@@ -6,7 +6,7 @@
     <style type="text/css">
         canvas { background: blue; }
     </style>
-    <script type="text/javascript" src="https://www.khronos.org/registry/webgl/sdk/demos/common/webgl-utils.js"></script>
+    <!-- <script type="text/javascript" src="https://www.khronos.org/registry/webgl/sdk/demos/common/webgl-utils.js"></script> -->
     <link rel="stylesheet" href="addon/bootstrap/bootstrap.min.css">
     <script type="text/javascript" src="addon/jquery/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="addon/vue/vue.min.js"></script>
@@ -29,8 +29,7 @@
         function init() {
             canvas = document.getElementById("gl-canvas");
             var gl = getWebGLContext(canvas);
-            do_drawinit(gl);
-            test_animate(gl);
+            test_functions(gl);
         }
 
     </script>
