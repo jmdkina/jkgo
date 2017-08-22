@@ -29,7 +29,7 @@
         function init() {
             canvas = document.getElementById("gl-canvas");
             var gl = getWebGLContext(canvas);
-            test_functions(gl);
+            test_functions(gl, canvas);
         }
 
     </script>
@@ -38,6 +38,7 @@
 <canvas id="gl-canvas" width="812" height="512">
     Choose a new browser, you must not stop the evolution of this world!!!
 </canvas>
+<p id="nearFar">The near and far values ares here</p>
 <div id="ws">
 <label>Send One Message</label>
 <input class="form-control" type="text" placeholder="Message" v-model="message" /><br/>

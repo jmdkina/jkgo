@@ -52,6 +52,126 @@ function do_drawinit_2(gl) {
     }
 }
 
+function do_drawinit_image(gl) {
+    var VSHADER_SOURCE_1 = 
+        'attribute vec4 a_Position;\n' +
+        'attribute vec2 a_TexCoord;\n' +
+        'varying vec2 v_TexCoord;\n' +
+        'void main() {\n' +
+        ' gl_Position = a_Position;\n' +
+        ' v_TexCoord = a_TexCoord;\n' +
+        '}\n';
+    var FSHADER_SOURCE =
+        'precision mediump float;\n'+
+        'uniform sampler2D u_Sampler; \n' +
+        'uniform sampler2D u_Sampler1;\n' +
+        'varying vec2 v_TexCoord; \n' +
+        'void main() {\n' + 
+        ' vec4 color0 = texture2D(u_Sampler, v_TexCoord);\n' +
+        ' vec4 color1 = texture2D(u_Sampler1, v_TexCoord);\n' +
+        ' gl_FragColor = color0 * color1;\n' +
+        '}\n';
+
+    if (!initShaders(gl, VSHADER_SOURCE_1, FSHADER_SOURCE)) {
+        log_print("failed to initialize shaders");
+        return;
+    }
+}
+
+function do_drawinit_matrix(gl) {
+    var VSHADER_SOURCE_1 = 
+        'attribute vec4 a_Position;\n' +
+        'attribute vec4 a_Color;\n' +
+        'uniform mat4 u_ModelMatrix; \n' +
+        'varying vec4 v_Color;\n' +
+        'void main() {\n' +
+        ' gl_Position = u_ModelMatrix * a_Position;\n' +
+        ' v_Color = a_Color;\n' +
+        '}\n';
+    var FSHADER_SOURCE =
+        'precision mediump float;\n'+
+        'varying vec4 v_Color;\n' +
+        'void main() {\n' + 
+        ' gl_FragColor = v_Color;\n' +
+        '}\n';
+
+    if (!initShaders(gl, VSHADER_SOURCE_1, FSHADER_SOURCE)) {
+        log_print("failed to initialize shaders");
+        return;
+    }
+}
+
+function do_drawinit_matrix_otheo(gl) {
+    var VSHADER_SOURCE_1 = 
+        'attribute vec4 a_Position;\n' +
+        'attribute vec4 a_Color;\n' +
+        'uniform mat4 u_ProjMatrix; \n' +
+        'varying vec4 v_Color;\n' +
+        'void main() {\n' +
+        ' gl_Position = u_ProjMatrix * a_Position;\n' +
+        ' v_Color = a_Color;\n' +
+        '}\n';
+    var FSHADER_SOURCE =
+        'precision mediump float;\n'+
+        'varying vec4 v_Color;\n' +
+        'void main() {\n' + 
+        ' gl_FragColor = v_Color;\n' +
+        '}\n';
+
+    if (!initShaders(gl, VSHADER_SOURCE_1, FSHADER_SOURCE)) {
+        log_print("failed to initialize shaders");
+        return;
+    }
+}
+
+function do_drawinit_matrix_more(gl) {
+    var VSHADER_SOURCE_1 = 
+        'attribute vec4 a_Position;\n' +
+        'attribute vec4 a_Color;\n' +
+        'uniform mat4 u_ModelMatrix;\n' +
+        'uniform mat4 u_ViewMatrix; \n' +
+        'uniform mat4 u_ProjMatrix; \n' +
+        'varying vec4 v_Color;\n' +
+        'void main() {\n' +
+        ' gl_Position = u_ProjMatrix * u_ViewMatrix * u_ModelMatrix * a_Position;\n' +
+        ' v_Color = a_Color;\n' +
+        '}\n';
+    var FSHADER_SOURCE =
+        'precision mediump float;\n'+
+        'varying vec4 v_Color;\n' +
+        'void main() {\n' + 
+        ' gl_FragColor = v_Color;\n' +
+        '}\n';
+
+    if (!initShaders(gl, VSHADER_SOURCE_1, FSHADER_SOURCE)) {
+        log_print("failed to initialize shaders");
+        return;
+    }
+}
+
+function do_drawinit_cube(gl) {
+    var VSHADER_SOURCE_1 = 
+        'attribute vec4 a_Position;\n' +
+        'attribute vec4 a_Color;\n' +
+        'uniform mat4 u_MvpMatrix; \n' +
+        'varying vec4 v_Color;\n' +
+        'void main() {\n' +
+        ' gl_Position = u_MvpMatrix * a_Position;\n' +
+        ' v_Color = a_Color;\n' +
+        '}\n';
+    var FSHADER_SOURCE =
+        'precision mediump float;\n'+
+        'varying vec4 v_Color;\n' +
+        'void main() {\n' + 
+        ' gl_FragColor = v_Color;\n' +
+        '}\n';
+
+    if (!initShaders(gl, VSHADER_SOURCE_1, FSHADER_SOURCE)) {
+        log_print("failed to initialize shaders");
+        return;
+    }
+}
+
 function do_clearcolor(gl) {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
 }
@@ -162,6 +282,141 @@ function initVertexBuffers_3(gl) {
     return n;
 }
 
+function initVertexBuffers_image(gl) {
+    // Put position and color together
+    var vertices = new Float32Array([
+       -0.5, 0.5, 0.0, 1.0,
+       -0.5, -0.8, 0.0, 0.0,
+        0.5, 0.5, 1.0, 1.0,
+        0.5, -0.8, 1.0, 0.0,
+    ]);
+
+    var n = 4;
+
+    var vertexBuffer = gl.createBuffer();
+    if (!vertexBuffer) {
+        log_print("Failed to create buffer");
+        return -1;
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+    var FSIZE = vertices.BYTES_PER_ELEMENT;
+
+    var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+    gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, FSIZE * 4, 0);
+    gl.enableVertexAttribArray(a_Position);
+
+    var a_TexCoord = gl.getAttribLocation(gl.program, 'a_TexCoord');
+    gl.vertexAttribPointer(a_TexCoord, 2, gl.FLOAT, false, FSIZE * 4, FSIZE * 2);
+    gl.enableVertexAttribArray(a_TexCoord);
+
+    return n;
+}
+
+function initVertexBuffers_matrix(gl) {
+    // Put position and color together
+    /*
+    var vertices = new Float32Array([
+        0.0, 0.5, -0.4, 0.4, 1.0, 0.4,
+        -0.5, -0.5, -0.4, 0.4, 1.0, 0.4,
+        0.5, -0.5, -0.4, 1.0, 0.4, 0.4,
+
+        0.5, 0.4, -0.2, 1.0, 0.4, 0.4,
+        -0.5, 0.4, -0.2, 1.0, 1.0, 0.4,
+        0.0, -0.6, -0.2, 1.0, 1.0, 0.4,
+
+        0, 0.5, 0.0, 0.4, 0.4, 1.0,
+        -0.5, -0.25, 0.0, 0.4, 0.4, 1.0,
+        0.5, -0.25, 0.0, 1.0, 0.4, 0.4
+    ]);
+    */
+    var vertices = new Float32Array([
+        0.0, 1, -0.4, 0.4, 1.0, 0.4,
+        -0.5, -0.5, -0.4, 0.4, 1.0, 0.4,
+        0.25, -0.5, -0.4, 1.0, 0.4, 0.4,
+
+        0.15, 0.5, -0.2, 1.0, 0.4, 0.4,
+        -0.05, -0.25, -0.2, 1.0, 1.0, 0.4,
+        0.25, -0.25, -0.2, 1.0, 1.0, 0.4,
+
+        0.2, 0.25, 0.0, 0.4, 0.4, 1.0,
+        0.1, -0.1, 0.0, 0.4, 0.4, 1.0,
+        0.3, -0.1, 0.0, 1.0, 0.4, 0.4
+    ]);
+    var n = 9;
+
+    var vertexBuffer = gl.createBuffer();
+    if (!vertexBuffer) {
+        log_print("Failed to create buffer");
+        return -1;
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+    var FSIZE = vertices.BYTES_PER_ELEMENT;
+
+    var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+    gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, FSIZE * 6, 0);
+    gl.enableVertexAttribArray(a_Position);
+
+    var a_Color = gl.getAttribLocation(gl.program, 'a_Color');
+    gl.vertexAttribPointer(a_Color, 3, gl.FLOAT, false, FSIZE * 6, FSIZE * 3);
+    gl.enableVertexAttribArray(a_Color);
+
+    return n;
+}
+
+function initVertexBuffers_cube(gl) {
+    // Put position and color together
+    var vertices = new Float32Array([
+        1.0, 1.0, 1.0, 0.4, 1.0, 0.4,
+        -1.0, 1.0, 1.0, 0.4, 1.0, 0.4,
+        -1.0, -1.0, 1.0, 1.0, 0.4, 0.4,
+
+        1.0, -1.0, 1.0, 1.0, 0.4, 0.4,
+        1.0, -1.0, -1.0, 1.0, 1.0, 0.4,
+        1.0, 1.0, -1.0, 1.0, 1.0, 0.5,
+
+        -1.0, 1.0, -1.0, 1.0, 1.0, 0.4,
+        -1.0, -1.0, -1.0, 0.4, 0.4, 1.0,
+    ]);
+
+    var indices = new Uint8Array ([
+        0, 1, 2, 0, 2, 3,
+        0, 3, 4, 0, 4, 5,
+        0, 5, 6, 0, 6, 1, 
+        1, 6, 7, 1, 7, 2,
+        7, 4, 3, 7, 3, 2,
+        4, 7, 6, 4, 6, 5
+    ]);
+
+    var vertexBuffer = gl.createBuffer();
+    var indexBuffer = gl.createBuffer();
+    if (!vertexBuffer) {
+        log_print("Failed to create buffer");
+        return -1;
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+    var FSIZE = vertices.BYTES_PER_ELEMENT;
+
+    var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+    gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, FSIZE * 6, 0);
+    gl.enableVertexAttribArray(a_Position);
+
+    var a_Color = gl.getAttribLocation(gl.program, 'a_Color');
+    gl.vertexAttribPointer(a_Color, 3, gl.FLOAT, false, FSIZE * 6, FSIZE * 3);
+    gl.enableVertexAttribArray(a_Color);
+
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
+
+    return indices.length;
+}
+
+
 function do_rotate(gl) {
     var ANGLE = 90.0;
     var radian = Math.PI * ANGLE /180.0;
@@ -230,6 +485,12 @@ function do_draw_num(gl, num) {
     gl.drawArrays(gl.TRIANGLES, 0, num);
 }
 
+function do_draw_strip(gl, num) {
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, num);
+}
+
 function glclick(ev, gl, canvas, g_points, u_rgba) {
     // var g_points = [];
 
@@ -287,6 +548,177 @@ function do_todraw(gl, n, currentAngle, modelMratrix, u_ModelMatrix) {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     gl.drawArrays(gl.TRIANGLES, 0, n);
+}
+
+
+function do_init_textures(gl, n) {
+    var texture = gl.createTexture();
+    var texture1 = gl.createTexture();
+
+    var u_Sampler = gl.getUniformLocation(gl.program, 'u_Sampler');
+    var u_Sampelr1 = gl.getUniformLocation(gl.program, 'u_Sampelr1');
+    var image = new Image();
+    var image1 = new Image();
+    image.onload = function() {
+        log_print("Start to load image " + image.src);
+        loadTexture(gl, n, texture, u_Sampler, image, 0);
+    }
+    image.src = 'images/1.jpg';
+
+    image1.onload = function() {
+        log_print("Start to load image: " + image1.src);
+        loadTexture(gl, n, texture, u_Sampelr1, image1, 1);
+    }
+    image1.src = 'images/2.jpg';
+    log_print("do init_texture");
+    return true;
+}
+
+var g_texUnit0 = false, g_texUnit1 = false;
+function loadTexture(gl, n, texture, u_Sampler, image, texUnit) {
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+
+    if (texUnit == 0) {
+        gl.activeTexture(gl.TEXTURE0);
+        g_texUnit0 = true;
+    } else {
+        gl.activeTexture(gl.TEXTURE1);
+        g_texUnit1 = true;
+    }
+
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+
+    gl.uniform1i(u_Sampler, texUnit);
+
+    log_print("draw strip " + n);
+    if (g_texUnit0 && g_texUnit1) {
+        do_draw_strip(gl, n);
+    }
+}
+
+var g_eyeX = 0.20, g_eyeY = 0.25, g_eyeZ = 0.25
+function keydown(ev, gl, n, u_ModelMatrix, viewMatrix) {
+    if (ev.keyCode == 39) {
+        g_eyeX += 0.01;
+    } else if (ev.keyCode == 37) {
+        g_eyeX -= 0.01;
+    } else {
+        return;
+    }
+    do_draw_matrix_extern(gl, n, u_ModelMatrix, viewMatrix);
+}
+
+var g_near = 0.0, g_far = 0.5;
+var nf;
+function keydown_ortho(ev, gl, n, u_ProjMatrix, projMatrix, nf) {
+    switch(ev.keyCode) {
+        case 39: g_near += 0.01; break;
+        case 37: g_near -= 0.01; break;
+        case 38: g_far += 0.01; break;
+        case 40: g_far -= 0.01; break;
+        default: return;
+    }
+    do_draw_matrix_ortho_e(gl, n, u_ProjMatrix, projMatrix, nf);
+}
+
+function do_draw_matrix_extern(gl, n, u_ModelMatrix, viewMatrix) {
+    viewMatrix.setLookAt(g_eyeX, g_eyeY, g_eyeZ, 0.0, -1.0, -1.0, 0, 1, 0);
+
+    var mMatrix = new Matrix4();
+    mMatrix.setRotate(0, 0, 0, 1);
+
+    var modelMatrix = viewMatrix.multiply(mMatrix);
+
+    gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
+
+    do_draw_num(gl, n);
+}
+
+function do_draw_matrix_ortho_e(gl, n, u_ProjMatrix, viewMatrix, nf) {
+
+    viewMatrix.setOrtho(-1, 1, -1, 1, g_near, g_far);
+    gl.uniformMatrix4fv(u_ProjMatrix, false, viewMatrix.elements);
+
+    nf.innerHTML = 'near: ' + Math.round(g_near * 100)/100 + ', far: ' + Math.round(g_far*100)/100;
+    do_draw_num(gl, n);
+}
+
+function do_draw_matrix(gl) {
+    var n = initVertexBuffers_matrix(gl);
+
+    var u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
+    var viewMatrix = new Matrix4();
+
+    document.onkeydown = function(ev) {
+        keydown(ev, gl, n, u_ModelMatrix, viewMatrix);
+    }
+
+    do_draw_matrix_extern(gl, n, u_ModelMatrix, viewMatrix);
+}
+
+function do_draw_matrix_ortho(gl) {
+    var n = initVertexBuffers_matrix(gl);
+    nf = document.getElementById('nearFar');
+
+    var u_ProjMatrix = gl.getUniformLocation(gl.program, 'u_ProjMatrix');
+    var viewMatrix = new Matrix4();
+
+    document.onkeydown = function(ev) {
+        keydown_ortho(ev, gl, n, u_ProjMatrix, viewMatrix, nf);
+    }
+
+    do_draw_matrix_ortho_e(gl, n, u_ProjMatrix, viewMatrix, nf);
+}
+
+function do_draw_matrix_more(gl, canvas) {
+    var n = initVertexBuffers_matrix(gl);
+
+    var u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
+    var u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
+    var u_ProjMatrix = gl.getUniformLocation(gl.program, 'u_ProjMatrix');
+
+    var modelMatrix = new Matrix4();
+    var viewMatrix = new Matrix4();
+    var projMatrix = new Matrix4();
+
+    modelMatrix.setTranslate(0.75, 0, 0);
+    viewMatrix.setLookAt(0, 0, 0, 0, -1, -1, 0, 1, 0);
+    projMatrix.setPerspective(30, canvas.width/canvas.height, 1, 100);
+
+    gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
+    gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix.elements);
+    gl.uniformMatrix4fv(u_ProjMatrix, false, projMatrix.elements);
+
+    do_draw_num(gl, n);
+
+    modelMatrix.setTranslate(-0.75, 0, 0);
+    gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
+
+    gl.drawArrays(gl.TRIANGLES, 0, n);
+}
+
+function do_draw_cube(gl) {
+    var n = initVertexBuffers_cube(gl);
+
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.enable(gl.DEPTH_TEST);
+
+    var mvpMtrix = new Matrix4();
+    mvpMtrix.setPerspective(30, 1, 1, 100);
+    mvpMtrix.lookAt(3, 3, 7, 0, 0, 0, 0, 1, 0);
+
+    var u_MvpMatrix = gl.getUniformLocation(gl.program, 'u_MvpMatrix');
+    gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMtrix.elements);
+
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_BYTE, 0);
 }
 
 var g_last = Date.now();
@@ -376,7 +808,40 @@ function test_color(gl) {
     do_draw_num(gl, n);
 }
 
-function test_functions(gl) {
+function test_image(gl) {
+    do_drawinit_image(gl);
+    var n = initVertexBuffers_image(gl);
+    do_init_textures(gl, n);
+    // log_print("Draw with point " + n);
+    // do_draw_strip(gl, n);
+}
+
+function test_matrix(gl) {
+    do_drawinit_matrix(gl);
+    do_draw_matrix(gl);
+}
+
+function test_matrix_ortho(gl) {
+    do_drawinit_matrix_otheo(gl);
+    do_draw_matrix_ortho(gl);
+}
+
+function test_matrix_more(gl) {
+    do_drawinit_matrix(gl);
+    do_draw_matrix_more(gl, canvas);
+}
+
+function test_cube(gl) {
+    do_drawinit_cube(gl);
+    do_draw_cube(gl);
+}
+
+function test_functions(gl, canvas) {
     // test_diff_size(gl);
-    test_color(gl);
+    // test_color(gl);
+    // test_image(gl);
+    // test_matrix(gl);
+    // test_matrix_ortho(gl);
+    // test_matrix_more(gl, canvas);
+    test_cube(gl);
 }
