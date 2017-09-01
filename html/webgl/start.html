@@ -18,6 +18,7 @@
     <script type="text/javascript" src="js/webgl/webgl-debug.js"></script>
     <script type="text/javascript" src="js/webgl/cuon-utils.js"></script>
     <script type="text/javascript" src="js/webgl/webgl.js"></script>
+    <script type="text/javascript" src="js/webgl/cube.js"></script>
     <script type="text/javascript" ></script>
     <script type="text/javascript">
         var canvas;
@@ -29,7 +30,8 @@
         function init() {
             canvas = document.getElementById("gl-canvas");
             var gl = getWebGLContext(canvas);
-            test_functions(gl, canvas);
+            // test_functions(gl, canvas);
+            do_cube(gl);
         }
 
     </script>
@@ -39,11 +41,13 @@
     Choose a new browser, you must not stop the evolution of this world!!!
 </canvas>
 <p id="nearFar">The near and far values ares here</p>
+<!--
 <div id="ws">
 <label>Send One Message</label>
 <input class="form-control" type="text" placeholder="Message" v-model="message" /><br/>
 <button class="btn btn-info btn-block" v-on:click="send_msg">Send</button><br/>
 </div>
+-->
 
     <script type="text/javascript" src="js/webgl/websocket.js"></script>
 </body>

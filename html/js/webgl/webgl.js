@@ -149,28 +149,6 @@ function do_drawinit_matrix_more(gl) {
     }
 }
 
-function do_drawinit_cube(gl) {
-    var VSHADER_SOURCE_1 = 
-        'attribute vec4 a_Position;\n' +
-        'attribute vec4 a_Color;\n' +
-        'uniform mat4 u_MvpMatrix; \n' +
-        'varying vec4 v_Color;\n' +
-        'void main() {\n' +
-        ' gl_Position = u_MvpMatrix * a_Position;\n' +
-        ' v_Color = a_Color;\n' +
-        '}\n';
-    var FSHADER_SOURCE =
-        'precision mediump float;\n'+
-        'varying vec4 v_Color;\n' +
-        'void main() {\n' + 
-        ' gl_FragColor = v_Color;\n' +
-        '}\n';
-
-    if (!initShaders(gl, VSHADER_SOURCE_1, FSHADER_SOURCE)) {
-        log_print("failed to initialize shaders");
-        return;
-    }
-}
 
 function do_clearcolor(gl) {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -366,56 +344,6 @@ function initVertexBuffers_matrix(gl) {
 
     return n;
 }
-
-function initVertexBuffers_cube(gl) {
-    // Put position and color together
-    var vertices = new Float32Array([
-        1.0, 1.0, 1.0, 0.4, 1.0, 0.4,
-        -1.0, 1.0, 1.0, 0.4, 1.0, 0.4,
-        -1.0, -1.0, 1.0, 1.0, 0.4, 0.4,
-
-        1.0, -1.0, 1.0, 1.0, 0.4, 0.4,
-        1.0, -1.0, -1.0, 1.0, 1.0, 0.4,
-        1.0, 1.0, -1.0, 1.0, 1.0, 0.5,
-
-        -1.0, 1.0, -1.0, 1.0, 1.0, 0.4,
-        -1.0, -1.0, -1.0, 0.4, 0.4, 1.0,
-    ]);
-
-    var indices = new Uint8Array ([
-        0, 1, 2, 0, 2, 3,
-        0, 3, 4, 0, 4, 5,
-        0, 5, 6, 0, 6, 1, 
-        1, 6, 7, 1, 7, 2,
-        7, 4, 3, 7, 3, 2,
-        4, 7, 6, 4, 6, 5
-    ]);
-
-    var vertexBuffer = gl.createBuffer();
-    var indexBuffer = gl.createBuffer();
-    if (!vertexBuffer) {
-        log_print("Failed to create buffer");
-        return -1;
-    }
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-
-    var FSIZE = vertices.BYTES_PER_ELEMENT;
-
-    var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
-    gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, FSIZE * 6, 0);
-    gl.enableVertexAttribArray(a_Position);
-
-    var a_Color = gl.getAttribLocation(gl.program, 'a_Color');
-    gl.vertexAttribPointer(a_Color, 3, gl.FLOAT, false, FSIZE * 6, FSIZE * 3);
-    gl.enableVertexAttribArray(a_Color);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
-
-    return indices.length;
-}
-
 
 function do_rotate(gl) {
     var ANGLE = 90.0;
@@ -701,24 +629,6 @@ function do_draw_matrix_more(gl, canvas) {
     gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
 
     gl.drawArrays(gl.TRIANGLES, 0, n);
-}
-
-function do_draw_cube(gl) {
-    var n = initVertexBuffers_cube(gl);
-
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.enable(gl.DEPTH_TEST);
-
-    var mvpMtrix = new Matrix4();
-    mvpMtrix.setPerspective(30, 1, 1, 100);
-    mvpMtrix.lookAt(3, 3, 7, 0, 0, 0, 0, 1, 0);
-
-    var u_MvpMatrix = gl.getUniformLocation(gl.program, 'u_MvpMatrix');
-    gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMtrix.elements);
-
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_BYTE, 0);
 }
 
 var g_last = Date.now();

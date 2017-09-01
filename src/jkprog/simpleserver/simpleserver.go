@@ -41,6 +41,7 @@ func main() {
 	ss.NewUploadServer(html_path)
 	ss.NewWebGL(html_path)
 	ss.NewWebSocket(html_path)
+	ss.NewDBMongo(html_path)
 
 	lport := *port
 

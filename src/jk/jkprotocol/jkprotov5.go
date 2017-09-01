@@ -61,6 +61,17 @@ func (base *V5Base) makeCmd(cmd, subcmd string, resp bool, data string) (string,
 	return string(d), nil
 }
 
+func (base *V5Base) GenCmd(cmd, subcmd string, resp bool, data string) (string, error) {
+	base.base(cmd, subcmd, resp)
+	base.Body.Data = data
+
+	d, err := json.Marshal(base)
+	if err != nil {
+		return "", err
+	}
+	return string(d), nil
+}
+
 func (base *V5Base) Register(data string) (string, error) {
 	return base.makeCmd("Register", "", false, data)
 }
