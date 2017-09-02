@@ -13,7 +13,8 @@ $(function(){
             dbs:[],
             dbname:"",
             colls: [],
-            collname: ""
+            collname: "",
+            data: []
         },
         methods: {
             query_dbs: function() {
@@ -26,6 +27,7 @@ $(function(){
                     success: function(response, textStatus) {
                         log_print("querydb success" + response + ", result:" + textStatus);
                         ret = $.parseJSON(response);
+                        dbop.dbs = [];
                         for (var i = 0; i < ret.Result.length; i++) {
                             var t_v = [];
                             t_v["text"] = ret.Result[i];
@@ -46,12 +48,35 @@ $(function(){
                     success: function(response, textStatus) {
                         log_print("querycolls success" + response + ", result:" + textStatus);
                         ret = $.parseJSON(response);
+                        dbop.colls = [];
                         for (var i = 0; i < ret.Result.length; i++) {
                             var t_v = [];
                             t_v["text"] = ret.Result[i];
                             t_v["value"] = ret.Result[i];
                             dbop.colls.push(t_v);
                         }
+                        // $("#colldata").show();
+                    }
+                });
+            },
+            query_data: function() {
+                var str = "jk=query_data&host="+this.host + "&dbname=" + this.dbname + "&collname=" + this.collname;
+                log_print(str);
+                $.ajax({
+                    url: "db",
+                    method:"POST",
+                    data: str,
+                    success: function(response, textStatus) {
+                        log_print("query data success" + response + ", result:" + textStatus);
+                        ret = $.parseJSON(response);
+                        log_print("Result data length " + ret.Result.length);
+                        for (var i = 0; i < ret.Result.length; i++) {
+                            var t_v = [];
+                            t_v["text"] = ret.Result[i];
+                            t_v["value"] = ret.Result[i];
+                            dbop.data.push(t_v);
+                        }
+                        log_print(data)
                     }
                 });
             }

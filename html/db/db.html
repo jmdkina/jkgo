@@ -15,7 +15,7 @@
 <div id="dboperation">
     <label for="host">Host:</label>
     <input type="text" class="form-control" v-model="host" placeholder="localhost"><br/>
-    <button class="btn btn-info btn-block" v-on:click="query_dbs">Query</button>
+    <button class="btn btn-info btn-block" v-on:click="query_dbs">Query DataBase</button>
     <hr/>
     <div>
         <label >Databases: </label>
@@ -27,9 +27,7 @@
     </div>
     <hr/>
     <div id="collop">
-    <label for="DatabaseName">DatabaseName:</label>
-    <input type="text" class="form-control" v-model="dbname" placeholder="dbname"><br/>
-    <button class="btn btn-info btn-block" v-on:click="query_colls">Query</button>
+    <button class="btn btn-info btn-block" v-on:click="query_colls">Query Coll</button>
     <div>
         <label>Collections of db ${ dbname }</label>
         <select v-model="collname">
@@ -38,6 +36,10 @@
             </option>
         </select>
     </div>
+    </div>
+    <hr/>
+    <div id="colldata">
+        <button class="btn btn-info btn-block" v-on:click="query_data">Query Data</button>
     </div>
 </div>
 </body>
