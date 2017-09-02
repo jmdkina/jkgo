@@ -7,6 +7,8 @@ import (
 	"jk/jksys"
 	"io"
 	"reflect"
+	"encoding/json"
+	"golanger.com/utils"
 )
 
 type Base struct {
@@ -21,6 +23,15 @@ func (b *Base) SetPath(path string) {
 func (b *Base) SetFunc(url string, child interface{}) {
 	b.child = child
 	http.HandleFunc(url, b.ServerHttp)
+}
+
+func (b *Base) WriteSerialData(w http.ResponseWriter, data interface{}, status int) {
+	res := utils.M{
+		"Status":status,
+	}
+	res["Result"] = data
+	d, _ := json.Marshal(res)
+	w.Write(d)
 }
 
 func (b *Base) ServerHttp(w http.ResponseWriter, r *http.Request) {

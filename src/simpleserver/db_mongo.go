@@ -4,8 +4,6 @@ import (
 	"net/http"
 	"jk/jklog"
 	"helper"
-	"golanger.com/utils"
-	"encoding/json"
 )
 
 type DBMongo struct {
@@ -33,9 +31,6 @@ func (b *DBMongo) Get(w http.ResponseWriter, r *http.Request) {
 
 func (b *DBMongo) Post(w http.ResponseWriter, r *http.Request) {
 	cmd := r.FormValue("jk")
-	res := utils.M{
-		"Status":200,
-	}
 	jklog.L().Debugln("deal with command ", cmd)
 	switch cmd {
 	case "query_dbs":
@@ -44,11 +39,13 @@ func (b *DBMongo) Post(w http.ResponseWriter, r *http.Request) {
 			b.m = helper.NewMongo("mongodb://" + host + "/")
 		}
 		dbs, _ := b.m.DBSession().DatabaseNames()
-		res["Result"] = dbs
-		d, _ := json.Marshal(res)
-		w.Write(d)
+		b.WriteSerialData(w, dbs, 200)
 		break;
 	case "query_colls":
+		dbname := r.FormValue("dbname")
+		d := b.m.DB(dbname)
+		c, _ := d.CollectionNames()
+		b.WriteSerialData(w, c, 200)
 		break;
 	}
 }
