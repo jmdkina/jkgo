@@ -1,14 +1,15 @@
 package jkstatus
 
 import (
+	"github.com/alecthomas/log4go"
+	"github.com/buger/jsonparser"
 	"jk/jkprotocol"
 	"net"
-	"github.com/alecthomas/log4go"
 )
 
 type Process struct {
-    proto *jkprotocol.JKProtocolWrap
-	conn net.Conn
+	proto *jkprotocol.JKProtocolWrap
+	conn  net.Conn
 }
 
 func ParseData(data string, conn net.Conn) (*Process, error) {
@@ -34,7 +35,7 @@ func (p *Process) isKeepalive() bool {
 
 func (p *Process) HandleMsg() bool {
 	if p.isKeepalive() {
-		str , err := p.proto.KeepaliveResponse("")
+		str, err := p.proto.KeepaliveResponse("")
 		if err != nil {
 			return false
 		}
