@@ -1,11 +1,14 @@
+//
+// +build linux
+
 package main
 
 import (
 	"flag"
-	"jk/jkcenter"
-	jdaemon "github.com/tyranron/daemonigo"
-	"time"
 	l4g "github.com/alecthomas/log4go"
+	jdaemon "github.com/tyranron/daemonigo"
+	"jk/jkcenter"
+	"time"
 )
 
 var (
@@ -21,7 +24,7 @@ func main() {
 
 	lw := l4g.NewFileLogWriter("/tmp/jkcenter.log", false)
 	if lw != nil {
-		lw.SetRotateSize(1024*1024*1024)
+		lw.SetRotateSize(1024 * 1024 * 1024)
 		l4g.AddFilter("file", l4g.FINE, lw)
 	}
 	l4g.Debug("jkcenter start")
@@ -57,6 +60,6 @@ func main() {
 	}
 
 	for {
-		time.Sleep(500*time.Millisecond)
+		time.Sleep(500 * time.Millisecond)
 	}
 }
