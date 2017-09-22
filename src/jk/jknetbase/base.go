@@ -1,31 +1,31 @@
 package jknetbase
 
 import (
-	"net"
 	"errors"
-	"strconv"
-	"io"
 	"github.com/alecthomas/log4go"
+	"io"
+	"net"
+	"strconv"
 )
 
 type HandlerMsgCallback func(conn net.Conn, data string) error
 
 type JKNetBaseRecv struct {
-	listener   net.Listener
+	listener net.Listener
 
-	address    string
-	port       int
-	nettype    int
+	address string
+	port    int
+	nettype int
 
-	handler_msg  HandlerMsgCallback
+	handler_msg HandlerMsgCallback
 
-	items      map[string](JKNetBaseRecvItem)
+	items map[string](JKNetBaseRecvItem)
 }
 
 type JKNetBaseRecvItem struct {
-	conn        net.Conn
-	remoteaddr  string
-	data        string
+	conn       net.Conn
+	remoteaddr string
+	data       string
 }
 
 func (nb *JKNetBaseRecv) New(addr string, port int, nettype int) error {
@@ -36,7 +36,7 @@ func (nb *JKNetBaseRecv) New(addr string, port int, nettype int) error {
 
 	if nettype == 1 {
 		var err error
-		nb.listener, err = net.Listen("tcp", addr + ":" + strconv.Itoa(port))
+		nb.listener, err = net.Listen("tcp", addr+":"+strconv.Itoa(port))
 		if err != nil {
 			return err
 		}
@@ -58,10 +58,14 @@ func (nb *JKNetBaseRecv) Recv() error {
 			log4go.Info("accept one client %s", conn.RemoteAddr().String())
 			go func() {
 				for {
-					rdata := make([]byte, 2 << 15)
+					rdata := make([]byte, 2<<15)
 					n, err := conn.Read(rdata)
 					if err == io.EOF {
 						log4go.Error("IO EOF exit")
+						break
+					}
+					if err != nil {
+						log4go.Error("Read error %s", err)
 						break
 					}
 
@@ -84,11 +88,11 @@ func (nb *JKNetBaseRecv) SetHandlerMsg(callback HandlerMsgCallback) {
 }
 
 type JKNetBaseClient struct {
-	address    string
-	port       int
-	nettype    int
+	address string
+	port    int
+	nettype int
 
-	conn net.Conn
+	conn     net.Conn
 	recvdata string
 }
 
@@ -97,7 +101,7 @@ func (nb *JKNetBaseClient) New(addr string, port int, nettype int) error {
 		nb.address = addr
 		nb.port = port
 		nb.nettype = nettype
-		conn, err := net.Dial("tcp", addr + ":" + strconv.Itoa(port))
+		conn, err := net.Dial("tcp", addr+":"+strconv.Itoa(port))
 		if err != nil {
 			return err
 		}

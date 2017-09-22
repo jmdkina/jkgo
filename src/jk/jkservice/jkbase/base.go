@@ -1,15 +1,15 @@
 package jkbase
 
 import (
+	"github.com/alecthomas/log4go"
 	"jk/jknetbase"
 	"jk/jkprotocol"
-	"github.com/alecthomas/log4go"
 	"time"
 )
 
 type ServiceClientCtrl struct {
 	client jknetbase.JKNetBaseClient
-	proto *jkprotocol.JKProtocolWrap
+	proto  *jkprotocol.JKProtocolWrap
 }
 
 func NewServiceClientCtrl(addr string, port int, nettype int) (*ServiceClientCtrl, error) {
@@ -28,10 +28,7 @@ func NewServiceClientCtrl(addr string, port int, nettype int) (*ServiceClientCtr
 
 func (c *ServiceClientCtrl) DoRun() error {
 	for {
-		str, err := c.proto.Keepalive("")
-		if err != nil {
-			return err
-		}
+		str, _ := jkprotocol.JKProtoV6MakeKeepalive("KA")
 		n := c.client.Send(str)
 		log4go.Debug("Send keepalive %d", n)
 		recv, err := c.client.Recv()
@@ -44,7 +41,6 @@ func (c *ServiceClientCtrl) DoRun() error {
 
 	return nil
 }
-
 
 func ServiceBaseRun(client_addr string, client_port int) {
 	go func() {

@@ -4,8 +4,8 @@ import (
 	"flag"
 	l4g "github.com/alecthomas/log4go"
 	"jk/jknetbase"
+	"jk/jkprotocol"
 	"jk/jkservice/jkclient"
-	"time"
 )
 
 var (
@@ -32,8 +32,7 @@ func main() {
 		return
 	}
 	for {
-		ss := "{\"H\":{\"C\":\"KeepAlive\",\"T\":\"12345666\",\"R\":\"No\"},"
-		ss += "\"B\":{\"Value\":\"X\"}}"
+		ss, _ := jkprotocol.JKProtoV6MakeKeepalive("KA")
 		n := c.Send(ss)
 		l4g.Info("send data out len %d", n)
 		data, err := c.Recv()
@@ -42,6 +41,6 @@ func main() {
 			break
 		}
 		l4g.Info("recv data ", string(data))
-		time.Sleep(time.Millisecond * 500)
+		break
 	}
 }
