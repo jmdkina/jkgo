@@ -27,5 +27,18 @@
 <p>CPUs: <strong>{{ .Info.CPUs }}</strong></p>
 {{ end }}
 </div>
+<div id="osoperation">
+	<label for="filename">Filename:</label>
+	<input type="text" class="form-control input-big" v-model="filename" placeholder="Filename With Path" />
+	<input type="text" class="form-control input-small" v-model="code" placeholder="Code" />
+	<button class="btn btn-info " v-on:click="open">Open</button>
+
+	<div class="content">
+		<textarea v-model="content" cols=200 rows=8>
+		</textarea>
+	</div>
+
+	<button class="btn btn-info " v-on:click="modify">Modify</button>
+</div>
 </body>
 </html>

@@ -2,6 +2,7 @@ package simpleserver
 
 import (
 	"io"
+	"io/ioutil"
 	"jk/jklog"
 	"jk/jksys"
 	"net/http"
@@ -48,11 +49,11 @@ type IndexInfo struct {
 func NewIndex(path string) *Index {
 	i := &Index{}
 	i.SetPath(path)
-	http.HandleFunc("/index", i.ServeHttp)
+	i.SetFunc("/index", i)
 	return i
 }
 
-func (b *Index) ServeHttp(w http.ResponseWriter, r *http.Request) {
+func (b *Index) Get(w http.ResponseWriter, r *http.Request) {
 	sp := SimpleParse{}
 	filename := b.path + "/index.html"
 	jklog.L().Debugf("Get html [%s]\n", filename)
@@ -64,6 +65,42 @@ func (b *Index) ServeHttp(w http.ResponseWriter, r *http.Request) {
 	err := sp.Parse(w, filename, ii)
 	if err != nil {
 		jklog.L().Errorln("Parse error ", err)
+	}
+}
+
+func (b *Index) openfile(filename string) string {
+	d, err := ioutil.ReadFile(filename)
+	if err != nil {
+		jklog.L().Errorf("open file [%s] error %v\n", filename, err)
+		return ""
+	}
+	return string(d)
+}
+
+func (b *Index) writefile(filename string, content string) error {
+	err := ioutil.WriteFile(filename, []byte(content), os.ModePerm)
+	return err
+}
+
+func (b *Index) Post(w http.ResponseWriter, r *http.Request) {
+	method := r.FormValue("method")
+	switch method {
+	case "open":
+		filename := r.FormValue("filename")
+		data := b.openfile(filename)
+		b.WriteSerialData(w, data, 200)
+		break
+	case "modify":
+		filename := r.FormValue("filename")
+		content := r.FormValue("content")
+		code := r.FormValue("code")
+		if code != "jmdcode" {
+			b.WriteSerialData(w, "", 403)
+			break
+		}
+		err := b.writefile(filename, content)
+		b.WriteSerialData(w, err, 200)
+		break
 	}
 }
 
