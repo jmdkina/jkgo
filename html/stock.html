@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <link rel="stylesheet" href="addon/bootstrap/bootstrap.min.css">
+    <script type="text/javascript" src="addon/jquery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="addon/vue/vue.min.js"></script>
+    <script type="text/javascript" src="addon/layer/layer.js"></script>
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/stock.css" />
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/stock.js" ></script>
+</head>
+<body>
+<div class="container-fluid" id="stockoperation">
+    <label for="operation">Supported Operation:</label>
+    <select v-model="op">
+        <option v-for="option in operations" v-bind:value="option.value">
+            ${ option.value }
+        </option>
+    </select>
+
+    <input type="text" class="form-control input-small" v-model="code" placeholder="Code" />
+	<button class="btn btn-info " v-on:click="execute">Execute</button>
+</div>
+
+</body>
+</html>

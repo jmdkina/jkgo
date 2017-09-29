@@ -35,10 +35,10 @@ $(function(){
                         log_print("querydb success" + response + ", result:" + textStatus);
                         ret = $.parseJSON(response);
                         if (ret.Status != 200) {
-                            alert("Fail of " + ret.Status);
+                            layer.msg("Fail of " + ret.Status);
                             return;
                         }
-                        log_print(ret.Result);
+                        layer.msg("Success! " + ret.Result);
                     }
                 });
             },
