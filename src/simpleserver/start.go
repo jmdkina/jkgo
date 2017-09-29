@@ -1,66 +1,12 @@
 package simpleserver
 
 import (
-	"net/http"
-	"jk/jklog"
-	"os"
-	"jk/jksys"
 	"io"
-	"reflect"
-	"encoding/json"
-	"golanger.com/utils"
+	"jk/jklog"
+	"jk/jksys"
+	"net/http"
+	"os"
 )
-
-type Base struct {
-	path     string
-	child    interface{}
-}
-
-func (b *Base) SetPath(path string) {
-	b.path = path
-}
-
-func (b *Base) SetFunc(url string, child interface{}) {
-	b.child = child
-	http.HandleFunc(url, b.ServerHttp)
-}
-
-func (b *Base) WriteSerialData(w http.ResponseWriter, data interface{}, status int) {
-	res := utils.M{
-		"Status":status,
-	}
-	res["Result"] = data
-	d, _ := json.Marshal(res)
-	w.Write(d)
-}
-
-func (b *Base) ServerHttp(w http.ResponseWriter, r *http.Request) {
-	c := reflect.ValueOf(b.child)
-	inputs := make([]reflect.Value, 2)
-	inputs[0] = reflect.ValueOf(w)
-	inputs[1] = reflect.ValueOf(r)
-	jklog.L().Debugf("URL: %s\n", r.URL.String())
-
-    switch r.Method {
-	case "GET":
-		method := c.MethodByName("Get")
-		if method.IsValid() {
-			method.Call(inputs)
-		} else {
-			jklog.L().Warnln("Undefined GET")
-		}
-		break
-	case "POST":
-		method := c.MethodByName("Post")
-		if method.IsValid() {
-			method.Call(inputs)
-		} else {
-			jklog.L().Warnln("Undefined POST")
-		}
-		break
-
-	}
-}
 
 type NotFound struct {
 	Base
@@ -81,7 +27,7 @@ func (b *NotFound) ServeHttp(w http.ResponseWriter, r *http.Request) {
 	sp := SimpleParse{}
 	filename := b.path + "/404.html"
 	jklog.L().Debugf("Not found html [%s]\n", r.URL.Path)
-    jklog.L().Debugf("Not found path [%s]\n", r.URL.Path)
+	jklog.L().Debugf("Not found path [%s]\n", r.URL.Path)
 
 	if _, err := os.Stat(filename); err != nil && !os.IsExist(err) {
 		sp.ParseString(w, "The page you request has go to Mars, manager deploy error, please contact to manager", "")
@@ -96,7 +42,7 @@ type Index struct {
 }
 
 type IndexInfo struct {
-	Sysinfo      jksys.KFSystemInfo
+	Sysinfo jksys.KFSystemInfo
 }
 
 func NewIndex(path string) *Index {
@@ -133,7 +79,7 @@ func NewDirServer(path string) *DirServer {
 }
 
 type DirServerInfo struct {
-	FSS  []FileServerInfo
+	FSS []FileServerInfo
 }
 
 func (b *DirServer) ServeHttp(w http.ResponseWriter, r *http.Request) {
@@ -143,8 +89,8 @@ func (b *DirServer) ServeHttp(w http.ResponseWriter, r *http.Request) {
 		jklog.L().Debugf("filepath [%s]\n", filename)
 		dsi := DirServerInfo{}
 		fsss := GetFileServers()
-		for _,v := range fsss {
-                     dsi.FSS = append(dsi.FSS, *v)
+		for _, v := range fsss {
+			dsi.FSS = append(dsi.FSS, *v)
 		}
 		err := sp.Parse(w, filename, dsi)
 		if err != nil {
@@ -156,19 +102,19 @@ func (b *DirServer) ServeHttp(w http.ResponseWriter, r *http.Request) {
 		jklog.L().Debugf("addfileserver cmd: %s\n", cmd)
 		switch cmd {
 		case "addfileserver":
-                        path := r.FormValue("path")
+			path := r.FormValue("path")
 			if len(path) > 0 {
 				jklog.L().Debugf("add path [%s]\n", path)
 				AddFileServer(path)
 			}
-			break;
+			break
 		case "adduploadpath":
 			path := r.FormValue("path")
 			if len(path) > 0 {
 				jklog.L().Debugf("add upload path [%s]\n", path)
 				SetFileUploadPath(path)
 			}
-			break;
+			break
 		}
 	}
 }
@@ -210,7 +156,7 @@ func (b *UploadServer) ServeHttp(w http.ResponseWriter, r *http.Request) {
 			jklog.L().Errorln("Have not set upload file ,exit")
 			return
 		}
-		r.ParseMultipartForm(2<<24)
+		r.ParseMultipartForm(2 << 24)
 		jklog.L().Debugln("upload file")
 		file, handler, err := r.FormFile("uploadfile")
 		if err != nil {
@@ -219,9 +165,9 @@ func (b *UploadServer) ServeHttp(w http.ResponseWriter, r *http.Request) {
 		}
 		defer file.Close()
 		jklog.L().Debugf("%v, save to file [%s]\n", handler.Header,
-		     GetFileUploadPath().Path + "/" + handler.Filename)
+			GetFileUploadPath().Path+"/"+handler.Filename)
 		f, err := os.OpenFile(GetFileUploadPath().Path+"/"+handler.Filename,
-			os.O_TRUNC|os.O_WRONLY|os.O_CREATE, 0666)  // 此处假设当前目录下已存在test目录
+			os.O_TRUNC|os.O_WRONLY|os.O_CREATE, 0666) // 此处假设当前目录下已存在test目录
 		if err != nil {
 			jklog.L().Errorln(err)
 			return

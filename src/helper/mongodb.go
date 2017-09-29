@@ -4,8 +4,8 @@ import (
 	"encoding/gob"
 	"golanger.com/log"
 	"golanger.com/utils"
-	"labix.org/v2/mgo"
-	"labix.org/v2/mgo/bson"
+	mgo "gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 	"strings"
 )
 

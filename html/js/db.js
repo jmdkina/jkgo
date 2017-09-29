@@ -55,7 +55,7 @@ $(function(){
                             t_v["value"] = ret.Result[i];
                             dbop.colls.push(t_v);
                         }
-                        // $("#colldata").show();
+                        $("#colldata").show();
                     }
                 });
             },
@@ -70,13 +70,24 @@ $(function(){
                         log_print("query data success" + response + ", result:" + textStatus);
                         ret = $.parseJSON(response);
                         log_print("Result data length " + ret.Result.length);
+                 
+                        objheader = "<tr>";
+                        objbody = "";
                         for (var i = 0; i < ret.Result.length; i++) {
-                            var t_v = [];
-                            t_v["text"] = ret.Result[i];
-                            t_v["value"] = ret.Result[i];
-                            dbop.data.push(t_v);
+                           
+                            objbody += "<tr>";
+                            for (var key in ret.Result[i]) {
+                                if (i == 0) {
+                                    objheader += "<td>" + key + "</td>";
+                                }
+                                objbody += "<td>" + ret.Result[i][key] + "</td>";
+                            }
+                            objbody += "</tr>";
                         }
-                        log_print(data)
+                        objheader += "</tr>";
+                        obj = "<table class=\"table table-bordered table-striped\"><thead><tr>" + 
+                        objheader + "</tr></thead><tbody>" + objbody + "</tbody></table>";
+                        $("#outputdata").html(obj);
                     }
                 });
             }

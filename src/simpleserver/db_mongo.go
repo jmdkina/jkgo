@@ -1,10 +1,10 @@
 package simpleserver
 
 import (
-	"net/http"
-	"jk/jklog"
-	"helper"
 	"golanger.com/utils"
+	"helper"
+	"jk/jklog"
+	"net/http"
 )
 
 type DBMongo struct {
@@ -31,7 +31,7 @@ func (b *DBMongo) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 type DBData struct {
-    Name string
+	Name string
 }
 
 func (b *DBMongo) Post(w http.ResponseWriter, r *http.Request) {
@@ -45,25 +45,28 @@ func (b *DBMongo) Post(w http.ResponseWriter, r *http.Request) {
 		}
 		dbs, _ := b.m.DBSession().DatabaseNames()
 		b.WriteSerialData(w, dbs, 200)
-		break;
+		break
 	case "query_colls":
 		dbname := r.FormValue("dbname")
 		d := b.m.DB(dbname)
-		c, _ := d.CollectionNames()
+		c, err := d.CollectionNames()
+		if err != nil {
+			jklog.L().Errorf("Query dbname [%s] error %v\n", err)
+		}
 		b.WriteSerialData(w, c, 200)
-		break;
+		break
 	case "query_data":
 		dbname := r.FormValue("dbname")
 		collname := r.FormValue("collname")
 		d := b.m.DB(dbname).C(collname)
 		data := []utils.M{}
 		err := d.Find(nil).All(&data)
-		if err != nil {
+		if err == nil {
 			b.WriteSerialData(w, data, 200)
 		} else {
 			jklog.L().Errorln("find data error ", err)
 		}
-		break;
+		break
 
 	}
 }

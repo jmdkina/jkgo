@@ -6,3 +6,18 @@
 #colldata {
     display:none;
 }
+
+.input-small {
+	display:inline;
+	width: 100px;
+}
+
+.input-middle {
+	display: inline;
+	width: 200px;
+}
+
+.input-big {
+	display: inline;
+	width: 400px;
+}
