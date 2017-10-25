@@ -11,6 +11,7 @@ type Process struct {
 	proto *jkprotocol.JKProtoV6
 	conn  net.Conn
 	data  string
+	SS    *ServiceStatus
 }
 
 func ParseData(data string, conn net.Conn) (*Process, error) {
@@ -36,6 +37,7 @@ func (p *Process) HandleMsg() bool {
 			return false
 		}
 		log4go.Debug("Give Response of keepalive msg %s ", str)
+		p.SS.remoteInstance[p.conn].UpdateTime()
 		p.conn.Write([]byte(str))
 	}
 	return true

@@ -6,10 +6,15 @@ import (
 )
 
 const (
+	jkp_v6_version = "1.0.0"
+)
+
+const (
 	JKP_V6_KEEPALIVE_NAME = "Keepalive"
 )
 
 type JKProtoV6Header struct {
+	V  string
 	C  string
 	ID string
 	T  int64
@@ -29,6 +34,7 @@ func JKProtoV6Parse(data string) (*JKProtoV6, error) {
 
 func JKProtoV6Make(cmd string, time int64, resp bool, id string, data interface{}) (string, error) {
 	p := &JKProtoV6{}
+	p.H.V = jkp_v6_version
 	p.H.C = cmd
 	p.H.T = time
 	p.H.R = resp
@@ -40,6 +46,7 @@ func JKProtoV6Make(cmd string, time int64, resp bool, id string, data interface{
 
 func JKProtoV6MakeKeepalive(id string) (string, error) {
 	p := &JKProtoV6{}
+	p.H.V = jkp_v6_version
 	p.H.C = JKP_V6_KEEPALIVE_NAME
 	p.H.T = time.Now().UnixNano() / 1000000
 	p.H.ID = id
