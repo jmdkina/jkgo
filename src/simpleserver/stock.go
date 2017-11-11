@@ -3,7 +3,16 @@ package simpleserver
 import (
 	"jk/jklog"
 	"net/http"
+	"helper"
+	"encoding/base64"
 )
+
+type StockIdeas struct {
+    Date string
+    Analyse string
+    Remember string
+    Key string
+}
 
 type Stock struct {
 	Base
@@ -40,6 +49,40 @@ func (s *Stock) Post(w http.ResponseWriter, r *http.Request) {
 	switch method {
 	case "todayall":
 		break
+	case "query_ideas":
+	    m := helper.NewMongo("mongodb://" + "localhost" + "/")
+	    c := m.DB("stock").C("mrjl")
+	    si := []StockIdeas{}
+	    err := c.Find(nil).Sort("-date").All(&si)
+	    if err != nil {
+	        s.WriteSerialData(w, "data error", 400)
+	    } else {
+	        s.WriteSerialData(w, si, 200)
+	    }
+		return
+	case "addnew":
+	    date := r.FormValue("date")
+	    analyse_p := r.FormValue("analyse")
+	    analyse_t, _ := base64.StdEncoding.DecodeString(analyse_p)
+	    analyse := string(analyse_t)
+	    remember := r.FormValue("remember")
+	    key := r.FormValue("key")
+	    m := helper.NewMongo("mongodb://" + "localhost" + "/")
+        c := m.DB("stock").C("mrjl")
+        si := &StockIdeas{
+            Date: date,
+            Analyse: analyse,
+            Remember: remember,
+            Key: key,
+        }
+        jklog.L().Debugln("insert of date ", date)
+        err := c.Insert(si)
+        if err != nil {
+            s.WriteSerialData(w, "insert error", 500)
+        } else {
+            s.WriteSerialData(w, "", 200)
+        }
+	    return
 	}
 	s.WriteSerialData(w, "no data", 200)
 }

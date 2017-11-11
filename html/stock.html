@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Index</title>
+    <title>Stock</title>
     <link rel="stylesheet" href="addon/bootstrap/bootstrap.min.css">
     <script type="text/javascript" src="addon/jquery/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="addon/vue/vue.min.js"></script>
     <script type="text/javascript" src="addon/layer/layer.js"></script>
+    <script type="text/javascript" src="addon/tools/base64.min.js"></script>
     <link rel="stylesheet" href="css/global.css" />
     <link rel="stylesheet" href="css/stock.css" />
     <script type="text/javascript" src="js/global.js"></script>
@@ -23,6 +24,36 @@
 
     <input type="text" class="form-control input-small" v-model="code" placeholder="Code" />
 	<button class="btn btn-info " v-on:click="execute">Execute</button>
+</div>
+
+<div class="container-fluid" id="stockstory">
+    <button class="btn btn-info" v-on:click="showdiag">Add New</button>
+    <div class="addnew" v-if="showadd_diag">
+        <label for="date">Date: </label>
+        <input type="text" class="form-control input-small" v-model="date" placeholder="Date" /><br>
+        <label for="Summary">Summary: </label>
+        <textarea cols="100" rows="10" v-model="analyse"></textarea><br/>
+        <label for="Idea">Idea: </label>
+        <input type="text" class="form-control input-middle" v-model="remember" placeholder="Idea"/><br/>
+        <label for="Key">Key: </label>
+        <input type="text" class="form-control input-middle" v-model="key" placeholder="Key"/><br/>
+        <input type="password" class="form-control input-small" v-model="code" placeholder="Code"/><br/>
+        <button class="btn btn-info" v-on:click="addnew">Add</button>
+    </div>
+    <table class="table table-hover table-bordered">
+        <tr>
+            <td>Date</td>
+            <td>Summary</td>
+            <td>Idea</td>
+            <td>Key</td>
+        </tr>
+        <tr v-for="idea in ideas">
+            <td>${ idea.Date } </td>
+            <td><textarea cols="100">${ idea.Analyse }</textarea></td>
+            <td>${ idea.Remember }</td>
+            <td>${ idea.Key }</td>
+        </tr>
+    </table>
 </div>
 
 </body>
