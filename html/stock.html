@@ -27,19 +27,7 @@
 </div>
 
 <div class="container-fluid" id="stockstory">
-    <button class="btn btn-info" v-on:click="showdiag">Add New</button>
-    <div class="addnew" v-if="showadd_diag">
-        <label for="date">Date: </label>
-        <input type="text" class="form-control input-small" v-model="date" placeholder="Date" /><br>
-        <label for="Summary">Summary: </label>
-        <textarea cols="100" rows="10" v-model="analyse"></textarea><br/>
-        <label for="Idea">Idea: </label>
-        <input type="text" class="form-control input-middle" v-model="remember" placeholder="Idea"/><br/>
-        <label for="Key">Key: </label>
-        <input type="text" class="form-control input-middle" v-model="key" placeholder="Key"/><br/>
-        <input type="password" class="form-control input-small" v-model="code" placeholder="Code"/><br/>
-        <button class="btn btn-info" v-on:click="addnew">Add</button>
-    </div>
+
     <table class="table table-hover table-bordered">
         <tr>
             <td>Date</td>
@@ -54,6 +42,20 @@
             <td>${ idea.Key }</td>
         </tr>
     </table>
+
+    <button class="btn btn-info" v-on:click="showdiag">Add New</button>
+    <div class="addnew" v-if="showadd_diag">
+        <label for="date">Date: </label>
+        <input type="text" class="form-control input-small" v-model="date" placeholder="Date" /><br>
+        <label for="Summary">Summary: </label>
+        <textarea cols="100" rows="10" v-model="analyse"></textarea><br/>
+        <label for="Idea">Idea: </label>
+        <input type="text" class="form-control input-middle" v-model="remember" placeholder="Idea"/><br/>
+        <label for="Key">Key: </label>
+        <input type="text" class="form-control input-middle" v-model="key" placeholder="Key"/><br/>
+        <input type="password" class="form-control input-small" v-model="code" placeholder="Code"/><br/>
+        <button class="btn btn-info" v-on:click="addnew">Add</button>
+    </div>
 </div>
 
 </body>
