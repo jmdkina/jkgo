@@ -21,7 +21,7 @@ go get github.com/gorilla/websocket
 ::https://github.com/golangers/database.git
 
 :: need install bzr
-go get labix.org/v2/mgo
+rem go get labix.org/v2/mgo
 go get gopkg.in/mgo.v2
 
 go get golang.org/x/net/html

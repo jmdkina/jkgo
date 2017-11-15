@@ -2,6 +2,7 @@
 goget="github.com/astaxie/beego github.com/beego/bee github.com/Unknwon/goconfig github.com/rthornton128/goncurses"
 goget+=" github.com/gogap/logs"
 goget+=" github.com/henrylee2cn/faygo github.com/henrylee2cn/fay github.com/gorilla/websocket"
+goget+=" gopkg.in/mgo.v2"
 
 for i in $goget
 do
@@ -19,6 +20,7 @@ srcs="github.com/alecthomas/log4go.git"
 srcs+=" github.com/golang/protobuf.git"
 srcs+=" github.com/gorilla/websocket.git"
 srcs+="  github.com/matishsiao/goInfo"
+srcs+=" github.com/beego/i18n"
 
 for src in $srcs
 do
