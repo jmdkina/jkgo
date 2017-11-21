@@ -9,8 +9,9 @@ import (
 )
 
 type Modular struct {
-	n int
-	b int
+	n   int
+	b   int
+	ret []int
 }
 
 func New() *Modular {
@@ -18,11 +19,11 @@ func New() *Modular {
 	return &mod
 }
 
-func (m *Modular) printBaseExpansionResult(ret []int) {
-	jklog.L().Infoln("The result is : ")
-	rlen := len(ret)
+func (m *Modular) Print() {
+	jklog.L().Info("The result is : ")
+	rlen := len(m.ret)
 	for i := rlen - 1; i >= 0; i-- {
-		fmt.Printf("%d", ret[i])
+		fmt.Printf("%d", m.ret[i])
 		if i%4 == 0 {
 			fmt.Printf(" ")
 		}
@@ -38,17 +39,15 @@ func (m *Modular) BaseExpansion(n, b int) error {
 	m.n = n
 	m.b = b
 	q := n
-	var ret []int // save the result.
+	m.ret = m.ret[:0]
 	for {
 		// Mod last, exit
 		if q == 0 {
 			break
 		}
 		quo := q % b
-		ret = append(ret, quo)
+		m.ret = append(m.ret, quo)
 		q = q / b
 	}
-	// out. print the result.
-	m.printBaseExpansionResult(ret)
 	return nil
 }

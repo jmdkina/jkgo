@@ -9,4 +9,5 @@ func TestBaseExpansion(t *testing.T) {
 	b := 2
 	m := New()
 	m.BaseExpansion(n, b)
+	m.Print()
 }
