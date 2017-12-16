@@ -39,6 +39,7 @@ func (p *Process) HandleMsg() bool {
 		}
 		log4go.Debug("Give Response of keepalive msg %s ", str)
 		p.SS.remoteInstance[p.conn].UpdateTime()
+		p.SS.remoteInstance[p.conn].Info.ID = p.proto.H.ID
 		p.conn.Write([]byte(str))
 	}
 	return true

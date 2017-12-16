@@ -18,9 +18,9 @@ type ClientBase struct {
 	jkbase.JKNetBase
 }
 
-func (c *ClientBase) KeepaliveCycle(interval time.Duration) error {
+func (c *ClientBase) KeepaliveCycle(interval time.Duration, id string) error {
 	for {
-		str, _ := jkprotocol.JKProtoV6MakeKeepalive("KA")
+		str, _ := jkprotocol.JKProtoV6MakeKeepalive(id)
 		n := c.Send(str)
 		log4go.Debug("Send keepalive %d", n)
 		if n < 0 {

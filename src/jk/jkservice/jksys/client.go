@@ -26,5 +26,5 @@ func NewSysClient(addr string, port int, nettype int) (*SysClient, error) {
 }
 
 func (sc *SysClient) Keepalive(interval time.Duration) {
-	sc.KeepaliveCycle(interval)
+	sc.KeepaliveCycle(interval, "jksys")
 }

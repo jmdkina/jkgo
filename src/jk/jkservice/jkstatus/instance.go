@@ -6,6 +6,7 @@ import (
 )
 
 type RemoteInfo struct {
+	ID       string
 	Remote   string
 	First    int64
 	Last     int64

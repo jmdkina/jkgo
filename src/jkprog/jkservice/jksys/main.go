@@ -14,8 +14,8 @@ var (
 	bg          = flag.Bool("bg", false, "true|false")
 	logfile     = flag.String("logfile", "/tmp/jksys.log", "log file")
 	logsize     = flag.Int("logsize", 1024*1024*1024, "log size")
-	client_addr = flag.String("client address", "0.0.0.0", "dial client address")
-	client_port = flag.Int("client port", 20101, "dial client port")
+	client_addr = flag.String("client_address", "0.0.0.0", "dial client address")
+	client_port = flag.Int("client_port", 20101, "dial client port")
 )
 
 func main() {
