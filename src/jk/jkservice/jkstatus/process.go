@@ -48,6 +48,9 @@ func (p *Process) HandleMsg() bool {
 			p.conn.Write([]byte(str))
 		}
 	case jkprotocol.JKP_V6_REGISTER_NAME:
+		// If use interface, can't transfer back to correct interface
+		// so we define a new with body of the struct
+		// Why can't transfer from interface ???
 		type OutSys struct {
 			H jkprotocol.JKProtoV6Header
 			B jksys.KFSystemInfo
