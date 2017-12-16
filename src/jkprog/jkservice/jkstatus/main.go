@@ -33,6 +33,9 @@ func main() {
 	}
 	l4g.Info("Start recv data")
 	status.RecvCycle()
+
+	// start http server
+	jkstatus.NewStatusHttp(12307)
 	for {
 		time.Sleep(time.Millisecond * 500)
 	}

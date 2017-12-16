@@ -1,22 +1,23 @@
 package main
 
 import (
-	"net/http"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"jk/jklog"
+	"net/http"
 	"strings"
 	"time"
-	"io/ioutil"
-	"encoding/json"
 )
 
 // Conf of route could set by file
 type RouteConf struct {
-	Url       string     `json:url`
-	User      string     `json:user`
-	Pass      string     `json:pass`
-	Interval  int        `json:interval`
-	Users     []string   `json:users`
-	Passes    []string   `json:passes`
+	Url      string   `json:url`
+	User     string   `json:user`
+	Pass     string   `json:pass`
+	Interval int      `json:interval`
+	Users    []string `json:users`
+	Passes   []string `json:passes`
 }
 
 // Get Conf of route from @filename
@@ -44,7 +45,6 @@ func make_request_get(url string) *http.Request {
 	return req
 }
 
-
 func make_do_req(req *http.Request) (int, *http.Response) {
 	h := http.Client{}
 	c, err := h.Do(req)
@@ -56,9 +56,7 @@ func make_do_req(req *http.Request) (int, *http.Response) {
 	return c.StatusCode, c
 }
 
-func main() {
-	//req := make_request_get("http://192.168.1.1")
-
+func old_func() {
 	rc := RouteConfFromFile("./etc/router.conf")
 	if rc == nil {
 		return
@@ -77,7 +75,7 @@ func main() {
 			code, res := make_do_req(req)
 			jklog.L().Infof("code: %d\n", code)
 			if res != nil {
-                jklog.L().Infof("status: %s\n", res.Status)
+				jklog.L().Infof("status: %s\n", res.Status)
 			}
 			if code == 200 {
 				jklog.L().Infof("Find one success, [%s, %s]\n", key, value)
@@ -85,10 +83,23 @@ func main() {
 				break
 			}
 
-			time.Sleep(time.Duration(rc.Interval)*time.Millisecond)
+			time.Sleep(time.Duration(rc.Interval) * time.Millisecond)
 		}
 		if find {
 			break
 		}
+	}
+}
+
+func main() {
+	req := make_request_get("http://localhost:12307/st")
+	var data []byte
+	n, err := req.Body.Read(data)
+	if err != nil {
+		fmt.Printf("get data error %v\n", err)
+		return
+	} else {
+		fmt.Printf("Get data success of %d\n", n)
+		fmt.Println(string(data))
 	}
 }
