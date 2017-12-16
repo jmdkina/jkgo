@@ -1,6 +1,7 @@
 package jkstatus
 
 import (
+	"jk/jksys"
 	"net"
 	"time"
 )
@@ -15,8 +16,9 @@ type RemoteInfo struct {
 }
 
 type RemoteInstance struct {
-	Conn net.Conn
-	Info RemoteInfo
+	Conn    net.Conn
+	Info    RemoteInfo
+	SysInfo jksys.KFSystemInfo
 }
 
 func NewRemoteInstance(conn net.Conn, inter int) (*RemoteInstance, error) {

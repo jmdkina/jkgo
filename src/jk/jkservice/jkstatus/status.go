@@ -16,10 +16,10 @@ type ServiceStatus struct {
 	remoteInstance map[net.Conn]*RemoteInstance
 }
 
-func (ctrl *ServiceStatus) RemoteInfos() []RemoteInfo {
-	var ris []RemoteInfo
+func (ctrl *ServiceStatus) RemoteInstances() []RemoteInstance {
+	var ris []RemoteInstance
 	for _, v := range ctrl.remoteInstance {
-		ris = append(ris, v.Info)
+		ris = append(ris, *v)
 	}
 	return ris
 }

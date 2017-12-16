@@ -2,12 +2,16 @@ package jksys
 
 import (
 	l4g "github.com/alecthomas/log4go"
+	"golanger.com/log"
+	"jk/jkprotocol"
 	cbase "jk/jkservice/jkbase"
+	"jk/jksys"
 	"time"
 )
 
 type SysClient struct {
 	cbase.ClientBase
+	SysInfo *jksys.KFSystemInfo
 }
 
 func NewSysClient(addr string, port int, nettype int) (*SysClient, error) {
@@ -22,7 +26,15 @@ func NewSysClient(addr string, port int, nettype int) (*SysClient, error) {
 	if err != nil {
 		return nil, err
 	}
+	sys.SysInfo = jksys.NewSystemInfo()
+	sys.Register()
 	return sys, nil
+}
+
+func (sc *SysClient) Register() {
+	str, _ := jkprotocol.JKProtoV6MakeRegister("jksys", sc.SysInfo)
+	log.Debug("Register send %s", str)
+	sc.Send(str)
 }
 
 func (sc *SysClient) Keepalive(interval time.Duration) {

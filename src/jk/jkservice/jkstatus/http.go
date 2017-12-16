@@ -25,7 +25,8 @@ func (sh *StatusHttp) WriteSerialData(w http.ResponseWriter, data interface{}, s
 }
 
 func (sh *StatusHttp) makeAllStatus() string {
-	ris := sh.stlink.RemoteInfos()
+	ris := sh.stlink.RemoteInstances()
+
 	data, err := json.Marshal(ris)
 	if err != nil {
 		log4go.Error("generate json data failed ", err)

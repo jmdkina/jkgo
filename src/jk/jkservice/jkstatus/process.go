@@ -1,7 +1,10 @@
 package jkstatus
 
 import (
+	"encoding/json"
 	"github.com/alecthomas/log4go"
+	"jk/jksys"
+
 	// "github.com/buger/jsonparser"
 	"jk/jkprotocol"
 	"net"
@@ -29,18 +32,37 @@ func (p *Process) HandleMsg() bool {
 		return false
 	}
 	p.proto = pp
-	log4go.Debug("status process receive message: ", *p.proto)
+	log4go.Debug("status process receive message: %v", *p.proto)
 
-	if p.proto.H.C == jkprotocol.JKP_V6_KEEPALIVE_NAME && p.proto.H.R {
-		str, err := p.proto.JKProtoV6MakeKeepaliveResponse()
-		if err != nil {
-			log4go.Error("Generate Keepalive string err %s ", err)
-			return false
+	switch p.proto.H.C {
+	case jkprotocol.JKP_V6_KEEPALIVE_NAME:
+		if p.proto.H.R {
+			str, err := p.proto.JKProtoV6MakeKeepaliveResponse()
+			if err != nil {
+				log4go.Error("Generate Keepalive string err %s ", err)
+				return false
+			}
+			log4go.Debug("Give Response of keepalive msg %s ", str)
+			p.SS.remoteInstance[p.conn].UpdateTime()
+			p.SS.remoteInstance[p.conn].Info.ID = p.proto.H.ID
+			p.conn.Write([]byte(str))
 		}
-		log4go.Debug("Give Response of keepalive msg %s ", str)
-		p.SS.remoteInstance[p.conn].UpdateTime()
-		p.SS.remoteInstance[p.conn].Info.ID = p.proto.H.ID
-		p.conn.Write([]byte(str))
+	case jkprotocol.JKP_V6_REGISTER_NAME:
+		type OutSys struct {
+			H jkprotocol.JKProtoV6Header
+			B jksys.KFSystemInfo
+		}
+		var outSys OutSys
+		err := json.Unmarshal([]byte(p.data), &outSys)
+		if err != nil {
+			log4go.Error("json unmarshal fail ", err)
+			break
+		}
+		p.SS.remoteInstance[p.conn].SysInfo = outSys.B
+		if p.proto.H.R {
+			str, _ := pp.JKProtoV6MakeCommonResponse("")
+			p.conn.Write([]byte(str))
+		}
 	}
 	return true
 }

@@ -6,8 +6,6 @@
 package jksys
 
 import (
-	// "encoding/json"
-	// "github.com/codeskyblue/go-sh"
 	"bytes"
 	"errors"
 	"jk/jklog"
@@ -16,11 +14,36 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
-//	"fmt"
+	//	"fmt"
 )
 
 var Localaddr string
 var LocalMac string
+
+// Get CPU info
+type ProcessCPU struct {
+	pid int
+	cpu float64
+}
+
+type KFSystemInfo struct {
+	Kernel   string
+	Core     string
+	Platform string
+	Hostname string
+	CPUs     int
+
+	OSName   string
+	IPAddr   string
+	Mac      string
+	TotalRam uint64
+	FreeRam  uint64
+
+	TotalDisk uint64
+	FreeDisk  uint64
+
+	CPUUsage float64
+}
 
 func KFLocalMac() (string, error) {
 	if len(LocalMac) > 0 {
@@ -127,8 +150,6 @@ func system(command string, args []string) bool {
 		return false
 	}
 	return true
-
-	// jklog.L().Infoln("command result: ", out.String())
 }
 
 func systemargs(command string, args string) bool {

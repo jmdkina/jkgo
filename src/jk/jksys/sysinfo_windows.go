@@ -12,36 +12,21 @@ import (
 	ssi "github.com/matishsiao/goInfo"
 )
 
-// Get CPU info
-type ProcessCPU struct {
-	pid int
-	cpu float64
-}
-
-type KFSystemInfo struct {
-	Info     *ssi.GoInfoObject
-	OSName   string
-	IPAddr  string
-	Mac      string
-	TotalRam uint64
-	FreeRam  uint64
-
-	TotalDisk uint64
-	FreeDisk  uint64
-
-	CPUUsage float64
-	procCPU  []*ProcessCPU
-}
-
 // Someday this name will get from file with different location
 const (
-	 TotalName = "Total"
-	 FreeName  = "Free"
+	TotalName = "Total"
+	FreeName  = "Free"
 )
 
 func NewSystemInfo() *KFSystemInfo {
 	si := &KFSystemInfo{}
-	si.Info = ssi.GetInfo()
+	info := *ssi.GetInfo()
+	si.CPUs = info.CPUs
+	si.Kernel = info.Kernel
+	si.Core = info.Core
+	si.OSName = info.OS
+	si.Platform = info.Platform
+	si.Hostname = info.Hostname
 	si.GetAddrInfo()
 	si.KFCPUInfo()
 	si.KFDiskInfo()

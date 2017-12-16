@@ -17,26 +17,6 @@ import (
 	"strings"
 )
 
-// Get CPU info
-type ProcessCPU struct {
-	pid int
-	cpu float64
-}
-
-type KFSystemInfo struct {
-	Info *ssi.GoInfoObject
-
-	OSName   string
-	TotalRam uint64
-	FreeRam  uint64
-
-	TotalDisk uint64
-	FreeDisk  uint64
-
-	CPUUsage float64
-	procCPU  []*ProcessCPU
-}
-
 // Someday this name will get from file with different location
 const (
 	// TotalName = "Total"

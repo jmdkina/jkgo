@@ -10,6 +10,7 @@ const (
 )
 
 const (
+	JKP_V6_REGISTER_NAME  = "Register"
 	JKP_V6_KEEPALIVE_NAME = "Keepalive"
 )
 
@@ -44,6 +45,10 @@ func JKProtoV6Make(cmd string, time int64, resp bool, id string, data interface{
 	return string(v), err
 }
 
+func JKProtoV6MakeRegister(id string, data interface{}) (string, error) {
+	return JKProtoV6Make(JKP_V6_REGISTER_NAME, time.Now().UnixNano()/1000000, false, id, data)
+}
+
 func JKProtoV6MakeKeepalive(id string) (string, error) {
 	p := &JKProtoV6{}
 	p.H.V = jkp_v6_version
@@ -59,6 +64,14 @@ func JKProtoV6MakeKeepalive(id string) (string, error) {
 func (p *JKProtoV6) JKProtoV6MakeKeepaliveResponse() (string, error) {
 	p.H.T = time.Now().UnixNano() / 1000000
 	p.H.R = false
+	v, err := json.Marshal(p)
+	return string(v), err
+}
+
+func (p *JKProtoV6) JKProtoV6MakeCommonResponse(data interface{}) (string, error) {
+	p.H.T = time.Now().UnixNano() / 1000000
+	p.H.R = false
+	p.B = data
 	v, err := json.Marshal(p)
 	return string(v), err
 }
