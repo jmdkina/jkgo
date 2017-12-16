@@ -1,11 +1,11 @@
 package main
 
 import (
-	l4g "github.com/alecthomas/log4go"
-	"time"
 	"flag"
-	"jk/jknetbase"
+	l4g "github.com/alecthomas/log4go"
 	"jk/jkservice/jkstatus"
+	"jkbase"
+	"time"
 )
 
 var (
@@ -19,12 +19,12 @@ var (
 func main() {
 	flag.Parse()
 
-	jknetbase.InitLog(*logfile, *logsize)
+	jkbase.InitLog(*logfile, *logsize)
 
 	l4g.Debug("jkstatus start")
 	l4g.Info("Listen with [%s:%d]", *address, *port)
 
-	jknetbase.InitDeamon(*bg)
+	jkbase.InitDeamon(*bg)
 
 	status, err := jkstatus.NewServiceStatus(*address, *port)
 	if err != nil {
@@ -32,8 +32,8 @@ func main() {
 		return
 	}
 	l4g.Info("Start recv data")
-	status.Recv()
+	status.RecvCycle()
 	for {
-		time.Sleep(time.Millisecond*500)
+		time.Sleep(time.Millisecond * 500)
 	}
 }

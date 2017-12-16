@@ -1,5 +1,5 @@
 // +build linux
-package jknetbase
+package jkbase
 
 import (
 	jdaemon "github.com/tyranron/daemonigo"

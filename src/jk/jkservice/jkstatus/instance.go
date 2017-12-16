@@ -26,7 +26,7 @@ func NewRemoteInstance(conn net.Conn, inter int) (*RemoteInstance, error) {
 
 func (ri *RemoteInstance) Update() {
 	now := time.Now().Unix()
-	if now-ri.Last > ri.Interval {
+	if now-ri.Last > int64(ri.Interval) {
 		ri.Online = false
 	}
 }

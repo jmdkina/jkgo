@@ -2,57 +2,39 @@ package jkbase
 
 import (
 	"github.com/alecthomas/log4go"
-	"jk/jknetbase"
 	"jk/jkprotocol"
+	"jkbase"
 	"time"
 )
 
-type ServiceClientCtrl struct {
-	client jknetbase.JKNetBaseClient
-	proto  *jkprotocol.JKProtocolWrap
+/*
+ * Service port
+ * status : 20101
+ * dbs : 20102
+ * sys : 20103
+ */
+
+type ClientBase struct {
+	jkbase.JKNetBase
 }
 
-func NewServiceClientCtrl(addr string, port int, nettype int) (*ServiceClientCtrl, error) {
-	c := &ServiceClientCtrl{}
-	c.client = jknetbase.JKNetBaseClient{}
-	err := c.client.New(addr, port, nettype)
-	if err != nil {
-		return nil, err
-	}
-	c.proto, err = jkprotocol.NewJKProtocolWrap(jkprotocol.JK_PROTOCOL_VERSION_5)
-	if err != nil {
-		return nil, err
-	}
-	return c, nil
-}
-
-func (c *ServiceClientCtrl) DoRun() error {
+func (c *ClientBase) KeepaliveCycle(interval time.Duration) error {
 	for {
 		str, _ := jkprotocol.JKProtoV6MakeKeepalive("KA")
-		n := c.client.Send(str)
+		n := c.Send(str)
 		log4go.Debug("Send keepalive %d", n)
-		recv, err := c.client.Recv()
+		if n < 0 {
+			log4go.Warn("Send keepalived fail, redial")
+			c.Dial()
+			continue
+		}
+		recv, err := c.RecvClient()
 		if err != nil {
 			return err
 		}
 		log4go.Debug("Recv response of keepalive %s", string(recv))
-		time.Sleep(time.Second * 30)
+		time.Sleep(time.Second * interval)
 	}
 
 	return nil
-}
-
-func ServiceBaseRun(client_addr string, client_port int) {
-	go func() {
-		for {
-			p, err := NewServiceClientCtrl(client_addr, client_port, 1)
-			if err != nil {
-				log4go.Error("service client ctrl failed ", err)
-				time.Sleep(time.Second * 5)
-			} else {
-				log4go.Info("Start service client ctrl with [%s, %d]", client_addr, client_port)
-				p.DoRun()
-			}
-		}
-	}()
 }

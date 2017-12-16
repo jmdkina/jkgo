@@ -1,4 +1,4 @@
-package jknetbase
+package jkbase
 
 import (
 	l4g "github.com/alecthomas/log4go"

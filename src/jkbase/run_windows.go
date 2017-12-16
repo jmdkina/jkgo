@@ -1,5 +1,5 @@
 // +build windows
-package jknetbase
+package jkbase
 
 func InitDeamon(backrun bool) {
 }
