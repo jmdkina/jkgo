@@ -35,7 +35,9 @@ func main() {
 	status.RecvCycle()
 
 	// start http server
-	jkstatus.NewStatusHttp(12307)
+	shttp, _ := jkstatus.NewStatusHttp(12307)
+	// make interactive for use status information
+	shttp.AddLinkStatus(status)
 	for {
 		time.Sleep(time.Millisecond * 500)
 	}

@@ -29,7 +29,7 @@ func (p *Process) HandleMsg() bool {
 		return false
 	}
 	p.proto = pp
-	log4go.Debug("status process receive message: ", p.proto)
+	log4go.Debug("status process receive message: ", *p.proto)
 
 	if p.proto.H.C == jkprotocol.JKP_V6_KEEPALIVE_NAME && p.proto.H.R {
 		str, err := p.proto.JKProtoV6MakeKeepaliveResponse()
