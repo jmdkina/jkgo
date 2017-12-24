@@ -2,7 +2,7 @@ log_enable(true);
 
 var current_image = 0;
 var query_length = 10;
-var image_path_prefix = "/imgs/q10/";
+var image_path_prefix = "/images/imgs/q10/";
 
 $(function(){
     // Vue.options.delimiters = ['{$', '#}'];
@@ -35,7 +35,9 @@ $(function(){
                         // log_print("length: " + ret.Result.length)
                         jmdkina.images = ret.Result;
                         for (var i = 0; i < jmdkina.images.length; i++) {
-                            jmdkina.images[i]["imageurl"] = image_path_prefix + jmdkina.images[i]["path"]
+                            jmdkina.images[i]["imageurl"] = image_path_prefix + 
+                                jmdkina.images[i]["path"];
+                            jmdkina.images[i]["timestr"] = time_unix2string(jmdkina.images[i]["createtime"]);
                         }
                         current_image += jmdkina.images.length;
                     } catch(e) {
@@ -62,9 +64,23 @@ $(function(){
                                 layer.msg("Fail of " + ret.Status);
                                 return;
                             }
+                            if (ret.Result.length == 0) {
+                                $(".showmore").attr("disabled", true);
+                                $(".showmore").html("No more");
+                            }
+                            oldimages = jmdkina.images;
                             jmdkina.images = ret.Result;
+
+                            for (var i = 0; i < jmdkina.images.length; i++) {
+                                jmdkina.images[i]["imageurl"] = image_path_prefix + 
+                                    jmdkina.images[i]["path"];
+                                jmdkina.images[i]["timestr"] = time_unix2string(jmdkina.images[i]["createtime"]);
+                            }
+
                             current_image += jmdkina.images.length;
-                            layer.msg("Add New Success!");
+                            for (var i = 0; i < oldimages.length; i++) {
+                                jmdkina.images.push(oldimages[i])
+                            }
                         } catch(e) {
                             layer.msg("Fail parse response " + response);
                         }

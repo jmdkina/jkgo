@@ -18,3 +18,11 @@
 	display: inline;
 	width: 400px;
 }
+
+.jk-leavetop {
+    margin-top: 4%;
+}
+
+.jk-leavebottom {
+    margin-bottom: 4%;
+}

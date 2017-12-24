@@ -13,3 +13,9 @@ function log_print(str) {
 		console.log(str);
 	}
 }
+
+function time_unix2string(unix) {
+    var unixTimestamp = new Date(unix* 1000); 
+    commonTime = unixTimestamp.toLocaleString();
+    return commonTime
+}

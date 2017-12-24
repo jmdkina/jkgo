@@ -10,6 +10,12 @@ import (
 	"strings"
 )
 
+type MongoCondition struct {
+	Limit int
+	Skip  int
+	Order bool
+}
+
 func init() {
 	gob.Register(bson.M{})
 }
@@ -85,7 +91,11 @@ func (m *Mongo) Close() {
 }
 
 func (m *Mongo) Query(dbname string, coll string, condition interface{}, result interface{}) error {
-	return m.session.DB(dbname).C(coll).Find(nil).All(result)
+	cond := condition.(MongoCondition)
+	limit := cond.Limit
+	skip := cond.Skip
+	// order := cond.Order
+	return m.session.DB(dbname).C(coll).Find(nil).Sort("-createtime").Skip(skip).Limit(limit).All(result)
 }
 
 func (m *Mongo) Update(dbname string, coll string, condition interface{}) error {

@@ -3,8 +3,10 @@ package simpleserver
 import (
 	"golanger.com/utils"
 	"jk/jklog"
+	"jkdbs"
 	"net/http"
 	. "simpleserver/dbs"
+	"strconv"
 )
 
 type Jmdkina struct {
@@ -34,13 +36,26 @@ func (s *Jmdkina) Post(w http.ResponseWriter, r *http.Request) {
 	jklog.L().Debugf("jmdkina page -- cmd %s\n", cmd)
 	switch cmd {
 	case "query_images":
-		// index := r.FormValue("index")
-		// length := r.FormValue("length")
-		out := []utils.M{}
-		GlobalDBS().Query("proj", "images", nil, &out)
+		out := s.queryImages(r)
 		s.WriteSerialData(w, out, 200)
 		// jklog.L().Debugln(out)
 	case "query_images_more":
-
+		out := s.queryImages(r)
+		s.WriteSerialData(w, out, 200)
 	}
+}
+
+func (s *Jmdkina) queryImages(r *http.Request) []utils.M {
+	index := r.FormValue("index")
+	length := r.FormValue("length")
+	out := []utils.M{}
+	limit, _ := strconv.Atoi(length)
+	skip, _ := strconv.Atoi(index)
+	mc := jkdbs.MongoCondition{
+		Limit: limit,
+		Skip:  skip,
+		Order: false,
+	}
+	GlobalDBS().Query("proj", "images", mc, &out)
+	return out
 }
