@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	ss "simpleserver"
+	. "simpleserver/dbs"
 	"strconv"
 )
 
@@ -44,8 +45,14 @@ func main() {
 	ss.NewWebSocket(html_path)
 	ss.NewDBMongo(html_path)
 	ss.NewStock(html_path)
+	ss.NewJmdkina(html_path)
+	ss.NewProject(html_path)
+	ss.NewShici(html_path)
+	ss.NewResume(html_path)
 
 	lport := *port
+
+	GlobalDBSMongoCreate("mongodb://localhost/")
 
 	jklog.L().Infof("Listen port %d\n", lport)
 	http.ListenAndServe(":"+strconv.Itoa(lport), nil)

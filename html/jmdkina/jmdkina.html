@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>History Impressive</title>
+    <link rel="stylesheet" href="addon/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/jmdkina.css" />
+    <script type="text/javascript" src="addon/jquery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="addon/vue/vue.js"></script>
+    <script type="text/javascript" src="addon/layer/layer.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/jmdkina.js" ></script>
+</head>
+<body>
+<div id="jmdkina">
+   
+<div class="container col-es-12 col-sm-12 col-md-12 col-lg-10 jk-leavetop" style="float:none">
+
+<div class='jkthumbnails'>
+
+<div class="item col-es-12 col-sm-3 col-md-2 col-lg-2" v-for="img in images">
+    <img :src="img.imageurl" />
+    <div>${ img.content }</div>    
+    <div class="time1 time"><b>${ img.author }</b>&nbsp;发布于&nbsp;<br/>${   img.createtime }</div>
+</div>
+
+<br/>
+<button class="btn btn-default btn-block" v-on:click="showmore">加载更多</button>
+
+<br class="jk-clear" />
+</div>
+</div>
+</body>
+</html>
