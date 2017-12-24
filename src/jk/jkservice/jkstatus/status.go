@@ -28,7 +28,7 @@ func (ctrl *ServiceStatus) findRemoteInstance(conn net.Conn) *RemoteInstance {
 	return ctrl.remoteInstance[conn]
 }
 
-func (ctrl *ServiceStatus) handler_msg(conn net.Conn, data string) error {
+func (ctrl *ServiceStatus) HandleMsg(conn net.Conn, data string) error {
 	l4g.Debug("handler msg of jkstatus from %s", conn.RemoteAddr().String())
 	ri := ctrl.findRemoteInstance(conn)
 	if ri == nil {
@@ -39,6 +39,10 @@ func (ctrl *ServiceStatus) handler_msg(conn net.Conn, data string) error {
 	p.SS = ctrl
 	p.HandleMsg()
 	return nil
+}
+
+func (ctrl *ServiceStatus) RecvCycle() {
+	ctrl.DoRecvCycle(ctrl)
 }
 
 func (ctrl *ServiceStatus) updateRemoteInstance() {
@@ -60,7 +64,6 @@ func NewServiceStatus(addr string, port int) (*ServiceStatus, error) {
 	}
 
 	ctrl.remoteInstance = make(map[net.Conn]*RemoteInstance)
-	ctrl.SetHandlerMsg(ctrl.handler_msg)
 	ctrl.Listen()
 	go ctrl.updateRemoteInstance()
 	return ctrl, nil

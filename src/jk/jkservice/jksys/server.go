@@ -1,7 +1,8 @@
 package jksys
 
 import (
-	l4g "github.com/alecthomas/log4go"
+	// l4g "github.com/alecthomas/log4go"
+	"errors"
 	"jkbase"
 	"net"
 )
@@ -10,10 +11,8 @@ type SysServer struct {
 	jkbase.JKNetBase
 }
 
-func handler_msg(conn net.Conn, data string) error {
-	l4g.Debug("handler msg of sys")
-	conn.Write([]byte("Hello give you a response"))
-	return nil
+func (ss *SysServer) HandleMsg(conn net.Conn, data string) error {
+	return errors.New("Unimplement")
 }
 
 func NewSysServer(addr string, port int, nettype int) (*SysServer, error) {
@@ -23,7 +22,10 @@ func NewSysServer(addr string, port int, nettype int) (*SysServer, error) {
 		return nil, err
 	}
 
-	sys.SetHandlerMsg(handler_msg)
 	sys.Listen()
 	return sys, nil
+}
+
+func (sys *SysServer) RecvCycle() {
+	sys.DoRecvCycle(sys)
 }

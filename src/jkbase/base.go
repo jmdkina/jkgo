@@ -10,7 +10,18 @@ import (
 
 var NetTypeBase = 1
 
-type HandlerMsgCallback func(conn net.Conn, data string) error
+// go 实现类似 C++ 的虚拟继承，是一种假像，至少使用上是
+// 通过一种特殊的方法，将子类的对像以接品的形式交给父类
+// 父类再调用相同的方法，其实就是调用子类实现的方法，而非
+// 父类的。但是这种方法也比使用回调稍微好一些，也不是很好理解
+// 不如c++的虚函数来的简单，明了，是对语言的变相使用
+type JKSuperBase interface {
+	HandleMsg(conn net.Conn, data string) error
+}
+
+func call_handlemsg(sb JKSuperBase, conn net.Conn, data string) {
+	sb.HandleMsg(conn, data)
+}
 
 type JKNetBase struct {
 	address string
@@ -23,9 +34,7 @@ type JKNetBase struct {
 
 	// As server listen
 	listener net.Listener
-	// return recv data to handle
-	handler_msg HandlerMsgCallback
-	items       map[string](JKNetBaseItem)
+	items    map[string](JKNetBaseItem)
 }
 
 type JKNetBaseItem struct {
@@ -82,7 +91,12 @@ func (nb *JKNetBase) Send(data string) int {
 	return n
 }
 
-func (nb *JKNetBase) RecvCycle() error {
+func (nb *JKNetBase) HandleMsg(conn net.Conn, data string) error {
+	log4go.Error("Children should implement it")
+	return errors.New("Children should implement it")
+}
+
+func (nb *JKNetBase) DoRecvCycle(dointer JKSuperBase) error {
 	go func() {
 		for {
 			log4go.Debug("Start to accept ...")
@@ -111,16 +125,12 @@ func (nb *JKNetBase) RecvCycle() error {
 					item.remoteaddr = conn.RemoteAddr().String()
 					item.data = string(rdata[0:n])
 					nb.items[item.remoteaddr] = item
-					nb.handler_msg(conn, item.data)
+					dointer.HandleMsg(conn, item.data)
 				}
 			}()
 		}
 	}()
 	return nil
-}
-
-func (nb *JKNetBase) SetHandlerMsg(callback HandlerMsgCallback) {
-	nb.handler_msg = callback
 }
 
 func (nb *JKNetBase) RecvClient() ([]byte, error) {
