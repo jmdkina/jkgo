@@ -5,6 +5,7 @@ import (
 	"jk/jklog"
 	"jkdbs"
 	"net/http"
+	. "simpleserver"
 	. "simpleserver/dbs"
 	"strconv"
 )
@@ -22,7 +23,7 @@ func NewJmdkina(path string) *Jmdkina {
 
 func (s *Jmdkina) Get(w http.ResponseWriter, r *http.Request) {
 	sp := SimpleParse{}
-	filename := s.path + "/jmdkina/jmdkina.html"
+	filename := s.Path() + "/jmdkina/jmdkina.html"
 	jklog.L().Debugf("Get html [%s]\n", filename)
 
 	err := sp.Parse(w, filename, "")

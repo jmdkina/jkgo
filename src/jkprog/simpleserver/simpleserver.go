@@ -8,6 +8,7 @@ import (
 	"os"
 	ss "simpleserver"
 	. "simpleserver/dbs"
+	. "simpleserver/jmdkina"
 	"strconv"
 )
 
@@ -31,6 +32,8 @@ func main() {
 		html_path = curpath + "/html"
 	}
 
+	ss.GlobalSetConfig("etc/simpleserver.json")
+
 	http.Handle("/css/", http.FileServer(http.Dir(html_path)))
 	http.Handle("/js/", http.FileServer(http.Dir(html_path)))
 	http.Handle("/addon/", http.FileServer(http.Dir(html_path)))
@@ -45,10 +48,11 @@ func main() {
 	ss.NewWebSocket(html_path)
 	ss.NewDBMongo(html_path)
 	ss.NewStock(html_path)
-	ss.NewJmdkina(html_path)
+	NewJmdkina(html_path)
 	ss.NewProject(html_path)
 	ss.NewShici(html_path)
 	ss.NewResume(html_path)
+	NewJmdkinaAdd(html_path)
 
 	lport := *port
 

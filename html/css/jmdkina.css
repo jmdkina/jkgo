@@ -17,6 +17,7 @@
 }
 .jkthumbnail:hover {
   box-shadow: 2px 2px 12px #433344;
+  cursor:pointer;
 }
 form div {
   padding-left: 0 !important;
@@ -43,4 +44,13 @@ form div {
 
 .timestr {
   font-size: 90%;
+}
+
+.jkmodal {
+  width: 90%;
+  max-width: 100%;
+}
+
+.carousel-item img {
+  margin: auto;
 }

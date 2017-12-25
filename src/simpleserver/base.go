@@ -4,9 +4,26 @@ import (
 	"encoding/json"
 	"golanger.com/utils"
 	"jk/jklog"
+	"jkbase"
 	"net/http"
 	"reflect"
 )
+
+type BaseConfig struct {
+	PicsPath string
+}
+
+var bConfig BaseConfig
+
+func GlobalSetConfig(filename string) {
+	jklog.L().Infof("Use config of file %s\n", filename)
+	jkbase.GetConfigInfo(filename, &bConfig)
+	jklog.L().Debugln("Config Info ", bConfig)
+}
+
+func GlobalBaseConfig() BaseConfig {
+	return bConfig
+}
 
 type Base struct {
 	path  string
@@ -15,6 +32,10 @@ type Base struct {
 
 func (b *Base) SetPath(path string) {
 	b.path = path
+}
+
+func (b *Base) Path() string {
+	return b.path
 }
 
 func (b *Base) SetFunc(url string, child interface{}) {

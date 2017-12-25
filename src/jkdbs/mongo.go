@@ -103,7 +103,7 @@ func (m *Mongo) Update(dbname string, coll string, condition interface{}) error 
 }
 
 func (m *Mongo) Add(dbname string, coll string, data interface{}) error {
-	return errors.New("Unimplement")
+	return m.session.DB(dbname).C(coll).Insert(data)
 }
 
 func (m *Mongo) Remove(dbname string, coll string, condition interface{}) error {

@@ -9,6 +9,9 @@ $(function(){
 
     // init get info
 
+    
+    // $("#fulldisplay").height($(window).height());
+    // $(".carousel").carousel('pause');
     var jmdkina = new Vue({
         el: '#jmdkina',
         delimiters: ['${', '}'],
@@ -32,14 +35,14 @@ $(function(){
                             layer.msg("Fail of " + ret.Status);
                             return;
                         }
-                        // log_print("length: " + ret.Result.length)
-                        jmdkina.images = ret.Result;
-                        for (var i = 0; i < jmdkina.images.length; i++) {
-                            jmdkina.images[i]["imageurl"] = image_path_prefix + 
-                                jmdkina.images[i]["path"];
-                            jmdkina.images[i]["timestr"] = time_unix2string(jmdkina.images[i]["createtime"]);
+                        for (var i = 0; i < ret.Result.length; i++) {
+                            ret.Result[i]["imageurl"] = image_path_prefix + 
+                                ret.Result[i]["path"] + "/" + ret.Result[i]["name"];
+                            ret.Result[i]["timestr"] = time_unix2string(ret.Result[i]["createtime"]);
+                            ret.Result[i]["index"] = i;
+                            jmdkina.images.push(ret.Result[i])
                         }
-                        current_image += jmdkina.images.length;
+                        current_image = jmdkina.images.length;
                     } catch(e) {
                         layer.msg("Fail parse response " + response);
                     }
@@ -67,25 +70,40 @@ $(function(){
                             if (ret.Result.length == 0) {
                                 $(".showmore").attr("disabled", true);
                                 $(".showmore").html("No more");
+                                return;
                             }
-                            oldimages = jmdkina.images;
-                            jmdkina.images = ret.Result;
-
-                            for (var i = 0; i < jmdkina.images.length; i++) {
-                                jmdkina.images[i]["imageurl"] = image_path_prefix + 
-                                    jmdkina.images[i]["path"];
-                                jmdkina.images[i]["timestr"] = time_unix2string(jmdkina.images[i]["createtime"]);
+                            for (var i = 0; i < ret.Result.length; i++) {
+                                ret.Result[i]["imageurl"] = image_path_prefix + 
+                                    ret.Result[i]["path"] + "/" + ret.Result[i]["name"];
+                                ret.Result[i]["timestr"] = time_unix2string(ret.Result[i]["createtime"]);
+                                ret.Result[i]["index"] = current_image + i;
+                                jmdkina.images.push(ret.Result[i])
                             }
-
-                            current_image += jmdkina.images.length;
-                            for (var i = 0; i < oldimages.length; i++) {
-                                jmdkina.images.push(oldimages[i])
-                            }
+                            current_image = jmdkina.images.length;
                         } catch(e) {
                             layer.msg("Fail parse response " + response);
                         }
                     }
                 });
+            },
+            fulldisplay: function(img) {
+                var name = img.name;
+                var content = img.content;
+                $(".carousel-inner").html(""); // clear
+                for (var i = 0; i < jmdkina.images.length; i++) {
+                    var thisimg = jmdkina.images[i];
+                    var imageurl = image_path_prefix + thisimg.path + "/" + thisimg.name;
+                    var obj = "<div class='carousel-item'>" + 
+                    "<img class='d-block w-100' alt='" + thisimg.name +
+                    "' src='"+ imageurl +"'/>" + 
+                    "</div></div>";
+                    $(".carousel-inner").append(obj);
+                }
+                $(".modal-title").text(name);
+                $(".carousel-inner").find(".active").removeClass("active");
+                log_print("now index  " + img.index);
+                $(".carousel-inner").find(".carousel-item").eq(img.index).addClass("active");
+                $(".modal").modal('show');
             }
         }
     });
