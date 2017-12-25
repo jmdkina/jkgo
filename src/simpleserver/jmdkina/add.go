@@ -77,6 +77,7 @@ func (s *JmdkinaAdd) saveImages(r *http.Request) {
 	path := r.FormValue("path")
 	tag := r.FormValue("tag")
 	author := r.FormValue("author")
+	content := r.FormValue("content")
 	r.ParseMultipartForm(32 << 20)
 
 	data := []utils.M{}
@@ -123,7 +124,7 @@ func (s *JmdkinaAdd) saveImages(r *http.Request) {
 				"createtime": time.Now().Unix(),
 				"updatetime": time.Now().Unix(),
 				"name":       v.Filename,
-				"content":    "",
+				"content":    content,
 			}
 			data = append(data, item)
 		}

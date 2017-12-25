@@ -12,7 +12,8 @@ $(function(){
             path: "",
             tag: "",
             author: "jmd",
-            code:""
+            code:"",
+            content:""
         },
         beforeCreate: function() {
             
@@ -23,7 +24,8 @@ $(function(){
                 var form = new FormData(document.forms.namedItem("jmdkinaadd"))
                 var xhr = new XMLHttpRequest();
                 var url_args = "cmd=add&code=" + this.code +
-                    "&path=" + this.path + "&tag=" + this.tag + "&author=" + this.author;
+                    "&path=" + this.path + "&tag=" + this.tag + "&author=" + this.author +
+                    "&content=" + this.content;
                 xhr.open("post", "/jmdkinaadd?" + url_args, true);
                 xhr.upload.onprogress = function(ev) {
                     var percent = 0;
