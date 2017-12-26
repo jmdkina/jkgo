@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"jk/jklog"
 	"net/http"
-	"os"
 	ss "simpleserver"
 	. "simpleserver/dbs"
 	. "simpleserver/jmdkina"
@@ -13,8 +12,7 @@ import (
 )
 
 var (
-	port = flag.Int("port", 12306, "Listen port")
-	path = flag.String("htmlpath", "", "Html path")
+	conf = flag.String("conf", "etc/simpleserver.json", "Config File")
 )
 
 var (
@@ -26,13 +24,9 @@ var (
 func main() {
 	fmt.Printf("VERSION: %s\nBUILD_TIME: %s\nGO_VERSION: %s\n", VERSION, BUILD_TIME, GOVERSION)
 	flag.Parse()
-	html_path := *path
-	if len(*path) == 0 {
-		curpath, _ := os.Getwd()
-		html_path = curpath + "/html"
-	}
 
-	ss.GlobalSetConfig("etc/simpleserver.json")
+	ss.GlobalSetConfig(*conf)
+	html_path := ss.GlobalBaseConfig().HtmlPath
 
 	http.Handle("/css/", http.FileServer(http.Dir(html_path)))
 	http.Handle("/js/", http.FileServer(http.Dir(html_path)))
@@ -54,9 +48,11 @@ func main() {
 	ss.NewResume(html_path)
 	NewJmdkinaAdd(html_path)
 
-	lport := *port
+	lport := ss.GlobalBaseConfig().Port
 
-	GlobalDBSMongoCreate("mongodb://localhost/")
+	if ss.GlobalBaseConfig().DBType == "Mongo" {
+		GlobalDBSMongoCreate(ss.GlobalBaseConfig().DBUrl)
+	}
 
 	jklog.L().Infof("Listen port %d\n", lport)
 	http.ListenAndServe(":"+strconv.Itoa(lport), nil)

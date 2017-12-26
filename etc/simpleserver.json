@@ -1,3 +1,8 @@
 {
-	"PicsPath":"J:/av/pics"
+	"PicsPath":"J:/av/pics",
+	"HtmlPath":"html",
+	"Port":12306,
+	"Index": "jmdkina",
+	"DBType":"Mongo",
+	"DBUrl":"mongodb://localhost/"
 }

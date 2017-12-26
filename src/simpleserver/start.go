@@ -21,8 +21,9 @@ func NewNotFound(path string) *NotFound {
 }
 
 func (b *NotFound) ServeHttp(w http.ResponseWriter, r *http.Request) {
+	indexpage := GlobalBaseConfig().Index
 	if r.URL.Path == "/" {
-		http.Redirect(w, r, "/index", http.StatusFound)
+		http.Redirect(w, r, "/"+indexpage, http.StatusFound)
 	}
 
 	sp := SimpleParse{}

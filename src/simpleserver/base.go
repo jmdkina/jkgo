@@ -11,6 +11,11 @@ import (
 
 type BaseConfig struct {
 	PicsPath string
+	HtmlPath string
+	Port     int
+	Index    string
+	DBType   string
+	DBUrl    string
 }
 
 var bConfig BaseConfig
