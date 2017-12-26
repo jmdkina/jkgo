@@ -123,10 +123,12 @@ func (si *KFSystemInfo) KFCPUInfo() float64 {
 		}
 		processes = append(processes, &ProcessCPU{pid, cpu})
 	}
-	si.procCPU = processes
-	for _, p := range processes {
-		si.CPUUsage += p.cpu
-	}
+	/*
+		si.procCPU = processes
+		for _, p := range processes {
+			si.CPUUsage += p.cpu
+		}
+	*/
 
 	return si.CPUUsage
 }

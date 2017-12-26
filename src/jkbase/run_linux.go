@@ -3,6 +3,7 @@ package jkbase
 
 import (
 	jdaemon "github.com/tyranron/daemonigo"
+	"jk/jklog"
 )
 
 func InitDeamon(backrun bool) {
@@ -12,7 +13,7 @@ func InitDeamon(backrun bool) {
 		case !isDaemon:
 			return
 		case err != nil:
-			l4g.Error("daemon start failed : ", err.Error())
+			jklog.L().Errorln("daemon start failed : ", err.Error())
 		}
 	}
 }
