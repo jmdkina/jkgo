@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"jk/jklog"
+	"jkbase"
 	"net/http"
 	ss "simpleserver"
 	. "simpleserver/dbs"
@@ -25,8 +26,12 @@ func main() {
 	fmt.Printf("VERSION: %s\nBUILD_TIME: %s\nGO_VERSION: %s\n", VERSION, BUILD_TIME, GOVERSION)
 	flag.Parse()
 
+	jkbase.InitDeamon(true)
+
 	ss.GlobalSetConfig(*conf)
 	html_path := ss.GlobalBaseConfig().HtmlPath
+
+	jklog.InitLog(ss.GlobalBaseConfig().LogFile)
 
 	http.Handle("/css/", http.FileServer(http.Dir(html_path)))
 	http.Handle("/js/", http.FileServer(http.Dir(html_path)))

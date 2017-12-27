@@ -16,6 +16,7 @@ type BaseConfig struct {
 	Index    string
 	DBType   string
 	DBUrl    string
+	LogFile  string
 }
 
 var bConfig BaseConfig

@@ -5,6 +5,7 @@ import (
 	"jk/jklog"
 	. "simpleserver"
 	// "jkdbs"
+	"image/draw"
 	"io"
 	img "jk/jkimage"
 	"net/http"
@@ -51,25 +52,19 @@ func (s *JmdkinaAdd) Post(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *JmdkinaAdd) encodeImages(basepath, path string) error {
+func (s *JmdkinaAdd) encodeImage(basepath, path, name string) error {
+	jklog.L().Infof("encode image %s %s %s\n", basepath, path, name)
 	en := img.JKEncoderImage{
-		ScanPath: basepath + "/" + path,
-		SavePos:  basepath + "/q10/" + path,
-		Scale:    24,
-		Quality:  40,
+		Scale: 50,
 	}
-	jklog.L().Debugf("Encode images 1 of %s to %s\n", en.ScanPath, en.SavePos)
-	en.JK_convertWithPath()
-	jklog.L().Debugf("Encode images 1 done\n")
-	en2 := img.JKEncoderImage{
-		ScanPath: basepath + "/" + path,
-		SavePos:  basepath + "/q60/" + path,
-		Scale:    40,
-		Quality:  60,
+	srcpath := basepath + "/q60/" + path + "/" + name
+	dstpath := basepath + "/q10/" + path + "/" + name
+	os.MkdirAll(basepath+"/q10/"+path, os.ModeDir|os.ModePerm)
+	err := en.JK_reducejpeg(dstpath, srcpath, draw.Src, 50)
+	if err != nil {
+		jklog.L().Errorln("encode img error : ", err)
+		return err
 	}
-	jklog.L().Debugf("Encode images 2 of %s to %s\n", en2.ScanPath, en2.SavePos)
-	en2.JK_convertWithPath()
-	jklog.L().Debugf("Encode images 2 done\n")
 	return nil
 }
 
@@ -82,8 +77,12 @@ func (s *JmdkinaAdd) saveImages(r *http.Request) {
 
 	data := []utils.M{}
 
+	// The pics come here is reduce to level 60
+	// this program only save it ,and then reduce it to level 10
+	baselevel := "/q60/"
+
 	bconfig := GlobalBaseConfig()
-	basepath := bconfig.PicsPath + "/" + path
+	basepath := bconfig.PicsPath + baselevel + path
 	if r.MultipartForm != nil && r.MultipartForm.File != nil {
 		fhs := r.MultipartForm.File["jmdkinaaddfile"]
 		num := len(fhs)
@@ -116,6 +115,9 @@ func (s *JmdkinaAdd) saveImages(r *http.Request) {
 			}
 			io.Copy(fsave, fread)
 
+			// encode image
+			s.encodeImage(bconfig.PicsPath, path, v.Filename)
+
 			// Generate utils.M to save to dbs
 			item := utils.M{
 				"author":     author,
@@ -128,9 +130,6 @@ func (s *JmdkinaAdd) saveImages(r *http.Request) {
 			}
 			data = append(data, item)
 		}
-		go func() {
-			s.encodeImages(bconfig.PicsPath, path)
-		}()
 		s.saveDBS(data)
 	}
 }

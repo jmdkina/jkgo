@@ -16,7 +16,7 @@ var lfile = New(os.Stderr, "[JK]", LstdFlags)
 var logfilename string
 
 func L() *Logger {
-	return l
+	return lfile
 }
 
 func Lfile() *Logger {
