@@ -68,3 +68,19 @@ func NewServiceStatus(addr string, port int) (*ServiceStatus, error) {
 	go ctrl.updateRemoteInstance()
 	return ctrl, nil
 }
+
+func Start(addr string, port int, recv bool) (*ServiceStatus, error) {
+	st, err := NewServiceStatus(addr, port)
+	if err != nil {
+		return nil, err
+	}
+	if recv {
+		st.RecvCycle()
+	}
+	shttp, err := NewStatusHttp(12307)
+	if err != nil {
+		return st, err
+	}
+	shttp.AddLinkStatus(st)
+	return st, nil
+}

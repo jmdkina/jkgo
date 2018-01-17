@@ -26,18 +26,7 @@ func main() {
 
 	jkbase.InitDeamon(*bg)
 
-	status, err := jkstatus.NewServiceStatus(*address, *port)
-	if err != nil {
-		l4g.Debug("create service ctrl failed ", err)
-		return
-	}
-	l4g.Info("Start recv data")
-	status.RecvCycle()
-
-	// start http server
-	shttp, _ := jkstatus.NewStatusHttp(12307)
-	// make interactive for use status information
-	shttp.AddLinkStatus(status)
+	jkstatus.Start(*address, *port, true)
 	for {
 		time.Sleep(time.Millisecond * 500)
 	}

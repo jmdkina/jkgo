@@ -19,6 +19,7 @@ go get github.com/gorilla/websocket
 ::git clone https://github.com/golangers/i18n.git
 ::git clone https://github.com/golangers/middleware.git
 ::https://github.com/golangers/database.git
+::https://github.com/kardianos/service.git
 
 :: need install bzr
 rem go get labix.org/v2/mgo

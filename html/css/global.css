@@ -26,3 +26,23 @@
 .jk-leavebottom {
     margin-bottom: 4%;
 }
+
+.jk-container-center {
+      margin:0 auto;
+}
+
+.jk-not-float {
+     margin:0 auto;
+     float: none;
+}
+.sidebar-nav {
+    padding: 9px 0;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.ul-horizontal ul li {
+    display: inline;
+}

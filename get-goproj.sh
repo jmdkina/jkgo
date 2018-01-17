@@ -21,6 +21,7 @@ srcs+=" github.com/golang/protobuf.git"
 srcs+=" github.com/gorilla/websocket.git"
 srcs+="  github.com/matishsiao/goInfo"
 srcs+=" github.com/beego/i18n"
+srcs+=" github.com/kardianos/service"
 
 for src in $srcs
 do

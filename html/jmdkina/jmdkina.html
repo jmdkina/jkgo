@@ -17,20 +17,15 @@
 <body>
 <div id="jmdkina">
    
-<div class="container-fluid bigarea jk-leavetop">
-
-<div class='jkthumbnails row'>
-
-<div class="item col-es-12 col-sm-3 col-md-2 col-lg-2" v-on:click="fulldisplay(img)" v-for="img in images">
+<div class="card-columns container bigarea jk-leavetop">
+  <div class="item card"  v-on:click="fulldisplay(img)" v-for="img in images">
     <img :src="img.imageurl" />
-    <div>${ img.name }</div>    
-    <div class="time1 time"><b>${ img.author }</b>&nbsp;发布于&nbsp;
+    <div class="card-body">
+      <div class="card-title">${ img.name } </div>
+      <div class="time1 time"><b>${ img.author }</b>&nbsp;发布于&nbsp;
         <span class="timestr">${ img.timestr }</span></div>
-</div>
-
-<button class="btn btn-primary btn-block showmore" v-on:click="showmore">加载更多</button>
-
-<br class="jk-clear" />
+    </div>
+  </div>
 </div>
 
 <div class="modal" tabindex="-1" role="dialog">
@@ -58,6 +53,7 @@
                 <span class="sr-only">Next</span>
               </a>
       </div>
+    </div>
       <div class="modal-footer">
       </div>
     </div>
