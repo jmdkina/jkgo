@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>满地残阳</title>
+    <link rel="stylesheet" href="addon/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/shici.css" />
+    <script type="text/javascript" src="addon/jquery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="addon/popper/popper.js"></script>
+    <script type="text/javascript" src="addon/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="addon/vue/vue.js"></script>
+    <script type="text/javascript" src="addon/layer/layer.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/shici/shici.js" ></script>
+</head>
+<body>
+<div id="shici">
+   
+<div class="card-columns container bigarea jk-leavetop">
+  <div class="item card" v-for="shici in shicis">
+    <div class="card-body">
+      <div class="card-content sscontent">${ shici.content } </div>
+    </div>
+    <div class="card-footer text-muted">
+        ${shici.title} - ${shici.subtitle} - <cite class="aux-title">${shici.author} - ${shici.createtimestr}</cite>
+    </div>
+  </div>
+</div>
+
+
+<nav class="navbar navbar-default extern-brower jk-leavetop">
+<div class="container-fluid">
+<ul class="nav navbar-nav ul-horizontal" >
+<li><a class="rounded-circle" href="/jmdkina">万里浮沉</a></li>
+</ul>
+</nav>
+
+</div>
+</body>
+</html>

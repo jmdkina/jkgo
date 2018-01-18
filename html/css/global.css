@@ -46,3 +46,22 @@ ul {
 .ul-horizontal ul li {
     display: inline;
 }
+
+
+.extern-brower ul {
+    float: none;
+    margin-left: 5%;
+}
+.extern-brower ul > li {
+    margin-right: 1%;
+    padding: 4px;
+    margin: 4px;
+}
+.extern-brower  a {
+    text-align: center;
+    border: 1px solid rgba(225, 211, 231, 0.68);
+    padding: 40px !important;
+    background-color: rgba(225, 211, 231, 0.28);
+    width: 120px;
+    height: 120px;
+}

@@ -9,6 +9,7 @@ import (
 	ss "simpleserver"
 	. "simpleserver/dbs"
 	. "simpleserver/jmdkina"
+	. "simpleserver/shici"
 	"strconv"
 )
 
@@ -49,7 +50,8 @@ func main() {
 	ss.NewStock(html_path)
 	NewJmdkina(html_path)
 	ss.NewProject(html_path)
-	ss.NewShici(html_path)
+	NewShici(html_path)
+	NewShiciAdd(html_path)
 	ss.NewResume(html_path)
 	NewJmdkinaAdd(html_path)
 
