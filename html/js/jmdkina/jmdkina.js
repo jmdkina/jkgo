@@ -31,7 +31,7 @@ $(function(){
                 $(".carousel-inner").html(""); // clear
                 for (var i = 0; i < jmdkina.images.length; i++) {
                     var thisimg = jmdkina.images[i];
-                    var imageurl = image_path_prefix + thisimg.path + "/" + thisimg.name;
+                    var imageurl = image_path_prefix + "../q60/" + thisimg.path + "/" + thisimg.name;
                     var obj = "<div class='carousel-item'>" + 
                     "<img class='d-block w-100' alt='" + thisimg.name +
                     "' src='"+ imageurl +"'/>" + 
