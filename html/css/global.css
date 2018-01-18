@@ -31,6 +31,11 @@
       margin:0 auto;
 }
 
+.container {
+    margin: 0 auto;
+    width: 88%;
+}
+
 .jk-not-float {
      margin:0 auto;
      float: none;
@@ -50,7 +55,7 @@ ul {
 
 .extern-brower ul {
     float: none;
-    margin-left: 5%;
+    /*margin-left: 5%;*/
 }
 .extern-brower ul > li {
     margin-right: 1%;

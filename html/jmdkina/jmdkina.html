@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>History Impressive</title>
+    <title>万里浮沉</title>
     <link rel="stylesheet" href="addon/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="css/global.css" />
     <link rel="stylesheet" href="css/jmdkina.css" />
@@ -15,9 +15,9 @@
     <script type="text/javascript" src="js/jmdkina/jmdkina.js" ></script>
 </head>
 <body>
-<div id="jmdkina">
+<div id="jmdkina" class="container">
    
-<div class="card-columns container bigarea jk-leavetop">
+<div class="card-columns bigarea jk-leavetop">
   <div class="item card"  v-on:click="fulldisplay(img)" v-for="img in images">
     <img :src="img.imageurl" />
     <div class="card-body">
@@ -27,6 +27,8 @@
     </div>
   </div>
 </div>
+
+<button class="btn btn-primary btn-block showmore" v-on:click="showmore">加载更多</button>
 
 <div class="modal" tabindex="-1" role="dialog">
   <div class="modal-dialog jkmodal" role="document">

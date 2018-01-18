@@ -15,9 +15,9 @@
     <script type="text/javascript" src="js/shici/shici.js" ></script>
 </head>
 <body>
-<div id="shici">
+<div id="shici" class="container">
    
-<div class="card-columns container bigarea jk-leavetop">
+<div class="card-columns bigarea jk-leavetop">
   <div class="item card" v-for="shici in shicis">
     <div class="card-body">
       <div class="card-content sscontent">${ shici.content } </div>
@@ -27,7 +27,7 @@
     </div>
   </div>
 </div>
-
+<button class="btn btn-primary btn-block showmore" v-on:click="showmore">加载更多</button>
 
 <nav class="navbar navbar-default extern-brower jk-leavetop">
 <div class="container-fluid">
