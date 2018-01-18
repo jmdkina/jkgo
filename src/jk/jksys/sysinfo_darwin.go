@@ -10,7 +10,7 @@ package jksys
 import (
 	"bytes"
 	"fmt"
-	ssi "github.com/matishsiao/goInfo"
+	// ssi "github.com/matishsiao/goInfo"
 	"jk/jklog"
 	"os/exec"
 	"strconv"
@@ -27,7 +27,7 @@ const (
 
 func NewSystemInfo() *KFSystemInfo {
 	si := &KFSystemInfo{}
-	si.Info = ssi.GetInfo()
+	// si.Info = ssi.GetInfo()
 	si.GetAddrInfo()
 	si.KFCPUInfo()
 	si.KFDiskInfo()
@@ -113,10 +113,10 @@ func (si *KFSystemInfo) KFCPUInfo() float64 {
 		}
 		processes = append(processes, &ProcessCPU{pid, cpu})
 	}
-	si.procCPU = processes
-	for _, p := range processes {
-		si.CPUUsage += p.cpu
-	}
+	// si.procCPU = processes
+	// for _, p := range processes {
+	// si.CPUUsage += p.cpu
+	// }
 
 	return si.CPUUsage
 }
