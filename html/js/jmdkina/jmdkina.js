@@ -1,4 +1,4 @@
-log_enable(true);
+log_enable(false);
 
 var current_image = 0;
 var query_length = 10;
@@ -19,72 +19,11 @@ $(function(){
             images: []
         },
         beforeCreate: function() {
-            var str = "jk=jmdkina&cmd=query_images" + "&index=" + current_image +
-                "&length=" + query_length;
-            log_print(str);
-            $.ajax({
-                url: "jmdkina",
-                method: "POST",
-                data: str,
-                success: function (response, textStatus) {
-                    // log_print("stockquery success" + response + ", result:" + textStatus);
-                    ret = $.parseJSON(response);
-                    try {
-                        ret = $.parseJSON(response);
-                        if (ret == undefined || ret.Status != 200) {
-                            layer.msg("Fail of " + ret.Status);
-                            return;
-                        }
-                        for (var i = 0; i < ret.Result.length; i++) {
-                            ret.Result[i]["imageurl"] = image_path_prefix + 
-                                ret.Result[i]["path"] + "/" + ret.Result[i]["name"];
-                            ret.Result[i]["timestr"] = time_unix2string(ret.Result[i]["createtime"]);
-                            ret.Result[i]["index"] = i;
-                            jmdkina.images.push(ret.Result[i])
-                        }
-                        current_image = jmdkina.images.length;
-                    } catch(e) {
-                        layer.msg("Fail parse response " + response);
-                    }
-                }
-             });
+            load_images();
         },
         methods: {
             showmore: function() {
-                var str = "jk=jmdkina&cmd=query_images_more&" +
-                    "index=" + current_image + "&length=" + query_length;
-                log_print(str);
-                $.ajax({
-                    url: "jmdkina",
-                    method: "POST",
-                    data: str,
-                    success: function (response, textStatus) {
-                        log_print("addnew success" + response + ", result:" + textStatus);
-                        ret = $.parseJSON(response);
-                        try {
-                            ret = $.parseJSON(response);
-                            if (ret.Status != 200) {
-                                layer.msg("Fail of " + ret.Status);
-                                return;
-                            }
-                            if (ret.Result.length == 0) {
-                                $(".showmore").attr("disabled", true);
-                                $(".showmore").html("No more");
-                                return;
-                            }
-                            for (var i = 0; i < ret.Result.length; i++) {
-                                ret.Result[i]["imageurl"] = image_path_prefix + 
-                                    ret.Result[i]["path"] + "/" + ret.Result[i]["name"];
-                                ret.Result[i]["timestr"] = time_unix2string(ret.Result[i]["createtime"]);
-                                ret.Result[i]["index"] = current_image + i;
-                                jmdkina.images.push(ret.Result[i])
-                            }
-                            current_image = jmdkina.images.length;
-                        } catch(e) {
-                            layer.msg("Fail parse response " + response);
-                        }
-                    }
-                });
+                load_images();
             },
             fulldisplay: function(img) {
                 var name = img.name;
@@ -107,4 +46,41 @@ $(function(){
             }
         }
     });
+
+function load_images() {
+    var str = "jk=jmdkina&cmd=query_images_more&" +
+        "index=" + current_image + "&length=" + query_length;
+    log_print(str);
+    $.ajax({
+        url: "jmdkina",
+        method: "POST",
+        data: str,
+        success: function (response, textStatus) {
+            log_print("addnew success" + response + ", result:" + textStatus);
+            ret = $.parseJSON(response);
+            try {
+                ret = $.parseJSON(response);
+                if (ret.Status != 200) {
+                    layer.msg("Fail of " + ret.Status);
+                    return;
+                }
+                if (ret.Result.length == 0) {
+                    $(".showmore").attr("disabled", true);
+                    $(".showmore").html("No more");
+                    return;
+                }
+                for (var i = 0; i < ret.Result.length; i++) {
+                    ret.Result[i]["imageurl"] = image_path_prefix + 
+                        ret.Result[i]["path"] + "/" + ret.Result[i]["name"];
+                    ret.Result[i]["timestr"] = time_unix2string(ret.Result[i]["createtime"]);
+                    ret.Result[i]["index"] = current_image + i;
+                    jmdkina.images.push(ret.Result[i])
+                }
+                current_image = jmdkina.images.length;
+            } catch(e) {
+                layer.msg("Fail parse response " + response);
+            }
+        }
+    });
+}
 });

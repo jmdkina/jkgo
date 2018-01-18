@@ -1,0 +1,12 @@
+
+.aux-title {
+	font-size: 70%;
+}
+
+.sscontent {
+	white-space: pre-wrap;
+}
+
+.card-columns {
+	column-count: 4;
+}
