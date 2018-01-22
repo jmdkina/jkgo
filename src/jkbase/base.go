@@ -19,10 +19,6 @@ type JKSuperBase interface {
 	HandleMsg(conn net.Conn, data string) error
 }
 
-func call_handlemsg(sb JKSuperBase, conn net.Conn, data string) {
-	sb.HandleMsg(conn, data)
-}
-
 type JKNetBase struct {
 	address string
 	port    int
@@ -33,8 +29,9 @@ type JKNetBase struct {
 	recvdata string
 
 	// As server listen
-	listener net.Listener
-	items    map[string](JKNetBaseItem)
+	listener  net.Listener
+	items     map[string](JKNetBaseItem)
+	HandleMsg func(conn net.Conn, data string) error
 }
 
 type JKNetBaseItem struct {
@@ -91,45 +88,38 @@ func (nb *JKNetBase) Send(data string) int {
 	return n
 }
 
-func (nb *JKNetBase) HandleMsg(conn net.Conn, data string) error {
-	log4go.Error("Children should implement it")
-	return errors.New("Children should implement it")
-}
-
-func (nb *JKNetBase) DoRecvCycle(dointer JKSuperBase) error {
-	go func() {
-		for {
-			log4go.Debug("Start to accept ...")
-			conn, err := nb.listener.Accept()
-			if err != nil {
-				log4go.Error("accept failed ", err)
-				return
-			}
-			log4go.Info("accept one client %s", conn.RemoteAddr().String())
-			go func() {
-				for {
-					rdata := make([]byte, 2<<15)
-					n, err := conn.Read(rdata)
-					if err == io.EOF {
-						log4go.Error("IO EOF exit")
-						break
-					}
-					if err != nil {
-						log4go.Error("Read error %s", err)
-						break
-					}
-
-					log4go.Debug("Recv data of length %d, from %s", n, conn.RemoteAddr().String())
-					item := JKNetBaseItem{}
-					item.conn = conn
-					item.remoteaddr = conn.RemoteAddr().String()
-					item.data = string(rdata[0:n])
-					nb.items[item.remoteaddr] = item
-					dointer.HandleMsg(conn, item.data)
-				}
-			}()
+func (nb *JKNetBase) DoRecvCycle() error {
+	for {
+		log4go.Debug("Start to accept ...")
+		conn, err := nb.listener.Accept()
+		if err != nil {
+			log4go.Error("accept failed ", err)
+			return err
 		}
-	}()
+		log4go.Info("accept one client %s", conn.RemoteAddr().String())
+		go func() {
+			for {
+				rdata := make([]byte, 2<<15)
+				n, err := conn.Read(rdata)
+				if err == io.EOF {
+					log4go.Error("IO EOF exit")
+					break
+				}
+				if err != nil {
+					log4go.Error("Read error %s", err)
+					break
+				}
+
+				log4go.Debug("Recv data of length %d, from %s", n, conn.RemoteAddr().String())
+				item := JKNetBaseItem{}
+				item.conn = conn
+				item.remoteaddr = conn.RemoteAddr().String()
+				item.data = string(rdata[0:n])
+				nb.items[item.remoteaddr] = item
+				nb.HandleMsg(conn, item.data)
+			}
+		}()
+	}
 	return nil
 }
 

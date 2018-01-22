@@ -9,26 +9,34 @@ import (
 	"time"
 )
 
+type sysArgs struct {
+	Addr       string
+	Port       int
+	LogFile    string
+	LogSize    int
+	ClientAddr string
+	ClientPort int
+}
+
+var sys_args sysArgs
+
 var (
-	address     = flag.String("address", "0.0.0.0", "Listen local address")
-	port        = flag.Int("port", 20103, "Listen local port")
-	bg          = flag.Bool("bg", false, "true|false")
-	logfile     = flag.String("logfile", "/tmp/jksys.log", "log file")
-	logsize     = flag.Int("logsize", 1024*1024*1024, "log size")
-	client_addr = flag.String("client_address", "0.0.0.0", "dial client address")
-	client_port = flag.Int("client_port", 20101, "dial client port")
-	cmd         = flag.String("cmd", "run", "run/install/remove service")
+	cmd  = flag.String("cmd", "run", "run/install/remove service")
+	conf = flag.String("conf", "./etc/jksys.json", "conf file")
 )
 
 func start() {
 
-	jkbase.InitLog(*logfile, *logsize)
+	jkbase.InitLog(sys_args.LogFile, sys_args.LogSize)
 
 	l4g.Debug("jksys start")
-	l4g.Info("Listen with [%s:%d]", *address, *port)
+	l4g.Info("Listen with [%s:%d]", sys_args.Addr, sys_args.Port)
 
-	// jkbase.InitDeamon(*bg)
-	jksys.Start(*address, *port, *client_addr, *client_port, true, true)
+	_, _, err := jksys.Start(sys_args.Addr, sys_args.Port, sys_args.ClientAddr, sys_args.ClientPort, true, true)
+	if err != nil {
+		jklog.L().Errorln("start error ", err)
+		return
+	}
 	for {
 		time.Sleep(time.Millisecond * 500)
 	}
@@ -38,6 +46,13 @@ func main() {
 
 	flag.Parse()
 
+	err := jkbase.GetConfigInfo(*conf, &sys_args)
+	if err != nil {
+		jklog.L().Errorf("get config %s failed %v\n", *conf, err)
+		return
+	}
+	jklog.L().Infoln("conf data ", sys_args)
+
 	prog := &jkbase.Program{
 		Name:        "jksys",
 		DisplayName: "jk system",
@@ -45,7 +60,7 @@ func main() {
 	}
 
 	prog.Runner = start
-	err := prog.CreateService()
+	err = prog.CreateService()
 	if err != nil {
 		jklog.L().Errorln("create service failed ", err)
 		return

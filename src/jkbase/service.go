@@ -26,6 +26,7 @@ func (p *Program) Start(s service.Service) error {
 func (p *Program) run() {
 	// Do work here
 	p.Runner()
+	p.s.Stop()
 }
 func (p *Program) Stop(s service.Service) error {
 	// Stop should not block. Return with a few seconds.
@@ -53,6 +54,12 @@ func (p *Program) Ctrl(cmd string) error {
 		err := p.Run()
 		if err != nil {
 			jklog.L().Errorln("Run service failed: ", err)
+			return err
+		}
+	case "stop":
+		err := p.s.Stop()
+		if err != nil {
+			jklog.L().Errorln("Stop service failed: ", err)
 			return err
 		}
 	case "install":

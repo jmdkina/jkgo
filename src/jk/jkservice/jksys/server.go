@@ -12,23 +12,23 @@ type SysServer struct {
 	jkbase.JKNetBase
 }
 
-func (ss *SysServer) HandleMsg(conn net.Conn, data string) error {
+func (ss *SysServer) handleMsg(conn net.Conn, data string) error {
 	return errors.New("Unimplement")
 }
 
 func NewSysServer(addr string, port int, nettype int) (*SysServer, error) {
 	sys := &SysServer{}
+	sys.HandleMsg = sys.handleMsg
 	err := sys.New(addr, port, nettype)
 	if err != nil {
 		return nil, err
 	}
 
-	sys.Listen()
+	err = sys.Listen()
+	if err != nil {
+		return nil, err
+	}
 	return sys, nil
-}
-
-func (sys *SysServer) RecvCycle() {
-	sys.DoRecvCycle(sys)
 }
 
 func Start(address string, port int, client_addr string, client_port int, recv bool, client bool) (*SysServer, *SysClient, error) {
@@ -38,7 +38,7 @@ func Start(address string, port int, client_addr string, client_port int, recv b
 	}
 	jklog.L().Infoln("jksys Start recv data")
 	if recv {
-		s.RecvCycle()
+		go s.DoRecvCycle()
 	}
 
 	var c SysClient
