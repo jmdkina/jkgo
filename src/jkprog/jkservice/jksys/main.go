@@ -22,7 +22,7 @@ var sys_args sysArgs
 
 var (
 	cmd  = flag.String("cmd", "run", "run/install/remove service")
-	conf = flag.String("conf", "./etc/jksys.json", "conf file")
+	conf = flag.String("conf", "c:/jk/jksys.json", "conf file")
 )
 
 func start() {
