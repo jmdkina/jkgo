@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	l4g "github.com/alecthomas/log4go"
+	"jk/jklog"
 	"jk/jkservice/jkstatus"
 	"jkbase"
 	"time"
@@ -14,11 +15,10 @@ var (
 	bg      = flag.Bool("bg", false, "true|false")
 	logfile = flag.String("logfile", "/tmp/jkstatus.log", "log file")
 	logsize = flag.Int("logsize", 1024*1024*1024, "log size")
+	cmd     = flag.String("cmd", "run", "run/install/remove service")
 )
 
-func main() {
-	flag.Parse()
-
+func start() {
 	jkbase.InitLog(*logfile, *logsize)
 
 	l4g.Debug("jkstatus start")
@@ -29,5 +29,26 @@ func main() {
 	jkstatus.Start(*address, *port, true)
 	for {
 		time.Sleep(time.Millisecond * 500)
+	}
+}
+
+func main() {
+	flag.Parse()
+
+	prog := &jkbase.Program{
+		Name:        "jkstatus",
+		DisplayName: "jk status",
+		Desc:        "jk status program",
+	}
+
+	prog.Runner = start
+	err := prog.CreateService()
+	if err != nil {
+		jklog.L().Errorln("create service failed ", err)
+		return
+	}
+	err = prog.Ctrl(*cmd)
+	if err == nil {
+		jklog.L().Infof("Do %s success\n", *cmd)
 	}
 }

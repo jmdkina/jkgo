@@ -5,10 +5,6 @@ import (
 	"jk/jklog"
 )
 
-type GlobalRun interface {
-	GRStart()
-}
-
 type Program struct {
 	Name        string
 	DisplayName string
