@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Resume</title>
+    <title>简历-张玉伟</title>
     <link rel="stylesheet" href="addon/bootstrap/bootstrap.min.css">
     <script type="text/javascript" src="addon/jquery/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="addon/vue/vue.min.js"></script>
@@ -57,7 +57,7 @@ section {
   <ul class="list-group">
     <li class="list-group-item">2011-3 - 2015-6 (合肥优视科技) - <strong>嵌入式视频监控设备研发</strong></li>
     <li class="list-group-item">2015-7 - 2016-7 (合肥罗姆特，深圳米联科) - <strong>基于 openwrt 的智能路由器的开发</strong></li>
-    <li class="list-group-item">2016-10 - 2017-10 (安徽阿启视) - <strong>监控视频后台服务程序开发</strong></li>
+    <li class="list-group-item">2016-10 - 2017-10 (安徽阿启视) - <strong>视频监控平台开发</strong></li>
   </ul>
 </div>
 
@@ -74,25 +74,16 @@ section {
             <li class="list-group-item">3. 基于华为等模块的3G, 4G拨号业务开发</li>
             <li class="list-group-item">4. 摄像头云台，串口等数据传输开发</li>
             <li class="list-group-item">5. 负责中央调度程序，对各个模块的业务处理，进行业务分离，模块化，采用多进程，共享管道的方式进行通信</li>
-            <li class="list-group-item">6. 新需求的确立，技术的实现，项目进度的控制</li>
+            <li class="list-group-item">6. 以 SDK 的方式重新设计设备端架构，将音视频传输，存储，拨号，外设，视频回放，界面显示，报警联动等功能模块化并实现成接口形式，以方便第三方调用</li>
+            <li class="list-group-item">7. 新需求的确立，技术的实现，项目进度的控制</li>
             <li class="list-group-item">此平台被用于的产品有: <strong>手持单兵，车载记录仪</strong>等</li>
       </ul>
-</div>
-
-	<!-- <hr class="red-line" /> -->
-
-<div class="card bg-light">
-  <div class="card-header">基于 linux 的应用程序平台的 SDK 的架构，设计与开发</div>
-  <ul class="list-group">
-    <li class="list-group-item">职位：主要负责人，负责架构设计</li>
-    <li class="list-group-item">打造更加模块化，易定制的 SDK ，并将此方法用于替代之前的进程通信的方法</li>
-    <li class="list-group-item">主要功能包括：音视频传输，存储，拨号业务，外设控制(云台，串口等)，视频播放，界面显示，报警联动等</li>
-  </ul>
 </div>
 
 <div class="card bg-light">
   <div class="card-header">基于 iOS 的音视频采集，传输，存储等应用程序的开发</div>
   <ul class="list-group">
+    <li class="list-group-item">这是一个利用 iPhone 设备作为设备端，采集音视频并传输至自有平台的功能</li>
     <li class="list-group-item">职位：负责人，独立完成</li>
     <li class="list-group-item">1. 基于 x264 的视频转码，YUV 转 h264</li>
     <li class="list-group-item">2. 基于 ffmpeg 的音频采集，转 g726, aac等</li>
@@ -119,21 +110,15 @@ section {
         <li class="list-group-item">4. 采用 googletest 对 C++ 代码进行自动化单元测试</li>
         <li class="list-group-item">5. 其它路由器需要的功能，如wifi，dhcp，拨号等各项配置，配置界面的重新设计，wifi的优化，路由器中存在的bug的解决等, 以及其它定制化的需求</li>
         <li class="list-group-item">6. 负责移植过基于 openwrt 的三个版本, Attitude Adjustment, Chaos Calmer, 基于 MTK 的原生 Barrier Breaker 版本</li>
-          <li class="list-group-item">7. 需求的确定，技术上的实现，以及项目的进度，服务的部署，设备升级管理等</li>
+        <li class="list-group-item">7. 需求的确定，技术上的实现，以及项目的进度，服务的部署，设备升级管理等</li>
        </ul>
     </div>
 
     <div class="card bg-light">
-      <div class="card-header">协助规划 iOS，android 端应用程序的开发</div>
+      <div class="card-header">服务器程序及 app 相关</div>
       <ul class="list-group">
-        <li class="list-group-item">1. 主要负责规划协议的制定，与路由器和服务器的交互，开发进度的协调，控制等工作，同时也参与解决技术问题</li>
-      </ul>
-    </div>
-
-    <div class="card bg-light">
-      <div class="card-header">节点服务器与后台主服务器的交互</div>
-      <ul class="list-group">
-        <li class="list-group-item">1. 采用 go 语言。参与协议的定义，与路由器端的一同开发完成</li>
+        <li class="list-group-item">1. 对各节点服务器的服务程序的开发，与主服务器的通信，协议的实现，对节点服务器服务的批量部署，配置，使用 ansible 及 python 自实现，服务程序采用 go 语言</li>
+        <li class="list-group-item">2. 协助 iOS, android 等控制路由器的 app 开发，协议确定及实现</li>
        </ul>
     </div>
   </div>
@@ -145,10 +130,9 @@ section {
   <div class="card-body">
     <div class="card-group">
     <div class="card bg-light">
-      <div class="card-header">监控后端服务平台 和 yocto系统定制开发</div>
-
+      <div class="card-header">监控平台 和 yocto 系统定制开发</div>
       <ul class="list-group">
-        <li class="list-group-item">职位：参与开发</li>
+        <li class="list-group-item">将整套服务端程序移植到基于 x86 的低端设备上，并基于 yocto 做定制开发，形成简单，易用的平台设备，这些平台设备亦可以级联后形成树状级联平台</li>
         <li class="list-group-item">多设备级联服务开发，负责数据，命令下发，上报等</li>
         <li class="list-group-item">国标视频流对普通视频流(ts)的转码</li>
         <li class="list-group-item">yocto 系统的定制开发</li>
@@ -166,8 +150,8 @@ section {
      <li class="list-group-item">对新技术，新任务有较强的学习和接受能力，可快速上手。</li>
      <li class="list-group-item">英文阅读能力良好，可熟练看懂各种英文技术文档</li>
      <li class="list-group-item">对技术有强烈的研究兴趣，可快速熟练使用各种开源工具，并研究其源码</li>
-     <li class="list-group-item">主攻 linux 操作系统及应用层开发，精通c，可熟练使用 c++, python, shell, lua 等。</li>
-     <li class="list-group-item">有 web 服务器的实践经验，如个人网站用到的技术有 nginx + golang + beego + mongodb + jquery + bootstrap 。</li>
+     <li class="list-group-item">主攻 linux 操作系统及应用层开发，精通c，可熟练使用 c++, go, python, shell, lua 等。</li>
+     <li class="list-group-item">有 web 服务器的实践经验，如个人网站用到的技术有 nginx + golang + mongodb + jquery + bootstrap</li>
    </ul>
 </div>
 	<!-- <hr class="red-line" /> -->
@@ -183,6 +167,7 @@ section {
 <div class="card-header">其它说明</div>
    <ul class="list-group">
        <li class="list-group-item">个人的一些源码项目放于：<a href="http://git.oschina.net/jmdvirus">jmdvirus</a> .</li>
+       <li class="list-group-item">个人的一些实践记录放于(内容较少，记录较迟)：<a href="https://github.com/jmdkina/jkdocs">实践记录</a></li>
        <li class="list-group-item">个人网站可访问 <a href="http://www.jmdkina.cn">www.jmdkina.cn</a> ，主要记录了个人的一些摄影照片。仅供查看。（可能会暂时性断开连接）</li>
     </ul>
  </div>
