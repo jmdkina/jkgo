@@ -5,9 +5,9 @@ import (
 	"net"
 	"strconv"
 	"time"
+    "flag"
 )
 
-var longdata = "I mean you are write, because if is not ok, it is must not like this, of course, not like that also, and this is just a test, if you don't beleive, I have no idea also, but you must beleive me, I'm write."
 
 // This file is use for test for udp
 // one is listen udp, each receive from udp send one data out for test
@@ -29,8 +29,13 @@ func connect_out(addr string, port int) {
 	defer sendto.Close()
 
 	// outdata := "Here is for test"
-	n, _ := sendto.Write([]byte(longdata))
+	n, _ := sendto.Write([]byte(*content))
 	jklog.L().Infoln("send out data of len ", n)
+    if *recv {
+        data := make([]byte, 1024)
+        sendto.Read(data)
+        jklog.L().Infof("Recv data [%v]\n", data)
+    }
 }
 
 func listenLocal(port int) {
@@ -68,16 +73,19 @@ func listenLocal(port int) {
 	}()
 }
 
+var (
+    addr = flag.String("addr", "", "dial to")
+    port = flag.Int("port", 2782, "port to dial")
+    content = flag.String("content", "", "content to send")
+    recv = flag.Bool("recv", true, "If recv resposne")
+)
+
 func main() {
-	if_send_data_out := false
+    flag.Parse()
 
-	listenLocal(2782)
+	//listenLocal(port)
 
-	time.Sleep(5000 * time.Millisecond)
-	// if_send_data_out = true
-	if if_send_data_out {
-		connect_out("192.168.6.152", 10041)
-	}
+	connect_out(*addr, *port)
 	for {
 		time.Sleep(200 * time.Millisecond)
 	}
