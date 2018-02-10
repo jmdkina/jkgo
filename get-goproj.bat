@@ -5,6 +5,10 @@ go get code.google.com/p/goprotobuf
 go get github.com/sbinet/go-config/config
 go get github.com/Unknwon/goconfig
 go get github.com/gorilla/websocket
+go get github.com/mattn/go-sqlite3
+go get github.com/nranchev/go-libGeoIP
+go get github.com/anaskhan96/soup
+go get github.com/h2non/filetype
 
 ::git clone https://github.com/golangers/session.git
 ::git clone https://github.com/golangers/utils.git
