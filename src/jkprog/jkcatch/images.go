@@ -16,15 +16,19 @@ import (
 type CatchHuaban struct {
 	files_list []string
 	need_lists []string
-	url        string
+	url        []string
 	path       string // where to save
 }
 
 func NewCatchHuaban(path string) (*CatchHuaban, error) {
 	ch := &CatchHuaban{
-		url:  "http://huaban.com/favorite/beauty/",
 		path: path,
 	}
+	ch.url = append(ch.url, "http://huaban.com/favorite/beauty/")
+	ch.url = append(ch.url, "http://huaban.com/boards/24116838/?md=newbn&beauty")
+	ch.url = append(ch.url, "http://huaban.com/boards/15729161/?md=newbn&beauty")
+	ch.url = append(ch.url, "http://huaban.com/boards/19241298/?md=newbn&beauty")
+	ch.url = append(ch.url, "http://huaban.com/boards/18398025?md=newbn&beauty")
 	return ch, nil
 }
 
@@ -89,9 +93,10 @@ func (ch *CatchHuaban) save_data(path string) {
 
 func catch_huaban() {
 	ch, _ := NewCatchHuaban(*path)
-	url := "http://huaban.com/favorite/beauty/"
-	ch.catch_data(url)
-	ch.save_data(*path)
+	for _, u := range ch.url {
+		ch.catch_data(u)
+		ch.save_data(*path)
+	}
 }
 
 var (
