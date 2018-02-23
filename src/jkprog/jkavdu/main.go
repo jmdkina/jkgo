@@ -9,10 +9,16 @@ import (
 
 var (
     unixpath = flag.String("path", "/tmp/av.unix", "unix path")
+    logfile = flag.String("logfile", "/tmp/jkavdu.log", "jkavdu logfile")
+    logconsole = flag.Bool("logconsole", false, "Log console print instead file")
 )
 
 func main() {
     flag.Parse()
+
+    if !*logconsole {
+        jklog.InitLog(*logfile)
+    }
 
     os.Remove(*unixpath)
     rd,_ := NewRecvData(*unixpath)
