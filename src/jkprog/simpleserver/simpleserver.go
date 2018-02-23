@@ -15,6 +15,7 @@ import (
 
 var (
 	conf = flag.String("conf", "etc/simpleserver.json", "Config File")
+    forerun = flag.Bool("forerun", false, "Foreground run")
 )
 
 var (
@@ -27,7 +28,9 @@ func main() {
 	fmt.Printf("VERSION: %s\nBUILD_TIME: %s\nGO_VERSION: %s\n", VERSION, BUILD_TIME, GOVERSION)
 	flag.Parse()
 
-	jkbase.InitDeamon(true)
+    if !*forerun {
+    	jkbase.InitDeamon(true)
+    }
 
 	ss.GlobalSetConfig(*conf)
 	html_path := ss.GlobalBaseConfig().HtmlPath
