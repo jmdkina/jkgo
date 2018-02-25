@@ -52,6 +52,7 @@ FILES+= jk/jkeasycrypto
 
 help:
 	$(Q)$(ECHO) make jkavdu/snaky
+	$(Q)$(ECHO) PLAT=linux/windows/... OS=amd64/i386/arm64/...
 	$(Q)$(ECHO)     base - build all base
 	$(Q)$(ECHO)     jkavdu - av distribution
 	$(Q)$(ECHO)     snaky - simpleserver for http
