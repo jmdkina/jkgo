@@ -25,7 +25,7 @@ var (
 )
 
 func main() {
-	fmt.Printf("VERSION: %s\nBUILD_TIME: %s\nGO_VERSION: %s\n", VERSION, BUILD_TIME, GOVERSION)
+	fmt.Printf("\rVERSION: %s\n\rBUILD_TIME: %s\n\rGO_VERSION: %s\n\n", VERSION, BUILD_TIME, GOVERSION)
 	flag.Parse()
 
     if !*forerun {

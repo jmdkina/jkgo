@@ -7,6 +7,8 @@ import (
 	"jkbase"
 	"net/http"
 	"reflect"
+	. "simpleserver/dbs"
+	"time"
 )
 
 type BaseConfig struct {
@@ -58,12 +60,32 @@ func (b *Base) WriteSerialData(w http.ResponseWriter, data interface{}, status i
 	w.Write(d)
 }
 
+func (b *Base) LogToDB(r *http.Request) {
+	url := r.URL.String()
+	remote := r.RemoteAddr
+	useragent := r.UserAgent()
+	method := r.Method
+	data := utils.M{
+		"TimeUnix":   time.Now().Unix(),
+		"TimeStr":    time.Now().String(),
+		"URL":        url,
+		"RemoteAddr": remote,
+		"UserAgent":  useragent,
+		"method":     method,
+	}
+	GlobalDBS().Add("proj", "log", data)
+}
+
 func (b *Base) ServerHttp(w http.ResponseWriter, r *http.Request) {
 	c := reflect.ValueOf(b.child)
 	inputs := make([]reflect.Value, 2)
 	inputs[0] = reflect.ValueOf(w)
 	inputs[1] = reflect.ValueOf(r)
-	jklog.L().Debugf("URL: %s\n", r.URL.String())
+	jklog.L().Debugf("URL: method: %s, %s, %s, %s\n", r.Method, r.URL.String(), r.RemoteAddr,
+		r.UserAgent())
+	// jklog.L().Debugln(r.Referer(), ",", r.Host, ",", r.RequestURI)
+
+	b.LogToDB(r)
 
 	switch r.Method {
 	case "GET":
