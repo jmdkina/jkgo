@@ -86,6 +86,9 @@ func (ch *CatchHuaban) save_data(path string) {
 			fmt.Println("error ", err)
 			continue
 		}
+        if len(buf) < 20000 {
+            continue
+        }
 		fmt.Println("Catch ", fullurl, " with len ", len(buf))
 		ioutil.WriteFile(fullpath, buf, os.ModePerm)
 	}
@@ -100,7 +103,7 @@ func catch_huaban() {
 }
 
 var (
-	option = flag.String("option", "", "which mode to run")
+	option = flag.String("option", "huaban", "which mode to run (huaban)")
 	path   = flag.String("path", ".", "where to save")
 )
 
