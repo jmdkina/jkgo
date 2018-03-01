@@ -1,3 +1,7 @@
+//
+// Database interface
+//
+
 package jkdbs
 
 type JKDBS interface {
