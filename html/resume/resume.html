@@ -23,7 +23,7 @@
   font-size: 90%;
 }
 .list-group-item {
-  font-size: 90%;
+  font-size: 95%;
 }
 section {
   font-size: 100%;
@@ -44,13 +44,16 @@ section {
   <div class="card-body ul-horizontal">
       <ul class=" baseinfo">
            <li><a><strong>张玉伟</strong></a></li><li><a>性别：男</a></li>
-           <li><a>出生: 1989</a></li><li><a>毕业于<strong>合肥学院</strong>(2011-7)</a></li>
-           <li><a>专业: <strong>网络管理</strong></a></li>
+           <li><a>出生: 1989-01-15</a></li>
+      </ul>
+      <ul class="baseinfo">
+        <li><a>毕业于<strong>合肥学院</strong>(2011-7)</a></li>
+        <li><a>专业: <strong>网络管理</strong></a></li>
+        <li>学历：大专</li>
       </ul>
       <ul class=" baseinfo2">
-          <li>学历：大专</li>
-      	<li>Tel: 15956929665</li><li>Mail: <a href="mailto:ciyingjue@163.com">ciyingjue@163.com</a></li>
-        <li>QQ: 849532544</li>
+      	<li>Tel/WeiXin: <strong>159 5692 9665</strong></li><li>Mail: <a href="mailto:jmdvirus@aliyun.com">jmdvirus@aliyun.com</a></li>
+        <li>QQ: 84953 2544</li>
       </ul>
   </div>
 </div>
@@ -62,12 +65,12 @@ section {
   <div class="card-header"><strong>基于 dm365 ,海思平台的监控设备的架构与开发</strong></div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item">职位：从单模块到负责人，整体维护</li>
-            <li class="list-group-item">1. 基于 MiniGui 的界面开发，主要是如拨号参数，录像规则之类的配置，还有，简单英文输入的输入法界面，图片的幻灯片播放，存储的录像回放，实时视频的直通显示。移植Qt，但因设备性能，未使用。</li>
-            <li class="list-group-item">2. 基于 rtp, rtsp 的音视频传输，采用修改自 rtp 的重传机制。设备作为客户端对 onvif, 国标 的视频获取。</li>
+            <li class="list-group-item">1. 基于 MiniGui 的界面开发，主要是如拨号参数，录像规则之类的配置，还有，简单英文输入的输入法界面，图片的幻灯片播放，存储的录像回放，实时视频的直通显示。移植Qt，但因设备性能，未使用</li>
+            <li class="list-group-item">2. 基于 rtp, rtsp 的音视频传输，采用修改自 rtp 的重传机制。设备作为客户端对 onvif, 国标 的视频获取</li>
             <li class="list-group-item">3. 基于ffmpeg的mkv,h264,g726,aac等音频，视频的存储业务</li>
             <li class="list-group-item">4. 3G, 4G，wifi 拨号功能,云台配置，控制等外设开发</li>
             <li class="list-group-item">5. 通过串口与第三方通信以扩展支持控制设备，并进行相关数据的配置等</li>
-            <li class="list-group-item">6. 设备以 linux 为操作系统，多进程架构，进程间通过共享管道进行命令通信，通过共享内存进行音视频等数据传输。</li>
+            <li class="list-group-item">6. 设备以 linux 为操作系统，多进程架构，进程间通过共享管道进行命令通信，通过共享内存进行音视频等数据传输</li>
             <li class="list-group-item">7. 为便于第三方调用简单，以 SDK 的方式重新设计设备端架构，将音视频传输，存储，拨号，外设，视频回放，界面显示，报警联动等功能模块化并实现成接口形式，底层用统一的库，上层可随意使用多进程或单进程，多线程</li>
             <li class="list-group-item">8. 后期主要负责，新需求的确立，技术的实现，项目进度的控制</li>
             <li class="list-group-item">此平台被用于的产品有: <strong>手持单兵，车载设备，执法记录仪</strong>等</li>
@@ -93,7 +96,7 @@ section {
   <div class="card-header"><h4>2015-7 - 2016-8 - 合肥罗姆特</h4></div>
   <div class="card-body">
     <div class="card bg-light">
-      <div class="card-header"><strong>基于 openwrt 的智能路由器的架构，设计，开发，包括与后台服务器的交互接口</strong></div>
+      <div class="card-header"><strong>基于 OpenWrt 的智能路由器的架构，设计，开发，包括与后台服务器的交互接口</strong></div>
       <ul class="list-group">
         <li class="list-group-item">职位：负责人</li>
         <li class="list-group-item">1. 主要负责基于 MT7620 SoC 的路由器的整体开发，带领团队完成需求，开发，测试，发布，维护等工作</li>
@@ -101,7 +104,7 @@ section {
         <li class="list-group-item">3. 对 SD 卡的驱动调试，功能添加</li>
         <li class="list-group-item">4. 调试 wifi 网络，进行问题的定位和连接的优化</li>
         <li class="list-group-item">5. 其它如 DHCP 分配，led 灯等辅助功能</li>
-        <li class="list-group-item">6. 带领团队完成 路由器上与后台通信交互并控制设备的功能开发，设计通信协议，代码框架。前期采用 lua 实现，后期用 C++ 进行了重构。</li>
+        <li class="list-group-item">6. 带领团队完成 路由器上的程序开发，主要与后台通信交互并控制设备的功能开发，设计通信协议，代码框架。前期采用 lua 实现，后期用 C++ 进行了重构</li>
         <li class="list-group-item">7. 针对自有多型号的问题，负责设计框架进行自动编译多型号，一次编译适用于多型号</li>
         <li class="list-group-item">8. 采用 googletest 对 C++ 代码进行自动化单元测试</li>
         <li class="list-group-item">9. 负责移植过基于 openwrt 的三个版本, Attitude Adjustment, Chaos Calmer, 基于 MTK 的原生 Barrier Breaker 版本</li>
@@ -112,9 +115,10 @@ section {
     <div class="card bg-light">
       <div class="card-header"><strong>服务器程序及 app 相关</strong></div>
       <ul class="list-group">
-        <li class="list-group-item">1. 对各节点服务器的服务程序的开发，与主服务器的通信，协议的实现，采用 Go 语言实现。</li>
-        <li class="list-group-item">2. 对节点服务器服务的批量部署，配置，使用 ansible 及 python 自实现。</li>
-        <li class="list-group-item">3. 协助 iOS, android 等控制路由器的 app 开发，协议确定及实现。</li>
+        <li class="list-group-item">1. 路由器与服务器通信时，不同类型的服务器需要与不同的节点服务器通信，而节点服务器需要与主服务器通信，获取基本信息</li>
+        <li class="list-group-item">2. 负责节点服务器与主服务器的通信，协议的实现，采用 Go 语言实现</li>
+        <li class="list-group-item">3. 对节点服务器服务的批量部署，配置，使用 ansible 及 python 自实现</li>
+        <li class="list-group-item">4. 协助 iOS, android 等控制路由器的 app 开发，协议确定及实现</li>
        </ul>
     </div>
 </div>
@@ -124,17 +128,17 @@ section {
   <div class="card-header"><h4>2016-10 - 2017-10 - 安徽阿启视</h4></div>
   <div class="card-body">
     <div class="card bg-light">
-      <div class="card-header"><strong>视频监控平台 和 yocto 系统定制开发</strong></div>
+      <div class="card-header"><strong>视频监控平台 和 Yocto 系统定制开发</strong></div>
       <ul class="list-group">
-        <li class="list-group-item">1. 将整套服务端程序移植到基于 x86 的低端设备上，并基于 yocto 做定制开发，形成简单，易用的平台设备，这些平台设备亦可以级联后形成树状级联平台</li>
-        <li class="list-group-item">2. 多设备级联服务开发，负责数据，命令下发，上报等</li>
+        <li class="list-group-item">1. 在定制的 x86 设备上基于 Yocto 做定制系统开发，并将公司平台程序全部移植到此设备上</li>
+        <li class="list-group-item">2. 为了让设备可以相互连接形成级联平台，开发级联服务，负责数据，命令下发，上报，维护级联关系等</li>
         <li class="list-group-item">3. 国标视频流对普通视频流(ts)的转码</li>
-        <li class="list-group-item">4. yocto 系统的定制开发，启动流程，中文支持等相关功能</li>
-        <li class="list-group-item">5. 基于 opencv 的人脸检测，定制硬件上的移植，性能优化</li>
-        <li class="list-group-item">6. 基于 intel libva yami 的硬件视频解码显示开发</li>
-        <li class="list-group-item">7. 定制硬件上的 基于 openGL 的视频显示，基于 Qt 的界面和视频显示开发。</li>
-        <li class="list-group-item">8. 专注于音视频流存储的文件系统开发</li>
-        <li class="list-group-item">9. 利用 jenkins 实现自动编译多平台</li>
+        <li class="list-group-item">4. Yocto 系统的定制开发，启动流程，中文支持等相关功能</li>
+        <li class="list-group-item">5. 基于 OpenCV 的人脸检测，定制硬件上的移植，性能优化</li>
+        <li class="list-group-item">6. 基于 Intel libva Yami 的硬件视频解码显示开发</li>
+        <li class="list-group-item">7. 定制硬件上的 基于 OpenGL 的视频显示，基于 Qt 的界面和 QtOpenGL 视频显示开发</li>
+        <li class="list-group-item">8. 专注于音视频流存储的文件系统开发，主要是便于针对视频流的时间维度的查询，提取等操作</li>
+        <li class="list-group-item">9. 利用 jenkins 实现自动编译多平台，实现一些自动化的编译，结合 jenkins 的展示操作使编译更简单</li>
       </ul>
     </div>
   </div>
@@ -143,11 +147,12 @@ section {
 <div class="card border-info bg-light">
  <div class="card-header">个人技能</div>
    <ul class="list-group">
-     <li class="list-group-item">从web服务，前端css开发 到 嵌入式监控设备开发 到 监控服务器后端开发 及 音视频流相关开发，音视频传输，存储的文件系统，基于 openwrt, yocto, buildroot 的系统定制 及 iOS上的音视频流采集，传输，均熟悉整套开发结构，并由自已独立设计，完成，并在公司中有成熟产品。</li>
-     <li class="list-group-item">英文阅读能力良好，可熟练看懂各种英文技术文档</li>
+     <li class="list-group-item">从web服务，前端css开发 到 嵌入式监控设备开发 到 监控服务器后端开发 及 音视频流相关开发，音视频传输，存储的文件系统，基于 openwrt, yocto, buildroot 的系统定制 及 iOS上的音视频流采集，传输，均熟悉整套开发结构，并由自已独立设计，完成，并在公司中有成熟产品</li>
+     <li class="list-group-item">主攻 linux 操作系统及应用层开发，精通C，可熟练使用 C++, Go, Python, Shell, Lua 等</li>
+     <li class="list-group-item">对linux内核较有兴趣，熟悉内核,驱动及其网络子系统, 熟悉 Yocto, OpenWrt, Buildroot 等系统构建工具</li>
      <li class="list-group-item">对技术很有兴趣，业余时间自学了深度学习，区块链等技术，了解 tensorflow, mxnet, bitcoin, ethereum 等用法</li>
-     <li class="list-group-item">对linux内核较有兴趣，熟悉内核,驱动及其网络子系统, 熟悉 yocto, openwrt, buildroot 等系统构建工具</li>
-     <li class="list-group-item">主攻 linux 操作系统及应用层开发，精通c，可熟练使用 c++, go, python, shell, lua 等。</li>
+     <li class="list-group-item">业余时间学习了 STM32, raspberrypi 开发，并对家居互联进行了一些实践</li>
+     <li class="list-group-item">英文阅读能力良好，可熟练看懂各种英文技术文档</li>
      <li class="list-group-item">有 web 服务器的实践经验，如个人网站用到的技术有 nginx + golang + mongodb + jquery + bootstrap</li>
    </ul>
 </div>
@@ -159,7 +164,7 @@ section {
        <li class="list-group-item"><a href="http://git.oschina.net/jmdvirus">jmdvirus</a>：个人源码</li>
        <li class="list-group-item"><a href="http://blog.csdn.net/leishengsheng">实践记录</a>：技术上的一些实践记录</li>
        <li class="list-group-item"><a href="http://www.jmdkina.cn">www.jmdkina.cn</a> 或 <a href="http://www.jmdvirus.cn">链接一</a> 或 <a href="http://104.194.94.237">链接二</a>，个人兴趣的一些记录展示。（暂时可能存在连接不稳定的情况）</li>
-       <li class="list-group-item">如以上链接未实别，本页内容可访问 <strong>http://www.jmdkina.cn/resume</strong></li>
+       <li class="list-group-item">如以上链接未识别，本页内容可访问 <strong>http://www.jmdkina.cn/resume</strong></li>
     </ul>
  </div>
 
