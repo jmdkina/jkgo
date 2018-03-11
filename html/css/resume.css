@@ -10,6 +10,7 @@
 .leftbar {
   padding: 1.5rem 1.0rem;
   background-color: gainsboro;
+  /* background-color: rgb(245, 245, 245); */
 }
 
 .item-two h4 {
@@ -21,6 +22,7 @@
 .rightcontent {
   padding: 1.5rem;
   background-color: ghostwhite;
+  /* background-color: rgb(255, 255, 255); */
 }
 .item-three {
   padding: 0.8rem 0 0 0;
