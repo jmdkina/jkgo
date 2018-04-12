@@ -35,6 +35,10 @@ form div {
   padding: 12px;
 }
 
+.item:hover {
+    cursor: pointer;
+}
+
 .item img {
     width: 100%;
     height: auto;

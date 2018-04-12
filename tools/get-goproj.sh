@@ -3,6 +3,7 @@ goget="github.com/astaxie/beego github.com/beego/bee github.com/Unknwon/goconfig
 goget+=" github.com/gogap/logs"
 goget+=" github.com/henrylee2cn/faygo github.com/henrylee2cn/fay github.com/gorilla/websocket"
 goget+=" gopkg.in/mgo.v2"
+goget+=" github.com/tuotoo/qrcode"
 
 for i in $goget
 do
