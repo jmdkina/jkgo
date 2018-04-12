@@ -16,17 +16,15 @@
     <script type="text/javascript" src="js/jmdkina/jmdkina.js" ></script>
 </head>
 <body>
-<div id="jmdkina" class="container">
+<div id="jmdkina" class="container jk-leavetop">
    
-<div class="card-columns bigarea jk-leavetop">
-  <div class="item card"  v-on:click="fulldisplay(img)" v-for="img in images">
+<div class="row items">
+<div class="item col-es-12 col-sm-4 col-md-3 col-lg-3" v-on:click="fulldisplay(img)" v-for="img in images">
     <img :src="img.imageurl" />
-    <div class="card-body">
-      <div class="card-title">${ img.name } </div>
-      <div class="time1 time"><b>${ img.author }</b>&nbsp;发布于&nbsp;
+    <div>${ img.name }</div>    
+    <div class="time1 time"><b>${ img.author }</b>&nbsp;发布于&nbsp;
         <span class="timestr">${ img.timestr }</span></div>
-    </div>
-  </div>
+</div>
 </div>
 
 <button class="btn btn-primary btn-block showmore" v-on:click="showmore">加载更多</button>

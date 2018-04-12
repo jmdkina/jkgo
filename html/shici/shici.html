@@ -16,17 +16,16 @@
     <script type="text/javascript" src="js/shici/shici.js" ></script>
 </head>
 <body>
-<div id="shici" class="container">
+<div id="shici" class="container jk-leavetop">
    
-<div class="card-columns bigarea jk-leavetop">
-  <div class="item card" v-for="shici in shicis">
-    <div class="card-body">
-      <div class="card-content sscontent">${ shici.content } </div>
-    </div>
-    <div class="card-footer text-muted">
+<div class="row items">
+<div class="item col-es-12 col-sm-5 col-md-4 col-lg-2" v-for="shici in shicis">
+    <div class="sscontent">${ shici.content } </div>
+    <div class="ssfooter text-muted"> 
         ${shici.title} - ${shici.subtitle} - <cite class="aux-title">${shici.author} - ${shici.createtimestr}</cite>
     </div>
-  </div>
+    <br class="clearfix"/>
+</div>
 </div>
 <button class="btn btn-primary btn-block showmore" v-on:click="showmore">加载更多</button>
 
