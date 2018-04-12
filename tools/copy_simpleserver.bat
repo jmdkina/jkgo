@@ -1,6 +1,6 @@
 
-set source=%~dp0
-set dst=%~dp0\..\bin\snaky-bin
+set source=%~dp0\..\
+set dst=%~dp0\..\..\bin\snaky-bin
 
 set dirs=html\addon
 

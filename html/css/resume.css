@@ -1,6 +1,56 @@
 @charset "UTF-8";
+.basex ul li {
+  margin: 0.2rem 0;
+  overflow-wrap: break-word;
+}
+.basex ul {
+  font-size: 94%;
+  padding: 1rem 0;
+}
+.leftbar {
+  padding: 1.5rem 1.0rem;
+  background-color: gainsboro;
+  /* background-color: rgb(245, 245, 245); */
+}
+
+.item-two h4 {
+   /* border-bottom: dimgray solid 2px; */
+   border-left: dimgray solid 4px;
+   padding-left: 0.4rem;
+}
+
+.rightcontent {
+  padding: 1.5rem;
+  background-color: ghostwhite;
+  /* background-color: rgb(255, 255, 255); */
+}
+.item-three {
+  padding: 0.8rem 0 0 0;
+}
+
+.item-three ol {
+  margin: 0.6rem 0.6rem;
+}
+
+.item-three ol li {
+  padding: 0.2rem 0;
+}
+
+.item-two ol {
+  padding: 0.2rem 1.2rem;
+}
+
+.item-two ol li {
+  padding: 0.2rem 0;
+}
+
+hr.split {
+}
 .base .card-body {
   padding: 1.25rem 0;
+}
+cite {
+  font-size: 95%;
 }
 .baseinfo { }
   .baseinfo li {
