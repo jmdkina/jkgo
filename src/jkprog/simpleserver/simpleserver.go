@@ -56,6 +56,7 @@ func main() {
 	NewShici(html_path)
 	NewShiciAdd(html_path)
 	ss.NewResume(html_path)
+	ss.NewResumeEn(html_path)
 	NewJmdkinaAdd(html_path)
 
 	lport := ss.GlobalBaseConfig().Port
