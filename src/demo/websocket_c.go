@@ -8,6 +8,8 @@ import (
 	"encoding/json"
 
 	"golang.org/x/net/websocket"
+	"strings"
+	"io/ioutil"
 )
 
 type URLs struct {
@@ -60,23 +62,55 @@ func generate_request_string() (string, error) {
 	return "", err
 }
 
+var (
+	resunknown = "what you send"
+)
+
+func GetFileContent(filename string) []byte {
+	filefull := "files/" + filename
+	data, _ := ioutil.ReadFile(filefull)
+	return data
+}
+
+func DealWithCmd(ws *websocket.Conn, msg string) {
+	fmt.Printf("ws read result [%s]\n", msg)
+	if strings.Index(msg, "login") > 0 {
+		n, err := ws.Write(GetFileContent("reslogin"))
+		if err != nil {
+			fmt.Println("Write error ", err)
+		}
+		fmt.Printf("Write done n [%d]\n", n)
+		//time.Sleep(2 * time.Second)
+		n, err = ws.Write(GetFileContent("resloginmore"))
+		if err != nil {
+			fmt.Println("Write error ", err)
+		}
+		fmt.Printf("Write done n [%d]\n", n)
+	} else {
+		msgw := []byte(resunknown)
+		fmt.Println("send unknow response\n")
+		ws.Write(msgw)
+	}
+}
+
 // Echo the data received on the WebSocket.
 func EchoServer(ws *websocket.Conn) {
 	msg := make([]byte, 1024)
-	n, err := ws.Read(msg)
-	if err != nil {
-		fmt.Println("ws read error ", err)
-	} else {
-		fmt.Printf("ws read result [%d] [%s]\n", n, msg)
-		msgw := []byte("This is response")
-		ws.Write(msgw)
+	for {
+		_, err := ws.Read(msg)
+		if err != nil {
+			fmt.Println("ws read error ", err)
+		} else {
+			DealWithCmd(ws, string(msg))
+		}
+		time.Sleep(100*time.Millisecon)
 	}
 }
 
 // This example demonstrates a trivial echo server.
 func ExampleHandler() {
-	http.Handle("/echo", websocket.Handler(EchoServer))
-	err := http.ListenAndServe(":12345", nil)
+	http.Handle("/message/ws", websocket.Handler(EchoServer))
+	err := http.ListenAndServe(":8081", nil)
 	if err != nil {
 		panic("ListenAndServe: " + err.Error())
 	}
@@ -116,6 +150,9 @@ func client_request() error {
 func main() {
 	go ExampleHandler()
 	time.Sleep(2 * time.Second)
-	client_request()
+	//client_request()
 
+	for {
+		time.Sleep(100 * time.Millisecond);
+	}
 }
