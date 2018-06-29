@@ -27,6 +27,12 @@ $(function(){
             },
             do_resumeplaying: function() {
                 do_command("resumePlaying");
+            },
+            do_songinsert: function() {
+                do_command("songInsert");
+            },
+            do_songskip: function() {
+                do_command("do_songskip");
             }
         }
     });

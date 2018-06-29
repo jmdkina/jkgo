@@ -161,6 +161,12 @@ func (ws *WSSimple) CommonCmd(cmd string) {
 	case "dataUpdate":
 		ws.Send(string(ws.getFileContent("resdataupdate")))
 		break
+	case "songInsert":
+		ws.Send(string(ws.getFileContent("ressonginsert")))
+		break
+	case "songSkip":
+		ws.Send(string(ws.getFileContent("ressongskip")))
+		break
 	default:
 		jklog.L().Warnf("Unknow command %s\n", cmd)
 		break
