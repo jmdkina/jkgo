@@ -10,12 +10,13 @@ import (
 	. "simpleserver/dbs"
 	. "simpleserver/jmdkina"
 	. "simpleserver/shici"
+	. "simpleserver/ws"
 	"strconv"
 )
 
 var (
-	conf = flag.String("conf", "etc/simpleserver.json", "Config File")
-    forerun = flag.Bool("forerun", false, "Foreground run")
+	conf    = flag.String("conf", "etc/simpleserver.json", "Config File")
+	forerun = flag.Bool("forerun", false, "Foreground run")
 )
 
 var (
@@ -28,9 +29,9 @@ func main() {
 	fmt.Printf("\rVERSION: %s\n\rBUILD_TIME: %s\n\rGO_VERSION: %s\n\n", VERSION, BUILD_TIME, GOVERSION)
 	flag.Parse()
 
-    if !*forerun {
-    	jkbase.InitDeamon(true)
-    }
+	if !*forerun {
+		jkbase.InitDeamon(true)
+	}
 
 	ss.GlobalSetConfig(*conf)
 	html_path := ss.GlobalBaseConfig().HtmlPath
@@ -58,6 +59,7 @@ func main() {
 	ss.NewResume(html_path)
 	ss.NewResumeEn(html_path)
 	NewJmdkinaAdd(html_path)
+	NewWSSimplePage(html_path)
 
 	lport := ss.GlobalBaseConfig().Port
 

@@ -31,12 +31,14 @@ func main() {
 		jklog.L().Infof("%v = %s\n", *v, result)
 		return
 	case "str":
-		t, err := time.Parse("2006-01-02-15-04-05 Z0700", *v)
+        timeLayout := "2006-01-02 15:04:05"
+        loc, _ := time.LoadLocation("Local")
+        theTime, err := time.ParseInLocation(timeLayout, *v, loc)
 		if err != nil {
 			jklog.L().Errorln("parse failed ", err)
 			return
 		}
-		result := t.Unix()
+		result := theTime.Unix()
 		jklog.L().Infof("%s = %d\n", *v, result)
 	}
 }

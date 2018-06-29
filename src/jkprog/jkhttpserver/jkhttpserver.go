@@ -11,9 +11,20 @@ var (
 	dir  = flag.String("dir", "./", "Files position")
 )
 
+func handler(w http.ResponseWriter, r *http.Request) {
+
+	buf := make([]byte, 1024)
+	n, _ := r.Body.Read(buf)
+
+	jklog.L().Infoln("This is message ws handler ", string(buf[:n]))
+
+	w.Write([]byte("Response of handler."))
+}
+
 func main() {
 	flag.Parse()
 
+	http.HandleFunc("/message/ws", handler)
 	http.Handle("/", http.FileServer(http.Dir(*dir)))
 	inPort := *port
 	if inPort[0] != ':' {
