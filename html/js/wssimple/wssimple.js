@@ -32,7 +32,10 @@ $(function(){
                 do_command("songInsert");
             },
             do_songskip: function() {
-                do_command("do_songskip");
+                do_command("songSkip");
+            },
+            do_logout: function() {
+                do_command("logout");
             }
         }
     });

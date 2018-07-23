@@ -201,6 +201,7 @@ func (b *UploadServer) ServeHttp(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer file.Close()
+		jklog.L().Debugf("[%s][%s]\n", r.FormValue("subId"), r.FormValue("uploadfile"))
 		jklog.L().Debugf("%v, save to file [%s]\n", handler.Header,
 			GetFileUploadPath().Path+"/"+handler.Filename)
 		f, err := os.OpenFile(GetFileUploadPath().Path+"/"+handler.Filename,

@@ -75,19 +75,35 @@ func (wss *WSSimple) dealWithCmd(ws *websocket.Conn, msg string) {
 			jklog.L().Infoln("Write error ", err)
 		}
 	} else if strings.Index(msg, "getCookSongs") > 0 {
-		if strings.Index(msg, "\"channelId\" : 95") > 0 ||
-			strings.Index(msg, "\"channelId\" : 100") > 0 {
-			ws.Write(wss.getFileContent("rescooksongs_1"))
-		} else if strings.Index(msg, "\"channelId\" : 96") > 0 ||
-			strings.Index(msg, "\"channelId\" : 101") > 0 {
-			ws.Write(wss.getFileContent("rescooksongs_2"))
-		} else if strings.Index(msg, "\"channelId\" : 97") > 0 ||
-			strings.Index(msg, "\"channelId\" : 102") > 0 {
-			ws.Write(wss.getFileContent("rescooksongs_3"))
+		if strings.Index(msg, "\"channelId\" : 95") > 0 {
+			if (strings.Index(msg, "\"cookId\" : 201") > 0) {
+			    ws.Write(wss.getFileContent("rescooksongs_1"))
+			} else if (strings.Index(msg, "\"cookId\" : 202") > 0) {
+			    ws.Write(wss.getFileContent("rescooksongs_2"))
+			} else if (strings.Index(msg, "\"cookId\" : 203") > 0) {
+			    ws.Write(wss.getFileContent("rescooksongs_5"))
+			}
+		} else if strings.Index(msg, "\"channelId\" : 96") > 0 {
+			if (strings.Index(msg, "\"cookId\" : 201") > 0) {
+			    ws.Write(wss.getFileContent("rescooksongs_1"))
+			} else if (strings.Index(msg, "\"cookId\" : 202") > 0) {
+			    ws.Write(wss.getFileContent("rescooksongs_2"))
+			} else if (strings.Index(msg, "\"cookId\" : 203") > 0) {
+			    ws.Write(wss.getFileContent("rescooksongs_3"))
+			}
+		} else if strings.Index(msg, "\"channelId\" : 97") > 0 {
+			if (strings.Index(msg, "\"cookId\" : 201") > 0) {
+			    ws.Write(wss.getFileContent("rescooksongs_1"))
+			} else if (strings.Index(msg, "\"cookId\" : 202") > 0) {
+			    ws.Write(wss.getFileContent("rescooksongs_4"))
+			} else if (strings.Index(msg, "\"cookId\" : 203") > 0) {
+			    ws.Write(wss.getFileContent("rescooksongs_3"))
+			}
 		}
 	} else if strings.Index(msg, "getCallWaitings") > 0 {
 		if strings.Index(msg, "\"channelId\" : 95") > 0 ||
-			strings.Index(msg, "\"channelId\" : 100") > 0 {
+			strings.Index(msg, "\"channelId\" : 100") > 0 ||
+			strings.Index(msg, "\"channelId\" : 172") > 0 {
 			ws.Write(wss.getFileContent("rescallwaitings_1"))
 		} else if strings.Index(msg, "\"channelId\" : 96") > 0 ||
 			strings.Index(msg, "\"channelId\" : 101") > 0 {
@@ -96,6 +112,8 @@ func (wss *WSSimple) dealWithCmd(ws *websocket.Conn, msg string) {
 			strings.Index(msg, "\"channelId\" : 102") > 0 {
 			ws.Write(wss.getFileContent("rescallwaitings_3"))
 		}
+	} else if strings.Index(msg, "getAds") > 0 {
+		ws.Write(wss.getFileContent("resads"))
 	} else {
 		msgw := []byte(resunknown)
 		jklog.L().Infoln("send unknow response\n")
@@ -166,6 +184,9 @@ func (ws *WSSimple) CommonCmd(cmd string) {
 		break
 	case "songSkip":
 		ws.Send(string(ws.getFileContent("ressongskip")))
+		break
+	case "logout":
+		ws.Send(string(ws.getFileContent("reslogout")))
 		break
 	default:
 		jklog.L().Warnf("Unknow command %s\n", cmd)
