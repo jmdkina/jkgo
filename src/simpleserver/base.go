@@ -61,6 +61,9 @@ func (b *Base) WriteSerialData(w http.ResponseWriter, data interface{}, status i
 }
 
 func (b *Base) LogToDB(r *http.Request) {
+	if GlobalDBS() == nil {
+		return
+	}
 	url := r.URL.String()
 	remote := r.RemoteAddr
 	useragent := r.UserAgent()

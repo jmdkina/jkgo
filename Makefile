@@ -17,8 +17,11 @@ Q=
 endif
 
 SNAKYDIRS=html/addon
+SNAKYDIRS+=html/js/wssimple
+SNAKYDIRS+=html/wssimple
 SNAKYFILES=html/css/global.css html/css/jmdkina.css
 SNAKYFILES+=html/css/resume.css html/css/shici.css html/css/db.css 
+SNAKYFILES+=html/css/wssimple.css
 SNAKYFILES+=html/jmdkina/add.html html/jmdkina/jmdkina.html 
 SNAKYFILES+=html/shici/add.html html/shici/shici.html 
 SNAKYFILES+=html/db/db.html 

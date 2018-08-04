@@ -99,6 +99,16 @@ func (wss *WSSimple) dealWithCmd(ws *websocket.Conn, msg string) {
 			} else if (strings.Index(msg, "\"cookId\" : 203") > 0) {
 			    ws.Write(wss.getFileContent("rescooksongs_3"))
 			}
+		} else if strings.Index(msg, "\"channelId\" : 98") > 0 {
+			if (strings.Index(msg, "\"cookId\" : 202") > 0) {
+			    ws.Write(wss.getFileContent("rescooksongs_4"))
+			} else if (strings.Index(msg, "\"cookId\" : 203") > 0) {
+			    ws.Write(wss.getFileContent("rescooksongs_5"))
+			}
+		} else if strings.Index(msg, "\"channelId\" : 99") > 0 {
+			if (strings.Index(msg, "\"cookId\" : 202") > 0) {
+			    ws.Write(wss.getFileContent("rescooksongs_6"))
+			}
 		}
 	} else if strings.Index(msg, "getCallWaitings") > 0 {
 		if strings.Index(msg, "\"channelId\" : 95") > 0 ||
@@ -111,6 +121,10 @@ func (wss *WSSimple) dealWithCmd(ws *websocket.Conn, msg string) {
 		} else if strings.Index(msg, "\"channelId\" : 97") > 0 ||
 			strings.Index(msg, "\"channelId\" : 102") > 0 {
 			ws.Write(wss.getFileContent("rescallwaitings_3"))
+		} else if strings.Index(msg, "\"channelId\" : 98") > 0 {
+			ws.Write(wss.getFileContent("rescallwaitings_98"))
+		} else if strings.Index(msg, "\"channelId\" : 99") > 0 {
+			ws.Write(wss.getFileContent("rescallwaitings_99"))
 		}
 	} else if strings.Index(msg, "getAds") > 0 {
 		ws.Write(wss.getFileContent("resads"))
@@ -124,6 +138,12 @@ func (wss *WSSimple) dealWithCmd(ws *websocket.Conn, msg string) {
 // Echo the data received on the WebSocket.
 func (wss *WSSimple) handle_server(ws *websocket.Conn) {
 	msg := make([]byte, 1024)
+	go func() {
+		for {
+            ws.Write(wss.getFileContent("resheartbeat"))
+			time.Sleep(time.Second * 60)
+		}
+	}()
 	go func() {
 		for {
 			e := wss.datas.Front()
