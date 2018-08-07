@@ -3,6 +3,9 @@ package simpleserver
 import (
 	"jk/jklog"
 	"net/http"
+	"io/ioutil"
+	"encoding/json"
+	"os"
 )
 
 type Resume struct {
@@ -48,3 +51,57 @@ func (s *ResumeEn) Get(w http.ResponseWriter, r *http.Request) {
 		jklog.L().Errorln("Parse error ", err)
 	}
 }
+
+type ResumeSet struct {
+	Base
+}
+
+func NewResumeSet(path string) *ResumeSet {
+	j := &ResumeSet{}
+	j.SetPath(path)
+	j.SetFunc("/resume_set", j)
+	return j
+}
+
+func (s *ResumeSet) Get(w http.ResponseWriter, r *http.Request) {
+	sp := SimpleParse{}
+	filename := s.path + "/resume/resume_set.html"
+	jklog.L().Debugf("Get htmle [%s]\n", filename)
+
+	err := sp.Parse(w, filename, "")
+	if err != nil {
+		jklog.L().Errorln("Parse error ", err)
+	}
+}
+
+type ResumeBaseInfoBase struct {
+	Name    string
+	Sex     string
+}
+
+type ResumeBaseInfo struct {
+	BaseInfo        ResumeBaseInfoBase
+}
+
+func (s *ResumeSet) Post(w http.ResponseWriter, r *http.Request) {
+	cmd := r.FormValue("cmd")
+	switch cmd {
+	case "query_info":
+		content, _ := ioutil.ReadFile(s.path + "/resume/template.json")
+		s.WriteSerialData(w, string(content), 200)
+		return
+	case "change_new":
+		data := r.FormValue("content")
+		out := ResumeBaseInfo{}
+	    err := json.Unmarshal([]byte(data), &out)
+		if err != nil {
+			s.WriteSerialData(w, "Invalid Str", 400);
+			jklog.L().Errorln("error parse ", err)
+		} else {
+			ioutil.WriteFile(s.path + "/resume/template.json", []byte(data), os.ModePerm)
+			s.WriteSerialData(w, "", 200);
+		}
+		return
+	}
+}
+

@@ -58,6 +58,7 @@ func main() {
 	NewShiciAdd(html_path)
 	ss.NewResume(html_path)
 	ss.NewResumeEn(html_path)
+	ss.NewResumeSet(html_path)
 	NewJmdkinaAdd(html_path)
 	NewWSSimplePage(html_path)
 
