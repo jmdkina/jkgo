@@ -107,5 +107,5 @@ func (m *Mongo) Add(dbname string, coll string, data interface{}) error {
 }
 
 func (m *Mongo) Remove(dbname string, coll string, condition interface{}) error {
-	return errors.New("Unimplement")
+	return m.session.DB(dbname).C(coll).Remove(nil)
 }

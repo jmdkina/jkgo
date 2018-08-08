@@ -3,8 +3,10 @@ package simpleserver
 import (
 	"jk/jklog"
 	"net/http"
+	"jkdbs"
 	"io/ioutil"
 	"encoding/json"
+	. "simpleserver/dbs"
 	"os"
 )
 
@@ -85,7 +87,25 @@ func (s *ResumeSet) Post(w http.ResponseWriter, r *http.Request) {
 	cmd := r.FormValue("cmd")
 	switch cmd {
 	case "query_info":
-		content, _ := ioutil.ReadFile(s.path + "/resume/template.json")
+		var out []interface{}
+	    mc := jkdbs.MongoCondition{
+			Limit: 10,
+			Skip:  0,
+			Order: false,
+	    }
+		var content []byte
+		err := GlobalDBS().Query("proj", "resume", mc, &out)
+		if err != nil || len(out) == 0 {
+			content, _ = ioutil.ReadFile(s.path + "/resume/template.json")
+			jklog.L().Infoln("Get from fiel")
+		} else {
+			content, err = json.Marshal(out[0])
+			if err != nil {
+				jklog.L().Errorln("Error parse from database ", err)
+			} else {
+				jklog.L().Infoln("Get from DB")
+			}
+		}
 		s.WriteSerialData(w, string(content), 200)
 		return
 	case "change_new":
@@ -102,7 +122,14 @@ func (s *ResumeSet) Post(w http.ResponseWriter, r *http.Request) {
 			jklog.L().Errorln("error parse ", err)
 		} else {
 			ioutil.WriteFile(s.path + "/resume/template.json", []byte(data), os.ModePerm)
-			s.WriteSerialData(w, "", 200);
+			GlobalDBS().Remove("proj", "resume", nil)
+			err := GlobalDBS().Add("proj", "resume", out)
+			if err != nil {
+				jklog.L().Errorln("write data base failed ", err)
+				s.WriteSerialData(w, "write db fail", 401)
+			} else {
+				s.WriteSerialData(w, "", 200);
+		    }
 		}
 		return
 	}
