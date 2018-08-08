@@ -75,8 +75,6 @@ func (s *ResumeSet) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 type ResumeBaseInfoBase struct {
-	Name    string
-	Sex     string
 }
 
 type ResumeBaseInfo struct {
@@ -91,8 +89,13 @@ func (s *ResumeSet) Post(w http.ResponseWriter, r *http.Request) {
 		s.WriteSerialData(w, string(content), 200)
 		return
 	case "change_new":
+		code := r.FormValue("code")
+		if code != "jkresumeset" {
+			s.WriteSerialData(w, "No Permission", 403)
+			return
+		}
 		data := r.FormValue("content")
-		out := ResumeBaseInfo{}
+		var out interface{}
 	    err := json.Unmarshal([]byte(data), &out)
 		if err != nil {
 			s.WriteSerialData(w, "Invalid Str", 400);

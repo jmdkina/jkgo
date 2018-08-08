@@ -1,11 +1,13 @@
-log_enable(false)
+log_enable(true)
 
 $(function(){
     var resume = new Vue({
         el: '#resume',
         delimiters: ['${', '}'],
         data: {
-			info: ""
+			info: "",
+			code: "",
+			retinfo: []
         },
         beforeCreate: function() {
             load_startup();
@@ -33,6 +35,7 @@ function load_startup() {
 					return;
 				}
 				resume.info = ret.Result;
+				resume.retinfo = $.parseJSON(resume.info);
             } catch(e) {
                 layer.msg("Fail parse , err: " + e);
             }
@@ -41,7 +44,7 @@ function load_startup() {
 }
 
 function change_new() {
-	var str = "jk=resume&cmd=change_new&content=" + resume.info;
+	var str = "jk=resume&cmd=change_new&code=" + resume.code + "&content=" + resume.info;
 	log_print(str);
 	$.ajax({
 		url: "resume_set",
