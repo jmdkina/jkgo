@@ -27,10 +27,14 @@ SNAKYFILES+=html/shici/add.html html/shici/shici.html
 SNAKYFILES+=html/db/db.html 
 SNAKYFILES+=html/resume/resume.html 
 SNAKYFILES+=html/resume/resume_en.html
+SNAKYFILES+=html/resume/resume_set.html
+SNAKYFILES+=html/resume/template.json
+SNAKYFILES+=html/resume/template.json.back
 SNAKYFILES+=html/404.html 
 SNAKYFILES+=html/js/jmdkina/add.js html/js/jmdkina/jmdkina.js 
 SNAKYFILES+=html/js/shici/add.js html/js/shici/shici.js 
 SNAKYFILES+=html/js/global.js  html/js/db.js
+SNAKYFILES+=html/js/resume.js
 SNAKYSOURCE=$(shell pwd)
 SNAKYDST=$(shell pwd)/../bin/snaky-bin
 
