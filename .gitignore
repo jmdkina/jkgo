@@ -38,3 +38,4 @@ pkg/
 *.txt
 .idea
 html/images
+/.project
