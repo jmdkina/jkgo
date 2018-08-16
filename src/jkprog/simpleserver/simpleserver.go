@@ -61,6 +61,7 @@ func main() {
 	ss.NewResumeSet(html_path)
 	NewJmdkinaAdd(html_path)
 	NewWSSimplePage(html_path)
+	ss.NewManager(html_path)
 
 	lport := ss.GlobalBaseConfig().Port
 
