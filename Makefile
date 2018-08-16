@@ -19,6 +19,7 @@ endif
 SNAKYDIRS=html/addon
 SNAKYDIRS+=html/js/wssimple
 SNAKYDIRS+=html/wssimple
+SNAKYDIRS+=html/manager
 SNAKYFILES=html/css/global.css html/css/jmdkina.css
 SNAKYFILES+=html/css/resume.css html/css/shici.css html/css/db.css 
 SNAKYFILES+=html/css/wssimple.css
