@@ -27,3 +27,9 @@ tools - 一些下载，编译相关的脚本工具
 Makefile - linux 下的编译 make help
 ```
 
+#### jk/jkservice/jkstatus
+
+```
+http://xxx:12307/st/cmd=getstatus
+```
+
