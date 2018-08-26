@@ -1,14 +1,14 @@
 
 set INSTALL_PATH=srctmp
 
-go get code.google.com/p/goprotobuf
-go get github.com/sbinet/go-config/config
-go get github.com/Unknwon/goconfig
-go get github.com/gorilla/websocket
-go get github.com/mattn/go-sqlite3
-go get github.com/nranchev/go-libGeoIP
-go get github.com/anaskhan96/soup
-go get github.com/h2non/filetype
+::go get code.google.com/p/goprotobuf
+::go get github.com/sbinet/go-config/config
+::go get github.com/Unknwon/goconfig
+::go get github.com/gorilla/websocket
+::go get github.com/mattn/go-sqlite3
+::go get github.com/nranchev/go-libGeoIP
+::go get github.com/anaskhan96/soup
+::go get github.com/h2non/filetype
 
 ::git clone https://github.com/golangers/session.git
 ::git clone https://github.com/golangers/utils.git
@@ -17,7 +17,8 @@ go get github.com/h2non/filetype
 ::https://github.com/golangers/webrouter.git
 ::https://github.com/golangers/config.git
 ::https://github.com/golangers/framework.git
-::https://github.com/golangers/log.git
+git clone https://github.com/golangers/log.git src/github.com/golangers/log
+git clone https://github.com/golangers/utils.git src/github.com/golangers/utils
 ::https://github.com/golangers/validate.git
 ::https://github.com/golangers/urlmanage.git
 ::git clone https://github.com/golangers/i18n.git
@@ -26,20 +27,20 @@ go get github.com/h2non/filetype
 ::https://github.com/kardianos/service.git
 
 :: need install bzr
-rem go get labix.org/v2/mgo
-go get gopkg.in/mgo.v2
+::rem go get labix.org/v2/mgo
+::go get gopkg.in/mgo.v2
 
-go get golang.org/x/net/html
+::go get golang.org/x/net/html
 ::go get github.com/sevlyar/go-daemon
 ::go get github.com/tyranron/daemonigo
 
-go get github.com/astaxie/beego
-go get github.com/beego/bee
+::go get github.com/astaxie/beego
+::go get github.com/beego/bee
 
 :: git clone https://github.com/alecthomas/log4go.git
 
-go get github.com/mattn/go-sqlite3
-go get github.com/go-sql-dirver/mysql
+::go get github.com/mattn/go-sqlite3
+::go get github.com/go-sql-dirver/mysql
 ::go get github.com/lib/pq
 
 :: git clone https://github.com/matishsiao/goInfo

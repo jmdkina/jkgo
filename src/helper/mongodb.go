@@ -2,8 +2,8 @@ package helper
 
 import (
 	"encoding/gob"
-	"golanger.com/log"
-	"golanger.com/utils"
+	"github.com/golangers/log"
+	"github.com/golangers/utils"
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"strings"
