@@ -3,6 +3,7 @@ package main
 import (
 	"jk/jklog"
 	"flag"
+	. "jkstock"
 )
 
 var (
