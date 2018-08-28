@@ -130,7 +130,7 @@ func (l *Logger) noneprintln(v ...interface{}) {
 
 func (l *Logger) print(prefix string, v ...interface{}) {
 	//又包了2层
-	localCalldepth := 2 + 2
+	localCalldepth := 2 + 2 + 1
 	s := fmt.Sprint(v...)
 	l.mu.Lock()
 	defer l.mu.Unlock()
@@ -140,7 +140,7 @@ func (l *Logger) print(prefix string, v ...interface{}) {
 
 func (l *Logger) println(prefix string, v ...interface{}) {
 	//又包了2层
-	localCalldepth := 2 + 2
+	localCalldepth := 2 + 2 + 1
 	s := fmt.Sprintln(v...)
 	l.mu.Lock()
 	defer l.mu.Unlock()
@@ -150,7 +150,7 @@ func (l *Logger) println(prefix string, v ...interface{}) {
 
 func (l *Logger) printf(prefix string, format string, v ...interface{}) {
 	//又包了2层
-	localCalldepth := 2 + 2
+	localCalldepth := 2 + 2 + 1
 	s := fmt.Sprintf(format, v...)
 	l.mu.Lock()
 	defer l.mu.Unlock()

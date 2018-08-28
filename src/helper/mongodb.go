@@ -3,11 +3,13 @@ package helper
 import (
 	"encoding/gob"
 	"github.com/golangers/log"
-	"github.com/golangers/utils"
+	//"github.com/golangers/utils"
 	mgo "gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"strings"
 )
+
+type TM map[string]interface{}
 
 func init() {
 	gob.Register(bson.M{})
@@ -37,7 +39,7 @@ func NewMongo(mgoDns string) *Mongo {
 	}
 }
 
-func (m *Mongo) C(col utils.M) *mgo.Collection {
+func (m *Mongo) C(col TM) *mgo.Collection {
 	colName := col["name"].(string)
 
 	if _, ok := m.colNames[colName]; !ok {
@@ -67,7 +69,7 @@ func (m *Mongo) DB(dbname string) *mgo.Database {
 /* get collections */
 func (m *Mongo) Cnew(dbname string, cname string) *mgo.Collection {
 	m.dbName = dbname
-	return m.C(utils.M{"name": cname})
+	return m.C(TM{"name": cname})
 }
 
 func (m *Mongo) DBSession() *mgo.Session {

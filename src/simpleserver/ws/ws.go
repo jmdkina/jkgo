@@ -55,20 +55,20 @@ func (ws *WSSimple) getFileContent(filename string) []byte {
 }
 
 func (wss *WSSimple) dealWithCmd(ws *websocket.Conn, msg string) {
-	jklog.L().Printf("ws read result [%s]\n", msg)
+	jklog.L().Debugf("ws read result [%s]\n", msg)
 	if strings.Index(msg, "login") > 0 {
 		n, err := ws.Write(wss.getFileContent("reslogin"))
 		if err != nil {
 			jklog.L().Infoln("Write error ", err)
 		}
-		jklog.L().Printf("Write done n [%d]\n", n)
+		jklog.L().Debugf("Write done n [%d]\n", n)
 		//time.Sleep(2 * time.Second)
 		n, err = ws.Write(wss.getFileContent("resloginmore"))
 		// n, err = ws.Write(wss.getFileContent("resloginnew"))
 		if err != nil {
 			jklog.L().Infoln("Write error ", err)
 		}
-		jklog.L().Printf("Write done n [%d]\n", n)
+		jklog.L().Debugf("Write done n [%d]\n", n)
 	} else if strings.Index(msg, "initData") > 0 {
 		_, err := ws.Write(wss.getFileContent("reschannels"))
 		if err != nil {
@@ -76,38 +76,38 @@ func (wss *WSSimple) dealWithCmd(ws *websocket.Conn, msg string) {
 		}
 	} else if strings.Index(msg, "getCookSongs") > 0 {
 		if strings.Index(msg, "\"channelId\" : 95") > 0 {
-			if (strings.Index(msg, "\"cookId\" : 201") > 0) {
-			    ws.Write(wss.getFileContent("rescooksongs_1"))
-			} else if (strings.Index(msg, "\"cookId\" : 202") > 0) {
-			    ws.Write(wss.getFileContent("rescooksongs_2"))
-			} else if (strings.Index(msg, "\"cookId\" : 203") > 0) {
-			    ws.Write(wss.getFileContent("rescooksongs_5"))
+			if strings.Index(msg, "\"cookId\" : 201") > 0 {
+				ws.Write(wss.getFileContent("rescooksongs_1"))
+			} else if strings.Index(msg, "\"cookId\" : 202") > 0 {
+				ws.Write(wss.getFileContent("rescooksongs_2"))
+			} else if strings.Index(msg, "\"cookId\" : 203") > 0 {
+				ws.Write(wss.getFileContent("rescooksongs_5"))
 			}
 		} else if strings.Index(msg, "\"channelId\" : 96") > 0 {
-			if (strings.Index(msg, "\"cookId\" : 201") > 0) {
-			    ws.Write(wss.getFileContent("rescooksongs_1"))
-			} else if (strings.Index(msg, "\"cookId\" : 202") > 0) {
-			    ws.Write(wss.getFileContent("rescooksongs_2"))
-			} else if (strings.Index(msg, "\"cookId\" : 203") > 0) {
-			    ws.Write(wss.getFileContent("rescooksongs_3"))
+			if strings.Index(msg, "\"cookId\" : 201") > 0 {
+				ws.Write(wss.getFileContent("rescooksongs_1"))
+			} else if strings.Index(msg, "\"cookId\" : 202") > 0 {
+				ws.Write(wss.getFileContent("rescooksongs_2"))
+			} else if strings.Index(msg, "\"cookId\" : 203") > 0 {
+				ws.Write(wss.getFileContent("rescooksongs_3"))
 			}
 		} else if strings.Index(msg, "\"channelId\" : 97") > 0 {
-			if (strings.Index(msg, "\"cookId\" : 201") > 0) {
-			    ws.Write(wss.getFileContent("rescooksongs_1"))
-			} else if (strings.Index(msg, "\"cookId\" : 202") > 0) {
-			    ws.Write(wss.getFileContent("rescooksongs_4"))
-			} else if (strings.Index(msg, "\"cookId\" : 203") > 0) {
-			    ws.Write(wss.getFileContent("rescooksongs_3"))
+			if strings.Index(msg, "\"cookId\" : 201") > 0 {
+				ws.Write(wss.getFileContent("rescooksongs_1"))
+			} else if strings.Index(msg, "\"cookId\" : 202") > 0 {
+				ws.Write(wss.getFileContent("rescooksongs_4"))
+			} else if strings.Index(msg, "\"cookId\" : 203") > 0 {
+				ws.Write(wss.getFileContent("rescooksongs_3"))
 			}
 		} else if strings.Index(msg, "\"channelId\" : 98") > 0 {
-			if (strings.Index(msg, "\"cookId\" : 202") > 0) {
-			    ws.Write(wss.getFileContent("rescooksongs_4"))
-			} else if (strings.Index(msg, "\"cookId\" : 203") > 0) {
-			    ws.Write(wss.getFileContent("rescooksongs_5"))
+			if strings.Index(msg, "\"cookId\" : 202") > 0 {
+				ws.Write(wss.getFileContent("rescooksongs_4"))
+			} else if strings.Index(msg, "\"cookId\" : 203") > 0 {
+				ws.Write(wss.getFileContent("rescooksongs_5"))
 			}
 		} else if strings.Index(msg, "\"channelId\" : 99") > 0 {
-			if (strings.Index(msg, "\"cookId\" : 202") > 0) {
-			    ws.Write(wss.getFileContent("rescooksongs_6"))
+			if strings.Index(msg, "\"cookId\" : 202") > 0 {
+				ws.Write(wss.getFileContent("rescooksongs_6"))
 			}
 		}
 	} else if strings.Index(msg, "getCallWaitings") > 0 {
@@ -140,7 +140,7 @@ func (wss *WSSimple) handle_server(ws *websocket.Conn) {
 	msg := make([]byte, 1024)
 	go func() {
 		for {
-            ws.Write(wss.getFileContent("resheartbeat"))
+			ws.Write(wss.getFileContent("resheartbeat"))
 			time.Sleep(time.Second * 60)
 		}
 	}()

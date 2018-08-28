@@ -36,7 +36,7 @@ func main() {
 	ss.GlobalSetConfig(*conf)
 	html_path := ss.GlobalBaseConfig().HtmlPath
 
-	jklog.InitLog(ss.GlobalBaseConfig().LogFile)
+	jklog.L().InitLog(ss.GlobalBaseConfig().LogFile)
 
 	http.Handle("/css/", http.FileServer(http.Dir(html_path)))
 	http.Handle("/js/", http.FileServer(http.Dir(html_path)))
