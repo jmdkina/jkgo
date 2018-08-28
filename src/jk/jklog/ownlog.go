@@ -19,7 +19,7 @@ var jkLogger *JKLogger
 
 func init() {
 	jkLogger = &JKLogger{
-		lstd: New(os.Stdout, "[JK]", LstdFlags),
+		lstd: New(os.Stdout, "[JK]", LstdFlags|Lmicroseconds),
 	}
 }
 
@@ -27,7 +27,7 @@ var l = New(os.Stdout, "[JK]", LstdFlags)
 
 // default is stderr for if init failed.
 // and also called this printf
-var lfile = New(os.Stderr, "[JK]", LstdFlags)
+var lfile = New(os.Stderr, "[JK]", LstdFlags|Lmicroseconds)
 
 var logfilename string
 
@@ -49,7 +49,7 @@ func LLogFileName() string {
 
 func (l *JKLogger) InitLog(name string) error {
 	nms := strings.Split(name, ".")
-	tmstr := helper.FormUnixTimeToStringDate(time.Now().Unix())
+	tmstr := helper.FormUnixTimeToString(time.Now().Unix())
 	logname := name
 	if len(nms) == 2 {
 		logname = nms[0] + "-" + tmstr + "." + nms[1]
@@ -65,11 +65,18 @@ func (l *JKLogger) InitLog(name string) error {
 	return nil
 }
 
-func (l *JKLogger) Reopen(name string) error {
+func (l *JKLogger) ChangeFile(name string) error {
 	if l.filefd != nil {
 		l.filefd.Close()
 	}
 	return l.InitLog(name)
+}
+
+func (l *JKLogger) Reopen() error {
+	if l.filefd != nil {
+		l.filefd.Close()
+	}
+	return l.InitLog(l.filename)
 }
 
 func (l *JKLogger) Debugln(v ...interface{}) {
