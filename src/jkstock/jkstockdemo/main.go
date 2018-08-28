@@ -1,8 +1,8 @@
 package main
 
 import (
-	"jk/jklog"
 	"flag"
+	"jk/jklog"
 	. "jkstock"
 )
 
@@ -19,5 +19,6 @@ func main() {
 		jklog.L().Errorln(err)
 		return
 	}
+	sp.ParseArea()
 	sp.DebugOut()
 }
