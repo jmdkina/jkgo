@@ -47,6 +47,7 @@ git clone https://github.com/golangers/utils.git src/github.com/golangers/utils
 
 ::go get git.eclipse.org/gitroot/paho/org.eclipse.paho.mqtt.golang.git
 
+:: go get github.com/unidoc/unidoc/...  :: pdf
 ::git clone https://github.com/jeffallen/mqtt.git
 ::git clone https://github.com/huin/mqtt.git
 ::git clone github.com/surgemq/surgemq.git

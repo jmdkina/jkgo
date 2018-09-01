@@ -58,6 +58,7 @@ FILES+= jk/jkeasycrypto
 # ios-deploy -b basic.app
 # go get -d golang.org/x/mobile/example/bind/...
 # git clone https://github.com/beego/i18n.git
+# go get github.com/unidoc/unidoc/... ## pdf operation
 
 help:
 	$(Q)$(ECHO) make jkavdu/snaky
