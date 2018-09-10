@@ -72,7 +72,7 @@ jkavdu:
 	$(BUILD_FLAGS) $(GO) $(cmd) jkprog/jkavdu
 
 snaky: 
-	$(BUILD_FLAGS) $(GO) build -ldflags "-X main.VERSION=$(SNAKY_VERSION) -X 'main.BUILD_TIME=$(shell date)' -X 'main.GOVERSION=$(shell go version)'" jkprog/simpleserver
+	$(BUILD_FLAGS) $(GO) build -ldflags "-X main.VERSION=$(SNAKY_VERSION) -X 'main.BUILD_TIME=$(shell date)' -X 'main.GOVERSION=$(shell go version)'" simpleserver/simpleserver
 	mv simpleserver bin/snaky
 
 copysnaky:

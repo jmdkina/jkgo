@@ -9,6 +9,7 @@ import (
 	ss "simpleserver"
 	. "simpleserver/dbs"
 	. "simpleserver/jmdkina"
+	. "simpleserver/sctek"
 	. "simpleserver/shici"
 	. "simpleserver/ws"
 	"strconv"
@@ -62,6 +63,7 @@ func main() {
 	NewJmdkinaAdd(html_path)
 	NewWSSimplePage(html_path)
 	ss.NewManager(html_path)
+	NewPageSctek(html_path)
 
 	lport := ss.GlobalBaseConfig().Port
 

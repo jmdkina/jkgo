@@ -17,8 +17,22 @@ set INSTALL_PATH=srctmp
 ::https://github.com/golangers/webrouter.git
 ::https://github.com/golangers/config.git
 ::https://github.com/golangers/framework.git
+
+mkdir -p src/github.com/golangers
+mkdir -p src/code.google.com/p
+mkdir -p src/golang.com/x
+mkdir -p src/github.com/kardianos
+
+git clone https://github.com/golangers/log.git src/golanger.com/log
+git clone https://github.com/golangers/utils.git src/golanger.com/utils
 git clone https://github.com/golangers/log.git src/github.com/golangers/log
 git clone https://github.com/golangers/utils.git src/github.com/golangers/utils
+git clone https://github.com/BurntSushi/graphics-go.git src/code.google.com/p/graphics-go
+git clone https://github.com/golang/tools src/golang.org/x/tools
+git clone https://github.com/golang/net src/golang.org/x/net
+git clone https://github.com/golang/sys src/golang.org/x/sys
+git clone https://github.com/golang/image src/golang.org/x/image
+git clone https://github.com/kardianos/service.git src/github.com/kardianos/service
 ::https://github.com/golangers/validate.git
 ::https://github.com/golangers/urlmanage.git
 ::git clone https://github.com/golangers/i18n.git
