@@ -8,6 +8,7 @@ import (
 type SctekDiscover struct {
 	broadNet *SctekBroadNet
 	DevList  []SctekDeviceList
+	stop     bool
 }
 
 type SctekDeviceList struct {
@@ -20,7 +21,7 @@ type SctekDeviceList struct {
 func NewSctekDiscover() (*SctekDiscover, error) {
 	sd := &SctekDiscover{}
 	var err error
-	sd.broadNet, err = NewSctekBroadNet("0.0.0.0", 12306)
+	sd.broadNet, err = NewSctekBroadNet("0.0.0.0", 30001)
 	if err != nil {
 		return nil, err
 	}
@@ -28,24 +29,24 @@ func NewSctekDiscover() (*SctekDiscover, error) {
 }
 
 func (sd *SctekDiscover) Discover(duration int) ([]SctekDeviceList, error) {
-	count := 0
+	sd.stop = false
 	for {
-		if count > 2 {
+		if sd.stop {
 			break
 		}
+		jklog.L().Debugln("Start to recv data")
 		buf, err := sd.broadNet.Recv()
 		if err != nil {
 			jklog.L().Errorln(err)
 			return nil, err
 		}
 		jklog.L().Debugln("recv data ", string(buf))
-		count = count + 1
 	}
 	return sd.DevList, nil
 }
 
 func (sd *SctekDiscover) Clear() {
-
+	sd.stop = true
 }
 
 func (sd *SctekDiscover) DebugDevicePrint() {
