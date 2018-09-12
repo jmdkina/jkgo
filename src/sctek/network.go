@@ -1,6 +1,7 @@
 package sctek
 
 import (
+	"jk/jklog"
 	"net"
 	"strconv"
 )
@@ -18,26 +19,24 @@ func NewSctekBroadNet(addr string, port int) (*SctekBroadNet, error) {
 		listenAddr: addr,
 		listenPort: port,
 	}
+	var err error
 	sb.udpAddr, _ = net.ResolveUDPAddr("udp", addr+":"+strconv.Itoa(port))
+	sb.udpConn, err = net.ListenUDP("udp", sb.udpAddr)
+	if err != nil {
+		return nil, err
+	}
 
+	sb.connected = true
 	return sb, nil
 }
 
 func (sb *SctekBroadNet) Recv() ([]byte, error) {
-	if !sb.connected {
-		var err error
-		sb.udpConn, err = net.DialUDP("udp", nil, sb.udpAddr)
-		if err != nil {
-			return nil, err
-		}
-	}
-	sb.connected = true
-
 	_buff := make([]byte, 4096)
-	n, err := sb.udpConn.Read(_buff)
+	n, addr, err := sb.udpConn.ReadFromUDP(_buff)
 	if err != nil {
 		return nil, err
 	}
+	jklog.L().Infoln(addr)
 	return _buff[:n], nil
 }
 
