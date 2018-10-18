@@ -81,109 +81,109 @@ func (l *JKLogger) Reopen() error {
 
 func (l *JKLogger) Debugln(v ...interface{}) {
 	if l.lstd != nil {
-		l.lstd.Debugln(v)
+		l.lstd.Debugln(v...)
 	}
 	if l.lfile != nil {
-		l.lfile.Debugln(v)
+		l.lfile.Debugln(v...)
 	}
 }
 
 func (l *JKLogger) Errorln(v ...interface{}) {
 	if l.lstd != nil {
-		l.lstd.Errorln(v)
+		l.lstd.Errorln(v...)
 	}
 	if l.lfile != nil {
-		l.lfile.Errorln(v)
+		l.lfile.Errorln(v...)
 	}
 }
 
 func (l *JKLogger) Warnln(v ...interface{}) {
 	if l.lstd != nil {
-		l.lstd.Warnln(v)
+		l.lstd.Warnln(v...)
 	}
 	if l.lfile != nil {
-		l.lfile.Warnln(v)
+		l.lfile.Warnln(v...)
 	}
 }
 
 func (l *JKLogger) Infoln(v ...interface{}) {
 	if l.lstd != nil {
-		l.lstd.Infoln(v)
+		l.lstd.Infoln(v...)
 	}
 	if l.lfile != nil {
-		l.lfile.Infoln(v)
+		l.lfile.Infoln(v...)
 	}
 }
 
 func (l *JKLogger) Debug(v ...interface{}) {
 	if l.lstd != nil {
-		l.lstd.Debug(v)
+		l.lstd.Debug(v...)
 	}
 	if l.lfile != nil {
-		l.lfile.Debug(v)
+		l.lfile.Debug(v...)
 	}
 }
 
 func (l *JKLogger) Error(v ...interface{}) {
 	if l.lstd != nil {
-		l.lstd.Error(v)
+		l.lstd.Error(v...)
 	}
 	if l.lfile != nil {
-		l.lfile.Error(v)
+		l.lfile.Error(v...)
 	}
 }
 
 func (l *JKLogger) Warn(v ...interface{}) {
 	if l.lstd != nil {
-		l.lstd.Warn(v)
+		l.lstd.Warn(v...)
 	}
 	if l.lfile != nil {
-		l.lfile.Warn(v)
+		l.lfile.Warn(v...)
 	}
 }
 
 func (l *JKLogger) Info(v ...interface{}) {
 	if l.lstd != nil {
-		l.lstd.Info(v)
+		l.lstd.Info(v...)
 	}
 	if l.lfile != nil {
-		l.lfile.Info(v)
+		l.lfile.Info(v...)
 	}
 }
 
 func (l *JKLogger) Debugf(format string, v ...interface{}) {
 	if l.lstd != nil {
-		l.lstd.Debugf(format, v)
+		l.lstd.Debugf(format, v...)
 	}
 	if l.lfile != nil {
-		l.lfile.Debugf(format, v)
+		l.lfile.Debugf(format, v...)
 	}
 }
 
 func (l *JKLogger) Errorf(format string, v ...interface{}) {
 	if l.lstd != nil {
-		l.lstd.Errorf(format, v)
+		l.lstd.Errorf(format, v...)
 	}
 	if l.lfile != nil {
-		l.lfile.Errorf(format, v)
+		l.lfile.Errorf(format, v...)
 	}
 }
 
 func (l *JKLogger) Warnf(format string, v ...interface{}) {
 	if l.lstd != nil {
-		l.lstd.Warnf(format, v)
+		l.lstd.Warnf(format, v...)
 	}
 	if l.lfile != nil {
-		l.lfile.Warnf(format, v)
+		l.lfile.Warnf(format, v...)
 	}
 }
 
 func (l *JKLogger) Infof(format string, v ...interface{}) {
 	if l.lstd != nil {
-		l.lstd.Infof(format, v)
+		l.lstd.Infof(format, v...)
 	}
 	if l.lfile != nil {
-		l.lfile.Infof(format, v)
+		l.lfile.Infof(format, v...)
 	}
 }
 

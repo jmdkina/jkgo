@@ -78,7 +78,7 @@ func (s *WSSimplePageClient) Get(w http.ResponseWriter, r *http.Request) {
 
 func (s *WSSimplePageClient) Post(w http.ResponseWriter, r *http.Request) {
 	cmd := r.FormValue("cmd")
-	jklog.L().Infof("wsclient Recv command of %s\n", cmd)
+	jklog.L().Infof("wsclient Recv command of [%s]\n", cmd)
 	switch cmd {
 	case "start":
 		addr := r.FormValue("addr")
@@ -87,7 +87,7 @@ func (s *WSSimplePageClient) Post(w http.ResponseWriter, r *http.Request) {
 		var err error
 		porti, _ := strconv.Atoi(port)
 		s.wsclient, err = NewWSClientSimple(addr, url, porti)
-		jklog.L().Debugf("wsclient start connect [%s:%s:%s]\n", addr, port, url)
+		jklog.L().Debugf("wsclient start connect [%s:%s/%s]\n", addr, port, url)
 		err = s.wsclient.Start()
 		if err != nil {
 			s.WriteSerialData(w, err.Error(), 403)
