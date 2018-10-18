@@ -159,7 +159,7 @@ func (wss *WSSimple) handle_server(ws *websocket.Conn) {
 	for {
 		_, err := ws.Read(msg)
 		if err != nil {
-			jklog.L().Errorln("ws read error ", err)
+			//jklog.L().Errorln("ws read error ", err)
 		} else {
 			wss.dealWithCmd(ws, string(msg))
 		}

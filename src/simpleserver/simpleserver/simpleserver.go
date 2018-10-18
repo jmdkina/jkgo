@@ -62,6 +62,7 @@ func main() {
 	ss.NewResumeSet(html_path)
 	NewJmdkinaAdd(html_path)
 	NewWSSimplePage(html_path)
+	NewWSSimplePageClient(html_path)
 	ss.NewManager(html_path)
 	NewPageSctek(html_path)
 
