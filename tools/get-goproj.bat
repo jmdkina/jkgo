@@ -18,10 +18,17 @@ set INSTALL_PATH=srctmp
 ::https://github.com/golangers/config.git
 ::https://github.com/golangers/framework.git
 
-mkdir -p src/github.com/golangers
-mkdir -p src/code.google.com/p
-mkdir -p src/golang.com/x
-mkdir -p src/github.com/kardianos
+::mkdir -p src/github.com/golangers
+::mkdir -p src/code.google.com/p
+::mkdir -p src/golang.com/x
+::mkdir -p src/github.com/kardianos
+
+go get gopkg.in/mgo.v2
+go get github.com/alecthomas/log4go
+go get github.com/gorilla/websocket
+go get github.com/matishsiao/goInfo
+
+git clone https://github.com/hashicorp/go.net.git src/code.google.com/p
 
 git clone https://github.com/golangers/log.git src/golanger.com/log
 git clone https://github.com/golangers/utils.git src/golanger.com/utils

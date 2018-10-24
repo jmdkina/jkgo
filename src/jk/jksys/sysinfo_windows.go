@@ -9,7 +9,7 @@ package jksys
 
 import (
 	"fmt"
-	ssi "github.com/matishsiao/goInfo"
+	// ssi "github.com/matishsiao/goInfo"
 )
 
 // Someday this name will get from file with different location
@@ -20,6 +20,7 @@ const (
 
 func NewSystemInfo() *KFSystemInfo {
 	si := &KFSystemInfo{}
+	/*
 	info := *ssi.GetInfo()
 	si.CPUs = info.CPUs
 	si.Kernel = info.Kernel
@@ -27,6 +28,7 @@ func NewSystemInfo() *KFSystemInfo {
 	si.OSName = info.OS
 	si.Platform = info.Platform
 	si.Hostname = info.Hostname
+	*/
 	si.GetAddrInfo()
 	si.KFCPUInfo()
 	si.KFDiskInfo()
