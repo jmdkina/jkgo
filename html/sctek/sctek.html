@@ -18,8 +18,17 @@
 <body>
 <div id="sctek" class="container jk-leavetop">
 <div>
-<div class="list-title">Device Lists</div>
-    
+<div class="list-title">Device Lists:</div>
+<table class="table table-bordered table-dark">
+    <thead><td>Version</td><td>LastSend</td><td>IP</td><td>Mac</td></thead>
+    {{ range $k, $v := . }}
+    <tr><td>{{ $v.Version }}</td>
+        <td>{{ $v.LastTime }}</td>
+        <td>{{ $v.IP }}</td>
+        <td>{{ $v.MAC }}</td>
+        </tr>
+        {{ end }}
+</table>
 </div>
 </body>
 </html>

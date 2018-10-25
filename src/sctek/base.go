@@ -3,23 +3,36 @@ package sctek
 import (
 	"fmt"
 	"jk/jklog"
+	"strings"
+	"time"
 )
 
 type SctekDiscover struct {
 	broadNet *SctekBroadNet
-	DevList  []SctekDeviceList
+	DevList  map[string]*SctekDeviceList
 	stop     bool
 }
 
 type SctekDeviceList struct {
-	Data    string
-	Version string
-	IP      string
-	MAC     string
+	LastTime string
+	Data     string
+	Version  string
+	IP       string
+	MAC      string
+}
+
+func (sd *SctekDeviceList) parse(buffer string) error {
+	items := strings.Split(buffer, ",")
+	sd.LastTime = time.Now().String()
+	sd.MAC = items[1][:len(items[1])-1]
+	sd.IP = items[2]
+	sd.Version = items[3][:len(items[3])-1]
+	return nil
 }
 
 func NewSctekDiscover() (*SctekDiscover, error) {
 	sd := &SctekDiscover{}
+	sd.DevList = make(map[string]*SctekDeviceList, 1024)
 	var err error
 	sd.broadNet, err = NewSctekBroadNet("0.0.0.0", 30001)
 	if err != nil {
@@ -28,7 +41,7 @@ func NewSctekDiscover() (*SctekDiscover, error) {
 	return sd, nil
 }
 
-func (sd *SctekDiscover) Discover(duration int) ([]SctekDeviceList, error) {
+func (sd *SctekDiscover) Discover(duration int) (map[string]*SctekDeviceList, error) {
 	sd.stop = false
 	for {
 		if sd.stop {
@@ -41,6 +54,9 @@ func (sd *SctekDiscover) Discover(duration int) ([]SctekDeviceList, error) {
 			return nil, err
 		}
 		jklog.L().Debugln("recv data ", string(buf))
+		sdc := &SctekDeviceList{}
+		sdc.parse(string(buf))
+		sd.DevList[sdc.IP] = sdc
 	}
 	return sd.DevList, nil
 }
@@ -51,6 +67,6 @@ func (sd *SctekDiscover) Clear() {
 
 func (sd *SctekDiscover) DebugDevicePrint() {
 	for k, v := range sd.DevList {
-		fmt.Printf("%d : %s, %s, %s\n", k, v.Version, v.IP, v.MAC)
+		fmt.Printf("%s : %s, %s, %s\n", k, v.Version, v.IP, v.MAC)
 	}
 }
