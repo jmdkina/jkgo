@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func jkPostDataExtern(ip string, port int, page string, data []byte, timeout int) ([]byte, error) {
+func JKPostDataExtern(ip string, port int, page string, data []byte, timeout int) ([]byte, error) {
 	url := "http://" + ip + ":" + strconv.Itoa(port) + "/" + page
 	jklog.Lfile().Debugln("post url: ", url)
 	client := http.Client{
@@ -25,10 +25,10 @@ func jkPostDataExtern(ip string, port int, page string, data []byte, timeout int
 	return ioutil.ReadAll(resp.Body)
 }
 
-func jkPostData(ip string, port int, page string, data []byte, timeout int) ([]byte, error) {
+func JKPostData(ip string, port int, page string, data []byte, timeout int) ([]byte, error) {
 	ips := strings.Split(ip, ",")
 	for _, ipitem := range ips {
-		data, err := jkPostDataExtern(ipitem, port, page, data, timeout)
+		data, err := JKPostDataExtern(ipitem, port, page, data, timeout)
 		if err == nil {
 			return data, nil
 		}
