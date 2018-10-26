@@ -20,6 +20,12 @@ func (dp *DemoPage) Get(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (dp *DemoPage) Post(w http.ResponseWriter, r *http.Request) {
+	jklog.L().Debugln("post in demopage")
+	username := r.FormValue("username")
+	dp.GenerateResponse(w, "hello, response = "+username, 200)
+}
+
 type DemoPageTwo struct {
 	jkbase.WebBaseInfo
 }
@@ -35,7 +41,7 @@ func (dp *DemoPageTwo) Get(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 
-	webh, _ := jkbase.NewWebBaseHandle(8089, "html")
+	webh, _ := jkbase.NewWebBaseHandle(9090, "html")
 	dp := &DemoPage{}
 	dp.SetFunc("/demopage", dp)
 	dp2 := &DemoPageTwo{}
@@ -46,7 +52,7 @@ func main() {
 		jklog.L().Infoln("Error list return")
 	}()
 
-	url := "http://127.0.0.1:8089/demopage"
+	url := "http://127.0.0.1:9090/demopage"
 	err := jkbase.JKOpenBrowser(url)
 	if err != nil {
 		jklog.L().Infof("error open %v\n", err)
