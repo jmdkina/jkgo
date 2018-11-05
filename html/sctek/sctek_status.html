@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>sctek Device Tools</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+</head>
+<body>
+<div id="sctek" class="container jk-leavetop">
+<div>
+<div class="list-title">Device Lists:</div>
+<table class="table table-bordered table-dark">
+    <thead><td>Version</td><td>LastSend</td><td>IP</td><td>Mac</td><td>DevType</td><td>RemoteIP</td><td>ActionType</td><td>Online</td></thead>
+    {{ range $k, $v := . }}
+    <tr><td>{{ $v.Version }}</td>
+        <td>{{ $v.Time }}</td>
+        <td>{{ $v.IP }}</td>
+        <td>{{ $v.Mac }}</td>
+        <td>{{ $v.DevType }}</td>
+        <td>{{ $v.RemoteIp }}</td>
+        <td>{{ $v.ActionType }}</td>
+        <td>{{ $v.Online }}</td>
+        </tr>
+        {{ end }}
+</table>
+</div>
+</body>
+</html>

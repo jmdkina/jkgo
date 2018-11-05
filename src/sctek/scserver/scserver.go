@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"jk/jklog"
 	"jkbase"
+	"jkdbs"
 	"net/http"
 	"sctek"
 	"time"
@@ -48,10 +49,20 @@ func main() {
 		schandle.sd.Discover(10)
 	}()
 
+	dbhandle, err = jkdbs.NewCMMysqlSC("v", "webfuture", "sctek_status")
+	if err != nil {
+		jklog.L().Errorln("Mysql open failed ", err)
+	}
+
 	webh, _ := jkbase.NewWebBaseHandle(12309, "./html")
+
 	wsp := &WebSctekPage{}
 	wsp.SetFunc("/sctek", wsp)
 
+	wst := &SCStatusPage{}
+	wst.SetFunc("/sctek_status", wst)
+
+	// for open browser default
 	url := "http://127.0.0.1:12309/sctek"
 	err = jkbase.JKOpenBrowser(url)
 	if err != nil {
@@ -61,6 +72,7 @@ func main() {
 	}
 
 	webh.Listen()
+
 	for {
 		time.Sleep(time.Millisecond * 500)
 	}
