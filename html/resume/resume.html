@@ -56,17 +56,35 @@
 </div>
 <div class="rightcontent col-12 col-sm-12 col-md-9">
   <div class="item-one">
+      <h3>自我简介</h3>
+      <hr class="split" />
+      <div class="item-two">
+        <ul>
+          <li v-for="item in retinfo.introduction.items">${ item.content }</li>
+        </ul>
+      </div>
+  </div>
+  <div class="item-one">
     <h3>工作经历</h3>
     <hr class="split">
 
     <div class="item-two" v-for="work in retinfo.work">
 		<h4>${ work.start } - ${ work.end } - ${ work.company }</h4>
+    <div><cite>${ work.info }</cite></div>
       <div class="item-three" v-for="project in work.projects">
-		  <strong>${ project.name }</strong>
-		  <div><cite>${ project.subname }</cite></div>
-        <ol>
-			<li v-for="item in project.items">${ item.content }</li>
-        </ol>
+          <ol>
+              <li v-for="item in project.items">${ item.content }</li>
+          </ol>
+
+          <!-- <hr class="split" /> -->
+          <div class="projtitle">项目简介</div>
+          <div class="item-next" v-for="proj in project.projects">
+            <h5 class="left-border-less"><strong>${ proj.name }</strong> - ${ proj.start } - ${proj.end}</h5>
+            <div><cite>${ proj.introduction }</cite></div>
+            <ol>
+                <li v-for="item in proj.items">${ item.content }</li>
+            </ol>
+          </div>
       </div>
     </div>
   </div>

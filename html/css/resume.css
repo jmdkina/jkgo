@@ -17,6 +17,10 @@
    margin-top: 2em;
 }
 
+.item-one {
+    margin-bottom: 2em;
+}
+
 .item-two h4 {
    /* border-bottom: dimgray solid 2px; */
    border-left: dimgray solid 4px;
@@ -30,6 +34,11 @@
 }
 .item-three {
   padding: 0.8rem 0 0 0;
+}
+
+.left-border-less {
+  border-left: rgb(143, 143, 143) solid 2px;
+   padding-left: 0.4rem;
 }
 
 .item-three ol {
@@ -46,6 +55,15 @@
 
 .item-two ol li {
   padding: 0.2rem 0;
+}
+
+.item-next {
+  padding: 0.8rem 0 0 1rem;
+}
+
+.projtitle {
+  border-top: 0.5px solid green;
+  text-align: center;
 }
 
 hr.split {
