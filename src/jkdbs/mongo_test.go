@@ -14,7 +14,7 @@ func TestMongo(t *testing.T) {
 		Skip:  3,
 		Order: false,
 	}
-	err := m.Query("proj", "images", mc, &out)
+	err := m.Query("proj", "imagest", mc, &out)
 	if err != nil {
 		t.Fatal("Query failed ", err)
 	}
@@ -33,7 +33,7 @@ func TestMongoInsert(t *testing.T) {
 		"updatetime": "name",
 	}
 	// in = append(in, i2)
-	err := m.Add("proj", "images", i1)
+	err := m.Add("proj", "imagest", i1)
 	if err != nil {
 		t.Fatal("Insert failed ", err)
 	}

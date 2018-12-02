@@ -68,10 +68,11 @@
     <h3>工作经历</h3>
     <hr class="split">
 
-    <div class="item-two" v-for="work in retinfo.work">
+    <div class="item-two projbottom" v-for="work in retinfo.work">
 		<h4>${ work.start } - ${ work.end } - ${ work.company }</h4>
     <div><cite>${ work.info }</cite></div>
       <div class="item-three" v-for="project in work.projects">
+			<div class="projtitle">工作内容</div>
           <ol>
               <li v-for="item in project.items">${ item.content }</li>
           </ol>
@@ -79,7 +80,7 @@
           <!-- <hr class="split" /> -->
           <div class="projtitle">项目简介</div>
           <div class="item-next" v-for="proj in project.projects">
-            <h5 class="left-border-less"><strong>${ proj.name }</strong> - ${ proj.start } - ${proj.end}</h5>
+            <h6 class="left-border-less"><strong>${ proj.name }</strong> - ${ proj.start } - ${proj.end}</h6>
             <div><cite>${ proj.introduction }</cite></div>
             <ol>
                 <li v-for="item in proj.items">${ item.content }</li>
