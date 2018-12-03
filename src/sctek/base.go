@@ -24,9 +24,9 @@ type SctekDeviceList struct {
 func (sd *SctekDeviceList) parse(buffer string) error {
 	items := strings.Split(buffer, ",")
 	sd.LastTime = time.Now().String()
-	sd.MAC = items[1][:len(items[1])-1]
+	sd.MAC = items[1][:len(items[1])]
 	sd.IP = items[2]
-	sd.Version = items[3][:len(items[3])-1]
+	sd.Version = items[3][:len(items[3])]
 	return nil
 }
 
