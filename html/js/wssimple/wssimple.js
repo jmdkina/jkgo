@@ -36,6 +36,9 @@ $(function(){
             },
             do_logout: function() {
                 do_command("logout");
+            },
+            yt_play: function() {
+                do_command("ytplay");
             }
         }
     });

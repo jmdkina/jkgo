@@ -49,7 +49,7 @@ func init() {
 }
 
 func (ws *WSSimple) getFileContent(filename string) []byte {
-	filefull := "/opt/data/sctek/files-jdh/" + filename
+	filefull := "files-jdh/" + filename
 	data, _ := ioutil.ReadFile(filefull)
 	return data
 }
@@ -208,6 +208,8 @@ func (ws *WSSimple) CommonCmd(cmd string) {
 	case "logout":
 		ws.Send(string(ws.getFileContent("reslogout")))
 		break
+	case "ytplay":
+		ws.Send(string(ws.getFileContent("ytplay")))
 	default:
 		jklog.L().Warnf("Unknow command %s\n", cmd)
 		break

@@ -56,7 +56,7 @@ func (sd *SctekDiscover) Discover(duration int) (map[string]*SctekDeviceList, er
 		jklog.L().Debugln("recv data ", string(buf))
 		sdc := &SctekDeviceList{}
 		sdc.parse(string(buf))
-		sd.DevList[sdc.IP] = sdc
+		sd.DevList[sdc.MAC] = sdc
 	}
 	return sd.DevList, nil
 }
