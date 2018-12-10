@@ -2,57 +2,24 @@ package jkmisc
 
 import (
 	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"jk/jklog"
-	"net/http"
 	"net/url"
 )
 
 type JKWether struct {
-	key   string
-	url   string
-	param url.Values
+	JKWetherBase
 
-	Result  map[string]interface{}
-	ResultW JKWetherInfo
+	param url.Values
 }
 
 func JKWetherNew(key string) (*JKWether, error) {
-	return &JKWether{
-		key:   key,
-		url:   "http://v.juhe.cn/weather/index",
+	w := &JKWether{
 		param: url.Values{},
-	}, nil
-}
+	}
+	w.key = key
+	w.url = "http://v.juhe.cn/weather/index"
 
-// get 网络请求
-func (w *JKWether) reqGet(apiURL string, params url.Values) (rs []byte, err error) {
-	var Url *url.URL
-	Url, err = url.Parse(apiURL)
-	if err != nil {
-		fmt.Printf("解析url错误:\r\n%v", err)
-		return nil, err
-	}
-	//如果参数中有中文参数,这个方法会进行URLEncode
-	Url.RawQuery = params.Encode()
-	resp, err := http.Get(Url.String())
-	if err != nil {
-		fmt.Println("err:", err)
-		return nil, err
-	}
-	defer resp.Body.Close()
-	return ioutil.ReadAll(resp.Body)
-}
-
-// post 网络请求 ,params 是url.Values类型
-func (w *JKWether) reqPost(apiURL string, params url.Values) (rs []byte, err error) {
-	resp, err := http.PostForm(apiURL, params)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	return ioutil.ReadAll(resp.Body)
+	return w, nil
 }
 
 func (w *JKWether) generateParam(location string, format string, key string) error {
