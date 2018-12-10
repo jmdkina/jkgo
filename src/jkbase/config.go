@@ -16,3 +16,7 @@ func GetConfigInfo(filepath string, ci interface{}) error {
 	}
 	return nil
 }
+
+func CMConfigFile(filepath string, ci interface{}) error {
+	return GetConfigInfo(filepath, ci)
+}
