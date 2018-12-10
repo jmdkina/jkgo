@@ -4,12 +4,11 @@ import (
 	"errors"
 	"io"
 	"io/ioutil"
+	"jk/jklog"
 	"net"
 	"net/http"
 	"net/url"
 	"strconv"
-
-	"github.com/alecthomas/log4go"
 )
 
 var NetTypeBase = 1
@@ -94,27 +93,27 @@ func (nb *JKNetBase) Send(data string) int {
 
 func (nb *JKNetBase) DoRecvCycle() error {
 	for {
-		log4go.Debug("Start to accept ...")
+		jklog.L().Debugln("Start to accept ...")
 		conn, err := nb.listener.Accept()
 		if err != nil {
-			log4go.Error("accept failed ", err)
+			jklog.L().Errorln("accept failed ", err)
 			return err
 		}
-		log4go.Info("accept one client %s", conn.RemoteAddr().String())
+		jklog.L().Infof("accept one client %s\n", conn.RemoteAddr().String())
 		go func() {
 			for {
 				rdata := make([]byte, 2<<15)
 				n, err := conn.Read(rdata)
 				if err == io.EOF {
-					log4go.Error("IO EOF exit")
+					jklog.L().Errorln("IO EOF exit")
 					break
 				}
 				if err != nil {
-					log4go.Error("Read error %s", err)
+					jklog.L().Errorln("Read error %s", err)
 					break
 				}
 
-				log4go.Debug("Recv data of length %d, from %s", n, conn.RemoteAddr().String())
+				jklog.L().Debugf("Recv data of length %d, from %s\n", n, conn.RemoteAddr().String())
 				item := JKNetBaseItem{}
 				item.conn = conn
 				item.remoteaddr = conn.RemoteAddr().String()
