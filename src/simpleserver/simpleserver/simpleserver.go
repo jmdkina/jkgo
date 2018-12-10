@@ -68,6 +68,8 @@ func main() {
 
 	lport := ss.GlobalBaseConfig().Port
 
+	ss.GlobalWetherInit()
+
 	if ss.GlobalBaseConfig().DBType == "Mongo" {
 		GlobalDBSMongoCreate(ss.GlobalBaseConfig().DBUrl)
 	}

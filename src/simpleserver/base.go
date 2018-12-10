@@ -20,6 +20,8 @@ type BaseConfig struct {
 	DBType   string
 	DBUrl    string
 	LogFile  string
+
+	WetherKey string
 }
 
 var bConfig BaseConfig
