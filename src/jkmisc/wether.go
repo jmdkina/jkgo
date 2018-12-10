@@ -4,17 +4,22 @@ import (
 	"encoding/json"
 	"jk/jklog"
 	"net/url"
+	"time"
 )
 
 type JKWether struct {
 	JKWetherBase
 
-	param url.Values
+	timeout     int64
+	lastGetTime int64
+	param       url.Values
 }
 
 func JKWetherNew(key string) (*JKWether, error) {
 	w := &JKWether{
-		param: url.Values{},
+		param:       url.Values{},
+		lastGetTime: 0,
+		timeout:     3600 * 12, // 12 hours update once
 	}
 	w.key = key
 	w.url = "http://v.juhe.cn/weather/index"
@@ -35,6 +40,10 @@ func (w *JKWether) generateParam(location string, format string, key string) err
 
 func (w *JKWether) Query(location string) (*JKWetherInfo, error) {
 	jklog.L().Debugf("wether goto query wether [%s]\n", location)
+	// Query only when timeout.
+	if time.Now().Unix()-w.lastGetTime < w.timeout {
+		return &w.ResultW, nil
+	}
 	// generate param
 	w.generateParam(location, "1", w.key)
 	// 发送请求
@@ -46,13 +55,9 @@ func (w *JKWether) Query(location string) (*JKWetherInfo, error) {
 		if err != nil {
 			return nil, err
 		}
-		/*
-			if w.Result["error_code"].(float64) == 0 {
-				jklog.L().Infof("接口返回result字段是:\r\n%v\n", w.Result["result"])
-			} else {
-				jklog.L().Debugf("result value : \n%v\n", w.Result)
-			}
-		*/
+		// Set last time only success.
+		w.lastGetTime = time.Now().Unix()
+		w.ResultW.GetTime = w.lastGetTime
 	}
 	return &w.ResultW, nil
 }

@@ -1,9 +1,7 @@
 package jkmisc
 
 import (
-	"fmt"
-	"io/ioutil"
-	"net/http"
+	"jkbase"
 	"net/url"
 )
 
@@ -41,6 +39,8 @@ type JKWetherInfoResult struct {
 type JKWetherInfo struct {
 	Error_code int
 	Result     JKWetherInfoResult
+	// Get time of this information
+	GetTime int64
 }
 
 type JKWetherBase struct {
@@ -53,31 +53,12 @@ type JKWetherBase struct {
 
 // get 网络请求
 func (w *JKWetherBase) reqGet(apiURL string, params url.Values) (rs []byte, err error) {
-	var Url *url.URL
-	Url, err = url.Parse(apiURL)
-	if err != nil {
-		fmt.Printf("解析url错误:\r\n%v", err)
-		return nil, err
-	}
-	//如果参数中有中文参数,这个方法会进行URLEncode
-	Url.RawQuery = params.Encode()
-	resp, err := http.Get(Url.String())
-	if err != nil {
-		fmt.Println("err:", err)
-		return nil, err
-	}
-	defer resp.Body.Close()
-	return ioutil.ReadAll(resp.Body)
+	return jkbase.CMHttpGet(apiURL, params)
 }
 
 // post 网络请求 ,params 是url.Values类型
 func (w *JKWetherBase) reqPost(apiURL string, params url.Values) (rs []byte, err error) {
-	resp, err := http.PostForm(apiURL, params)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-	return ioutil.ReadAll(resp.Body)
+	return jkbase.CMHttpPost(apiURL, params)
 }
 
 type JKWetherInterface interface {

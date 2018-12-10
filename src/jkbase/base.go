@@ -2,10 +2,14 @@ package jkbase
 
 import (
 	"errors"
-	"github.com/alecthomas/log4go"
 	"io"
+	"io/ioutil"
 	"net"
+	"net/http"
+	"net/url"
 	"strconv"
+
+	"github.com/alecthomas/log4go"
 )
 
 var NetTypeBase = 1
@@ -131,4 +135,29 @@ func (nb *JKNetBase) RecvClient() ([]byte, error) {
 	}
 	nb.recvdata = string(rdata[0:n])
 	return rdata[0:n], nil
+}
+
+func CMHttpGet(rurl string, params url.Values) ([]byte, error) {
+	var Url *url.URL
+	Url, err := url.Parse(rurl)
+	if err != nil {
+		return nil, err
+	}
+	//如果参数中有中文参数,这个方法会进行URLEncode
+	Url.RawQuery = params.Encode()
+	resp, err := http.Get(Url.String())
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	return ioutil.ReadAll(resp.Body)
+}
+
+func CMHttpPost(rurl string, params url.Values) ([]byte, error) {
+	resp, err := http.PostForm(rurl, params)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+	return ioutil.ReadAll(resp.Body)
 }
