@@ -157,11 +157,11 @@ func (wss *WSSimple) handle_server(ws *websocket.Conn) {
 		}
 	}()
 	for {
-		_, err := ws.Read(msg)
+		n, err := ws.Read(msg)
 		if err != nil {
-			//jklog.L().Errorln("ws read error ", err)
+			break
 		} else {
-			wss.dealWithCmd(ws, string(msg))
+			wss.dealWithCmd(ws, string(msg[:n]))
 		}
 		time.Sleep(100 * time.Millisecond)
 		if wss.Exit {
