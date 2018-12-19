@@ -8,6 +8,7 @@ import (
 	"net"
 	"os"
 	"strconv"
+	"time"
 )
 
 var (
@@ -61,10 +62,11 @@ func (sc *SCDebug) Debug() {
 		}
 		sc.nethd.Write([]byte(data))
 
+		sc.nethd.SetReadDeadline(time.Now().Add(5 * time.Second))
 		n, err := sc.nethd.Read(rdata)
 		if err != nil {
 			jklog.L().Errorln("read err ", err)
-			break
+			continue
 		}
 		jklog.L().Infof("Read out response [%d] [%s]\n", n, string(rdata[:n]))
 	}

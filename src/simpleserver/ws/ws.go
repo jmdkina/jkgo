@@ -129,14 +129,15 @@ func (wss *WSSimple) dealWithCmd(ws *websocket.Conn, msg string) {
 	} else if strings.Index(msg, "getAds") > 0 {
 		ws.Write(wss.getFileContent("resads"))
 	} else {
-		msgw := []byte(resunknown)
-		jklog.L().Infoln("send unknow response\n")
-		ws.Write(msgw)
+		// msgw := []byte(resunknown)
+		jklog.L().Infoln("unknow data\n")
+		// ws.Write(msgw)
 	}
 }
 
 // Echo the data received on the WebSocket.
 func (wss *WSSimple) handle_server(ws *websocket.Conn) {
+	jklog.L().Infoln("one client coming ", ws.RemoteAddr().String())
 	msg := make([]byte, 1024)
 	go func() {
 		for {
