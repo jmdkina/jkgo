@@ -8,19 +8,24 @@ import (
 	"io/ioutil"
 	"os"
 	"strconv"
+	"math/rand"
+	"time"
 )
 
 type BZInfo struct {
 	url    string
 	imgs   []string
 
+	path   string
+
 	from   int
 	end    int
 }
 
-func NewBZ(url string) *BZInfo {
+func NewBZ(url string, path string) *BZInfo {
 	return &BZInfo{
 		url: url,
+		path: path,
 	}
 }
 
@@ -59,7 +64,7 @@ func (bz *BZInfo) downloadImageNow(img string) error {
 		return e
 	}
 	jklog.L().Infoln("name", name)
-	ioutil.WriteFile("out/" + name, []byte(d), os.ModePerm)
+	ioutil.WriteFile(bz.path + "/" + name, []byte(d), os.ModePerm)
 	return nil
 }
 
@@ -80,6 +85,44 @@ func (bz *BZInfo) queryImagePreview(link string) error {
 	bz.downloadImageNow(blink)
 	//bz.imgs = append(bz.imgs, blink)
 	return nil
+}
+
+func (bz *BZInfo) queryRandom(max int) error {
+	rand.Seed( time.Now().UTC().UnixNano())
+	jklog.L().Debugln("random max ", max)
+	for i := 0; i < max; i++ {
+		e := bz.queryRandomI()
+		if e != nil {
+			jklog.L().Errorln("index ", i, " : ", e)
+		}
+	}
+	return nil
+}
+
+func (bz *BZInfo) queryRandomI() error {
+	jklog.L().Infoln("query random")
+    pageindex := rand.Intn(200)
+    queryurl := bz.url + "&page=" + strconv.Itoa(pageindex)
+    jklog.L().Infoln("query url ", queryurl)
+	resp, err := soup.Get(queryurl)
+	if err != nil {
+		return err
+	}
+	//jklog.L().Infoln(resp)
+	doc := soup.HTMLParse(resp)
+	links := doc.FindAll("div", "class", "thumb-container-big")
+	jklog.L().Infoln("len links ", len(links), " of url ", queryurl)
+
+	linkrandom := rand.Intn(len(links)-1)
+	link := links[linkrandom]
+	jklog.L().Infoln("query random link index ", linkrandom)
+	aurl := link.Find("a").Attrs()["href"]
+	host := bz.extraceDomain()
+	tourl := host + "/" + aurl
+	jklog.L().Infoln("query: ", tourl)
+	e := bz.queryImagePreview(tourl)
+
+	return e
 }
 
 func (bz *BZInfo) query() string {

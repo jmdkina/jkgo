@@ -115,16 +115,21 @@ func ist_catch() {
 }
 
 func bz_catch() {
-	bz := NewBZ(test_two)
+	bz := NewBZ(test_two, *path)
 	bz.setPage(*pagestart, *pageend)
-	bz.query()
+	if *random_max == -1 {
+		bz.query()
+	} else {
+		bz.queryRandom(*random_max)
+	}
 }
 
 var (
 	option = flag.String("option", "huaban", "which mode to run (huaban)")
 	pagestart = flag.Int("pagestart", 1, "which page to query")
 	pageend = flag.Int("pageend", 10, "page end")
-	path   = flag.String("path", ".", "where to save")
+	random_max = flag.Int("random", -1, "random how many")
+	path   = flag.String("path", "/opt/data/data/out", "where to save")
 )
 
 func main() {
