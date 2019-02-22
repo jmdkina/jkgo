@@ -7,10 +7,11 @@ import (
 	"strings"
 
 	//"fmt"
-	"github.com/alecthomas/log4go"
 	//"github.com/anaskhan96/soup"
 	"io/ioutil"
 	"net/http"
+	"github.com/alecthomas/log4go"
+	"jk/jklog"
 )
 
 type CatchHuaban struct {
@@ -86,9 +87,9 @@ func (ch *CatchHuaban) save_data(path string) {
 			fmt.Println("error ", err)
 			continue
 		}
-        if len(buf) < 20000 {
-            continue
-        }
+		if len(buf) < 20000 {
+			continue
+		}
 		fmt.Println("Catch ", fullurl, " with len ", len(buf))
 		ioutil.WriteFile(fullpath, buf, os.ModePerm)
 	}
@@ -102,18 +103,41 @@ func catch_huaban() {
 	}
 }
 
+const (
+	test_one_url = "https://category.vip.com/search-1-0-1.html?q=3|96348||&rp=26594|71208&ff=women|0|2|5&adidx=2&f=ad&adp=65001&adid=326640"
+	test_two     = "https://wall.alphacoders.com/by_sub_category.php?id=169040&name=%E4%BA%9A%E6%B4%B2+%E5%A3%81%E7%BA%B8&lang=Chinese"
+)
+
+func ist_catch() {
+	ist := newIST(test_two)
+	// ist.queryWithSele()
+	ist.queryGlobal()
+}
+
+func bz_catch() {
+	bz := NewBZ(test_two)
+	bz.setPage(*pagestart, *pageend)
+	bz.query()
+}
+
 var (
 	option = flag.String("option", "huaban", "which mode to run (huaban)")
+	pagestart = flag.Int("pagestart", 1, "which page to query")
+	pageend = flag.Int("pageend", 10, "page end")
 	path   = flag.String("path", ".", "where to save")
 )
 
 func main() {
 	flag.Parse()
 
-	log4go.Debug("option: ", *option)
+	jklog.L().Debugln("option: ", *option)
 	switch *option {
 	case "huaban":
 		catch_huaban()
+	case "ist":
+		ist_catch()
+	case "bz":
+		bz_catch()
 	}
-	log4go.Debug("Everythin done.")
+	jklog.L().Debugln("Everythin done.")
 }
