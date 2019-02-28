@@ -1,30 +1,32 @@
 package main
 
 import (
-	"github.com/anaskhan96/soup"
-	"jk/jklog"
-	"net/url"
-	"strings"
+	"errors"
 	"io/ioutil"
+	"jk/jklog"
+	"math/rand"
+	"net/url"
 	"os"
 	"strconv"
-	"math/rand"
+	"strings"
 	"time"
+
+	"github.com/anaskhan96/soup"
 )
 
 type BZInfo struct {
-	url    string
-	imgs   []string
+	url  string
+	imgs []string
 
-	path   string
+	path string
 
-	from   int
-	end    int
+	from int
+	end  int
 }
 
 func NewBZ(url string, path string) *BZInfo {
 	return &BZInfo{
-		url: url,
+		url:  url,
 		path: path,
 	}
 }
@@ -64,7 +66,7 @@ func (bz *BZInfo) downloadImageNow(img string) error {
 		return e
 	}
 	jklog.L().Infoln("name", name)
-	ioutil.WriteFile(bz.path + "/" + name, []byte(d), os.ModePerm)
+	ioutil.WriteFile(bz.path+"/"+name, []byte(d), os.ModePerm)
 	return nil
 }
 
@@ -88,7 +90,7 @@ func (bz *BZInfo) queryImagePreview(link string) error {
 }
 
 func (bz *BZInfo) queryRandom(max int) error {
-	rand.Seed( time.Now().UTC().UnixNano())
+	rand.Seed(time.Now().UTC().UnixNano())
 	jklog.L().Debugln("random max ", max)
 	for i := 0; i < max; i++ {
 		e := bz.queryRandomI()
@@ -101,19 +103,22 @@ func (bz *BZInfo) queryRandom(max int) error {
 
 func (bz *BZInfo) queryRandomI() error {
 	jklog.L().Infoln("query random")
-    pageindex := rand.Intn(200)
-    queryurl := bz.url + "&page=" + strconv.Itoa(pageindex)
-    jklog.L().Infoln("query url ", queryurl)
+	pageindex := rand.Intn(200)
+	queryurl := bz.url + "&page=" + strconv.Itoa(pageindex)
+	jklog.L().Infoln("query url ", queryurl)
 	resp, err := soup.Get(queryurl)
 	if err != nil {
 		return err
 	}
-	//jklog.L().Infoln(resp)
+	// jklog.L().Infoln(resp)
 	doc := soup.HTMLParse(resp)
 	links := doc.FindAll("div", "class", "thumb-container-big")
 	jklog.L().Infoln("len links ", len(links), " of url ", queryurl)
+	if len(links) == 0 {
+		return errors.New("no pages")
+	}
 
-	linkrandom := rand.Intn(len(links)-1)
+	linkrandom := rand.Intn(len(links) - 1)
 	link := links[linkrandom]
 	jklog.L().Infoln("query random link index ", linkrandom)
 	aurl := link.Find("a").Attrs()["href"]

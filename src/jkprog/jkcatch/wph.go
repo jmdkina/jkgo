@@ -5,10 +5,7 @@ import (
 	"jk/jklog"
 
 	"github.com/anaskhan96/soup"
-	"github.com/tebeka/selenium"
-	"os"
-	"strings"
-	"time"
+	// "github.com/tebeka/selenium"
 )
 
 type IstStruct struct {
@@ -40,6 +37,7 @@ func (ist *IstStruct) queryGlobal() string {
 	return ""
 }
 
+/*
 func (ist *IstStruct) queryWithSele() string {
 	// Start a Selenium WebDriver server instance (if one is not already
 	// running).
@@ -131,3 +129,4 @@ func (ist *IstStruct) queryWithSele() string {
 	// Program exited.
 	return ""
 }
+*/
