@@ -1,5 +1,9 @@
 package main
 
+/**
+ * This is a test for send broadcast to receiver
+ */
+
 import "net"
 
 func main() {

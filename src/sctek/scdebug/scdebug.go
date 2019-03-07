@@ -1,5 +1,9 @@
 package main
 
+/**
+ * Connect to distination with addr and port for debug device
+ */
+
 import (
 	"bufio"
 	"flag"

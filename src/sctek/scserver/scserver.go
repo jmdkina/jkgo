@@ -1,5 +1,10 @@
 package main
 
+/**
+ * Start client to discovery devices and save them to database.
+ * Then enable web server for query
+ */
+
 import (
 	"encoding/json"
 	"jk/jklog"
