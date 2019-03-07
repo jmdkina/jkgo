@@ -14,10 +14,19 @@ src
   - helper 一些通用小功能集，将逐步整体到 jkbase 中
   - jkbase 基础功能集
   - jkdbs 基础数据库操作功能库
-  - jktools 一些实用的小工具合集
   - jk 带有业务功能的接口集，其中部分业务的将逐步移入 jkbase
   - simplerserver 简洁服务器
-  - jkprog 各种小功能的 main 函数数据，具体业务实现在 jk 中
+  - jkencoderbackground 图片上添加文字
+  - jkencoderimg 图片压缩功能
+  - jkhttpclient http 客户端功能
+  - jkhttpserver http 文件服务器功能
+  - jkmisc 杂项小功能
+  - jkservice 后台服务程序集合，可能会在未来提取出去
+  - jkssh ssh 连接工具
+  - jkstock 分析股市，实验阶段，未使用
+  - jktime 时间功具
+  - jktransfer pc 间传输文件工具
+  - morserver monitor 服务器功能，监控，探测周边设备，当然要设备实现对应协议
 tools - 一些下载，编译相关的脚本工具
   - build_simpleserver.bat simpleserver  的编译特殊，用了脚本实现
   - copy_simpleserver.bat 复制，打包的操作
