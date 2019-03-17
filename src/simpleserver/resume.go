@@ -21,12 +21,22 @@ func NewResume(path string) *Resume {
 	return j
 }
 
+type ResumeInfo struct {
+	Title string
+}
+
 func (s *Resume) Get(w http.ResponseWriter, r *http.Request) {
 	sp := SimpleParse{}
 	filename := s.path + "/resume/resume.html"
 	jklog.L().Debugf("Get html [%s]\n", filename)
 
-	err := sp.Parse(w, "", filename)
+	tempPath := s.SetTemplateDefault("resume", "resume")
+
+	ri := ResumeInfo{
+		Title: "resume",
+	}
+
+	err := sp.Parse(w, ri, tempPath...)
 	if err != nil {
 		jklog.L().Errorln("Parse error ", err)
 	}
@@ -48,7 +58,9 @@ func (s *ResumeEn) Get(w http.ResponseWriter, r *http.Request) {
 	filename := s.path + "/resume/resume_en.html"
 	jklog.L().Debugf("Get html [%s]\n", filename)
 
-	err := sp.Parse(w, "", filename)
+	files := s.SetTemplateDefault("resume", "resume_en")
+
+	err := sp.Parse(w, "", files...)
 	if err != nil {
 		jklog.L().Errorln("Parse error ", err)
 	}
@@ -68,9 +80,12 @@ func NewResumeSet(path string) *ResumeSet {
 func (s *ResumeSet) Get(w http.ResponseWriter, r *http.Request) {
 	sp := SimpleParse{}
 	filename := s.path + "/resume/resume_set.html"
-	jklog.L().Debugf("Get htmle [%s]\n", filename)
+	jklog.L().Debugf("Get html [%s]\n", filename)
 
-	err := sp.Parse(w, "", filename)
+	files := s.SetTemplateDefault("resume", "resume_set")
+
+	err := sp.Parse(w, "", files...)
+	// err := sp.ParseTemp(w, "", files...)
 	if err != nil {
 		jklog.L().Errorln("Parse error ", err)
 	}

@@ -37,12 +37,23 @@ func GlobalBaseConfig() BaseConfig {
 }
 
 type Base struct {
-	path  string
-	child interface{}
+	path        string
+	child       interface{}
+	tempPath    string
+	tempAllPath []string
 }
 
 func (b *Base) SetPath(path string) {
 	b.path = path
+	b.tempPath = "template"
+}
+
+func (b *Base) SetTemplateDefault(dir, name string) []string {
+	return []string{
+		b.path + "/" + dir + "/" + name + ".html",
+		b.path + "/" + b.tempPath + "/global.html",
+		b.path + "/" + b.tempPath + "/addon.html",
+	}
 }
 
 func (b *Base) Path() string {
