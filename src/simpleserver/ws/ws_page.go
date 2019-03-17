@@ -24,7 +24,7 @@ func (s *WSSimplePage) Get(w http.ResponseWriter, r *http.Request) {
 	filename := s.Path() + "/wssimple/ws.html"
 	jklog.L().Debugf("Get html [%s]\n", filename)
 
-	err := sp.Parse(w, filename, "")
+	err := sp.Parse(w, "", filename)
 	if err != nil {
 		jklog.L().Errorln("Parse error ", err)
 	}
@@ -70,7 +70,7 @@ func (s *WSSimplePageClient) Get(w http.ResponseWriter, r *http.Request) {
 	filename := s.Path() + "/wssimple/wsclient.html"
 	jklog.L().Debugf("Get html [%s]\n", filename)
 
-	err := sp.Parse(w, filename, "")
+	err := sp.Parse(w, "", filename)
 	if err != nil {
 		jklog.L().Errorln("Parse error ", err)
 	}

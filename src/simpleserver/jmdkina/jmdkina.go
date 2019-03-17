@@ -1,13 +1,14 @@
 package simpleserver
 
 import (
-	"golanger.com/utils"
 	"jk/jklog"
 	"jkdbs"
 	"net/http"
 	. "simpleserver"
 	. "simpleserver/dbs"
 	"strconv"
+
+	"golanger.com/utils"
 )
 
 type Jmdkina struct {
@@ -26,7 +27,7 @@ func (s *Jmdkina) Get(w http.ResponseWriter, r *http.Request) {
 	filename := s.Path() + "/jmdkina/jmdkina.html"
 	jklog.L().Debugf("Get html [%s]\n", filename)
 
-	err := sp.Parse(w, filename, "")
+	err := sp.Parse(w, "", filename)
 	if err != nil {
 		jklog.L().Errorln("Parse error ", err)
 	}

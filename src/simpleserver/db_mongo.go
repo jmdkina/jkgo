@@ -1,10 +1,11 @@
 package simpleserver
 
 import (
-	"golanger.com/utils"
 	"helper"
 	"jk/jklog"
 	"net/http"
+
+	"golanger.com/utils"
 )
 
 type DBMongo struct {
@@ -24,7 +25,7 @@ func (b *DBMongo) Get(w http.ResponseWriter, r *http.Request) {
 	filename := b.path + "/db/db.html"
 	jklog.L().Debugf("Get html [%s]\n", filename)
 
-	err := sp.Parse(w, filename, "")
+	err := sp.Parse(w, "", filename)
 	if err != nil {
 		jklog.L().Errorln("Parse error ", err)
 	}

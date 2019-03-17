@@ -35,7 +35,7 @@ func (b *NotFound) ServeHttp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sp.Parse(w, filename, nil)
+	sp.Parse(w, nil, filename)
 }
 
 type Index struct {
@@ -62,7 +62,7 @@ func (b *Index) Get(w http.ResponseWriter, r *http.Request) {
 		Sysinfo: *jksys.NewSystemInfo(),
 	}
 
-	err := sp.Parse(w, filename, ii)
+	err := sp.Parse(w, ii, filename)
 	if err != nil {
 		jklog.L().Errorln("Parse error ", err)
 	}
@@ -129,7 +129,7 @@ func (b *DirServer) ServeHttp(w http.ResponseWriter, r *http.Request) {
 		for _, v := range fsss {
 			dsi.FSS = append(dsi.FSS, *v)
 		}
-		err := sp.Parse(w, filename, dsi)
+		err := sp.Parse(w, dsi, filename)
 		if err != nil {
 			jklog.L().Errorln("Parse error ", err)
 			return
@@ -182,7 +182,7 @@ func (b *UploadServer) ServeHttp(w http.ResponseWriter, r *http.Request) {
 		if len(usi.UploadInfo.Path) <= 0 {
 			usi.UploadInfo.Enable = 0
 		}
-		err := sp.Parse(w, filename, usi)
+		err := sp.Parse(w, usi, filename)
 		if err != nil {
 			jklog.L().Errorln("Parse error ", err)
 			return

@@ -22,7 +22,7 @@ func (s *PageSctek) Get(w http.ResponseWriter, r *http.Request) {
 	filename := s.Path() + "/sctek/sctek.html"
 	jklog.L().Debugf("Get html [%s]\n", filename)
 
-	err := sp.Parse(w, filename, "")
+	err := sp.Parse(w, "", filename)
 	if err != nil {
 		jklog.L().Errorln("Parse error ", err)
 	}

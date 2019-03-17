@@ -1,9 +1,10 @@
 package simpleserver
 
 import (
-	"github.com/gorilla/websocket"
 	"jk/jklog"
 	"net/http"
+
+	"github.com/gorilla/websocket"
 )
 
 var upgrader = websocket.Upgrader{} // use default options
@@ -27,7 +28,7 @@ func (b *WebGL) ServeHttp(w http.ResponseWriter, r *http.Request) {
 	filename := b.path + "/webgl/start.html"
 	jklog.L().Debugf("Get html [%s]\n", filename)
 
-	err := sp.Parse(w, filename, "")
+	err := sp.Parse(w, "", filename)
 	if err != nil {
 		jklog.L().Errorln("Parse error ", err)
 	}

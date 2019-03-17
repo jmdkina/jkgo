@@ -1,12 +1,13 @@
 package simpleserver
 
 import (
-	"golanger.com/utils"
 	"jk/jklog"
 	"net/http"
 	. "simpleserver"
 	. "simpleserver/dbs"
 	"time"
+
+	"golanger.com/utils"
 )
 
 type ShiciAdd struct {
@@ -25,7 +26,7 @@ func (s *ShiciAdd) Get(w http.ResponseWriter, r *http.Request) {
 	filename := s.Path() + "/shici/add.html"
 	jklog.L().Debugf("Get html [%s]\n", filename)
 
-	err := sp.Parse(w, filename, "")
+	err := sp.Parse(w, "", filename)
 	if err != nil {
 		jklog.L().Errorln("Parse error ", err)
 	}

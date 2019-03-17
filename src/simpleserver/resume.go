@@ -1,13 +1,13 @@
 package simpleserver
 
 import (
-	"jk/jklog"
-	"net/http"
-	"jkdbs"
-	"io/ioutil"
 	"encoding/json"
-	. "simpleserver/dbs"
+	"io/ioutil"
+	"jk/jklog"
+	"jkdbs"
+	"net/http"
 	"os"
+	. "simpleserver/dbs"
 )
 
 type Resume struct {
@@ -26,14 +26,14 @@ func (s *Resume) Get(w http.ResponseWriter, r *http.Request) {
 	filename := s.path + "/resume/resume.html"
 	jklog.L().Debugf("Get html [%s]\n", filename)
 
-	err := sp.Parse(w, filename, "")
+	err := sp.Parse(w, "", filename)
 	if err != nil {
 		jklog.L().Errorln("Parse error ", err)
 	}
 }
 
-type ResumeEn struct{
-    Base
+type ResumeEn struct {
+	Base
 }
 
 func NewResumeEn(path string) *ResumeEn {
@@ -48,7 +48,7 @@ func (s *ResumeEn) Get(w http.ResponseWriter, r *http.Request) {
 	filename := s.path + "/resume/resume_en.html"
 	jklog.L().Debugf("Get html [%s]\n", filename)
 
-	err := sp.Parse(w, filename, "")
+	err := sp.Parse(w, "", filename)
 	if err != nil {
 		jklog.L().Errorln("Parse error ", err)
 	}
@@ -70,7 +70,7 @@ func (s *ResumeSet) Get(w http.ResponseWriter, r *http.Request) {
 	filename := s.path + "/resume/resume_set.html"
 	jklog.L().Debugf("Get htmle [%s]\n", filename)
 
-	err := sp.Parse(w, filename, "")
+	err := sp.Parse(w, "", filename)
 	if err != nil {
 		jklog.L().Errorln("Parse error ", err)
 	}
@@ -80,7 +80,7 @@ type ResumeBaseInfoBase struct {
 }
 
 type ResumeBaseInfo struct {
-	BaseInfo        ResumeBaseInfoBase
+	BaseInfo ResumeBaseInfoBase
 }
 
 func (s *ResumeSet) Post(w http.ResponseWriter, r *http.Request) {
@@ -88,11 +88,11 @@ func (s *ResumeSet) Post(w http.ResponseWriter, r *http.Request) {
 	switch cmd {
 	case "query_info":
 		var out []interface{}
-	    mc := jkdbs.MongoCondition{
+		mc := jkdbs.MongoCondition{
 			Limit: 10,
 			Skip:  0,
 			Order: false,
-	    }
+		}
 		var content []byte
 		err := GlobalDBS().Query("proj", "resume", mc, &out)
 		if err != nil || len(out) == 0 {
@@ -116,22 +116,21 @@ func (s *ResumeSet) Post(w http.ResponseWriter, r *http.Request) {
 		}
 		data := r.FormValue("content")
 		var out interface{}
-	    err := json.Unmarshal([]byte(data), &out)
+		err := json.Unmarshal([]byte(data), &out)
 		if err != nil {
-			s.WriteSerialData(w, "Invalid Str", 400);
+			s.WriteSerialData(w, "Invalid Str", 400)
 			jklog.L().Errorln("error parse ", err)
 		} else {
-			ioutil.WriteFile(s.path + "/resume/template.json", []byte(data), os.ModePerm)
+			ioutil.WriteFile(s.path+"/resume/template.json", []byte(data), os.ModePerm)
 			GlobalDBS().Remove("proj", "resume", nil)
 			err := GlobalDBS().Add("proj", "resume", out)
 			if err != nil {
 				jklog.L().Errorln("write data base failed ", err)
 				s.WriteSerialData(w, "write db fail", 401)
 			} else {
-				s.WriteSerialData(w, "", 200);
-		    }
+				s.WriteSerialData(w, "", 200)
+			}
 		}
 		return
 	}
 }
-

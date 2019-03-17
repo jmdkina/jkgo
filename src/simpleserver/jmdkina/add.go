@@ -1,13 +1,15 @@
 package simpleserver
 
 import (
-	"golanger.com/utils"
 	"jk/jklog"
 	. "simpleserver"
+
+	"golanger.com/utils"
+
 	// "jkdbs"
 	"image/draw"
 	"io"
-	img "jk/jkimage"
+	img "jkencoderimg/en"
 	"net/http"
 	"os"
 	. "simpleserver/dbs"
@@ -31,7 +33,7 @@ func (s *JmdkinaAdd) Get(w http.ResponseWriter, r *http.Request) {
 	filename := s.Path() + "/jmdkina/add.html"
 	jklog.L().Debugf("Get html [%s]\n", filename)
 
-	err := sp.Parse(w, filename, "")
+	err := sp.Parse(w, "", filename)
 	if err != nil {
 		jklog.L().Errorln("Parse error ", err)
 	}

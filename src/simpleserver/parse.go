@@ -17,8 +17,8 @@ func (sp *SimpleParse) ParseString(out io.Writer, content string, data interface
 	return nil
 }
 
-func (sp *SimpleParse) Parse(out io.Writer, file string, data interface{}) error {
-	t, err := template.ParseFiles(file)
+func (sp *SimpleParse) Parse(out io.Writer, data interface{}, file ...string) error {
+	t, err := template.ParseFiles(file...)
 	if err != nil {
 		return err
 	}
