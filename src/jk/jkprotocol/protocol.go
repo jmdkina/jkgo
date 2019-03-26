@@ -2,9 +2,9 @@ package jkprotocol
 
 import (
 	// "jk/jkcommon"
+	"crypto/md5"
 	"fmt"
 	"jk/jklog"
-	"jk/kfmd5"
 	"strconv"
 	"strings"
 	"time"
@@ -55,7 +55,7 @@ func (p *JKProtocol) toString() string {
 	firststring := p.head.version + jk_seperate + p.head.id + jk_seperate +
 		strconv.Itoa(p.head.command) + jk_seperate + strconv.Itoa(p.head.subcommand) + jk_seperate +
 		fmt.Sprintf("%d", p.head.timeval)
-	key := kfmd5.Sum([]byte(firststring + jk_seperate + jk_protocol_key))
+	key := md5.Sum([]byte(firststring + jk_seperate + jk_protocol_key))
 	return firststring + jk_seperate + fmt.Sprintf("%x", key)
 }
 
@@ -91,7 +91,7 @@ func (p *JKProtocol) checkJKProtocolHeadValid() bool {
 	firststring := p.head.version + jk_seperate + p.head.id + jk_seperate +
 		strconv.Itoa(p.head.command) + jk_seperate + strconv.Itoa(p.head.subcommand) + jk_seperate +
 		fmt.Sprintf("%d", p.head.timeval)
-	key := kfmd5.Sum([]byte(firststring + jk_seperate + jk_protocol_key))
+	key := md5.Sum([]byte(firststring + jk_seperate + jk_protocol_key))
 	if strings.Compare(p.head.sign, fmt.Sprintf("%x", key)) == 0 {
 		return true
 	}

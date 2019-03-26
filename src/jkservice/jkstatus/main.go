@@ -6,8 +6,6 @@ import (
 	"jkbase"
 	"jkservice/jkstatus/jkstatus"
 	"time"
-
-	l4g "github.com/alecthomas/log4go"
 )
 
 var (
@@ -20,11 +18,6 @@ var (
 )
 
 func start() {
-	jkbase.InitLog(*logfile, *logsize)
-
-	l4g.Debug("jkstatus start")
-	l4g.Info("Listen with [%s:%d]", *address, *port)
-
 	jkbase.InitDeamon(*bg)
 
 	jkstatus.Start(*address, *port, true)
@@ -35,6 +28,10 @@ func start() {
 
 func main() {
 	flag.Parse()
+
+	jklog.L().InitLog("jkstatus")
+	jklog.L().Debugln("jkstatus start")
+	jklog.L().Infof("Listen with [%s:%d]\n", *address, *port)
 
 	prog := &jkbase.Program{
 		Name:        "jkstatus",

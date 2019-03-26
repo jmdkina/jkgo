@@ -2,13 +2,18 @@ package jkstatus
 
 import (
 	"encoding/json"
-	"github.com/alecthomas/log4go"
+	"jk/jklog"
 	"jk/jksys"
 
 	// "github.com/buger/jsonparser"
 	"jk/jkprotocol"
 	"net"
 )
+
+/**
+ * This model receive message from server, then parse msg with protocol,
+ * and save data to struct, give response if necessary
+ */
 
 type Process struct {
 	proto *jkprotocol.JKProtoV6
@@ -28,21 +33,21 @@ func ParseData(data string, conn net.Conn) (*Process, error) {
 func (p *Process) HandleMsg() bool {
 	pp, err := jkprotocol.JKProtoV6Parse(p.data)
 	if err != nil {
-		log4go.Error("Parser fail %s\n %s\n", err, p.data)
+		jklog.L().Errorf("Parser fail %s\n %s\n", err, p.data)
 		return false
 	}
 	p.proto = pp
-	log4go.Debug("status process receive message: %v", *p.proto)
+	jklog.L().Debugf("status process receive message: %v\n", *p.proto)
 
 	switch p.proto.H.C {
 	case jkprotocol.JKP_V6_KEEPALIVE_NAME:
 		if p.proto.H.R {
 			str, err := p.proto.JKProtoV6MakeKeepaliveResponse()
 			if err != nil {
-				log4go.Error("Generate Keepalive string err %s ", err)
+				jklog.L().Errorln("Generate Keepalive string err ", err)
 				return false
 			}
-			log4go.Debug("Give Response of keepalive msg %s ", str)
+			jklog.L().Debugln("Give Response of keepalive msg ", str)
 			p.SS.remoteInstance[p.conn].UpdateTime()
 			p.SS.remoteInstance[p.conn].Info.ID = p.proto.H.ID
 			p.conn.Write([]byte(str))
@@ -58,7 +63,7 @@ func (p *Process) HandleMsg() bool {
 		var outSys OutSys
 		err := json.Unmarshal([]byte(p.data), &outSys)
 		if err != nil {
-			log4go.Error("json unmarshal fail ", err)
+			jklog.L().Errorln("json unmarshal fail ", err)
 			break
 		}
 		p.SS.remoteInstance[p.conn].SysInfo = outSys.B

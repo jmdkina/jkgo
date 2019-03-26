@@ -1,7 +1,7 @@
 package jkstatus
 
 import (
-	l4g "github.com/alecthomas/log4go"
+	"jk/jklog"
 	"jkbase"
 	"net"
 	"time"
@@ -29,7 +29,10 @@ func (ctrl *ServiceStatus) findRemoteInstance(conn net.Conn) *RemoteInstance {
 }
 
 func (ctrl *ServiceStatus) handleMsg(conn net.Conn, data string) error {
-	l4g.Debug("handler msg of jkstatus from %s", conn.RemoteAddr().String())
+	jklog.L().Debugln("handler msg of jkstatus from ", conn.RemoteAddr().String())
+
+	// Check if client has connected
+	// Update device info if connected, create new one if not
 	ri := ctrl.findRemoteInstance(conn)
 	if ri == nil {
 		rii, _ := NewRemoteInstance(conn, jk_status_remote_interval)
@@ -37,30 +40,41 @@ func (ctrl *ServiceStatus) handleMsg(conn net.Conn, data string) error {
 	}
 	p, _ := ParseData(data, conn)
 	p.SS = ctrl
+
+	// Parse msg, and give response if need
+	// Do other process also.
 	p.HandleMsg()
 	return nil
 }
 
 func (ctrl *ServiceStatus) updateRemoteInstance() {
-	l4g.Debug("go func for update remote instance start")
+	jklog.L().Debugln("go func for update remote instance start")
 	for {
+		// Traverse all connected clients and call update to check if client still connected
+		// Mark disconnected if does, set update time if online.
 		for _, v := range ctrl.remoteInstance {
 			v.Update()
 		}
 		time.Sleep(time.Millisecond * 1000)
 	}
-	l4g.Debug("go func for update remote instance end ")
+	jklog.L().Debugln("go func for update remote instance end ")
 }
 
 func NewServiceStatus(addr string, port int) (*ServiceStatus, error) {
 	ctrl := &ServiceStatus{}
+
+	// Set call back functions
 	ctrl.HandleMsg = ctrl.handleMsg
+
+	// Create handle
 	err := ctrl.New(addr, port, 1)
 	if err != nil {
 		return nil, err
 	}
 
 	ctrl.remoteInstance = make(map[net.Conn]*RemoteInstance)
+
+	// Start listen, wait client connect
 	ctrl.Listen()
 	go ctrl.updateRemoteInstance()
 	return ctrl, nil
@@ -74,6 +88,9 @@ func Start(addr string, port int, recv bool) (*ServiceStatus, error) {
 	if recv {
 		go st.DoRecvCycle()
 	}
+	/**
+	 * Next provide http server for get status with http
+	 */
 	shttp, err := NewStatusHttp(12307)
 	if err != nil {
 		return st, err

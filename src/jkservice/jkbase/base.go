@@ -1,7 +1,7 @@
 package jkbase
 
 import (
-	"github.com/alecthomas/log4go"
+	"jk/jklog"
 	"jk/jkprotocol"
 	"jkbase"
 	"time"
@@ -22,9 +22,9 @@ func (c *ClientBase) KeepaliveCycle(interval time.Duration, id string) error {
 	for {
 		str, _ := jkprotocol.JKProtoV6MakeKeepalive(id)
 		n := c.Send(str)
-		log4go.Debug("Send keepalive %d", n)
+		jklog.L().Debugf("Send keepalive %d\n", n)
 		if n < 0 {
-			log4go.Warn("Send keepalived fail, redial")
+			jklog.L().Warnln("Send keepalived fail, redial")
 			c.Dial()
 			continue
 		}
@@ -32,7 +32,7 @@ func (c *ClientBase) KeepaliveCycle(interval time.Duration, id string) error {
 		if err != nil {
 			return err
 		}
-		log4go.Debug("Recv response of keepalive %s", string(recv))
+		jklog.L().Debugf("Recv response of keepalive %s\n", string(recv))
 		time.Sleep(time.Second * interval)
 	}
 

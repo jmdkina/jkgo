@@ -2,11 +2,11 @@ package jkprotocol
 
 import (
 	"bytes"
+	"crypto/md5"
 	"encoding/binary"
 	"errors"
 	"fmt"
 	"jk/jklog"
-	"jk/kfmd5"
 	"strconv"
 	"strings"
 	"time"
@@ -136,7 +136,7 @@ func (p *KFProtocol) generateSign() [16]byte {
 		p.Header.IdStr, p.Header.Cmd,
 		p.Header.SubCmd, p.Header.Transaction, p.Header.Sequence, kf_protocol_key, p.Header.Length)
 	jklog.L().Debugln("sign is ", str)
-	return kfmd5.Sum([]byte(str))
+	return md5.Sum([]byte(str))
 }
 
 func (p *KFProtocol) generate() {
