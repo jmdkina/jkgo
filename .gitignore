@@ -5,6 +5,7 @@ tmp/parse-html
 goproj/pkg
 code.google.com
 github.com
+gitlab.com
 goconfig
 golanger.com
 labix.org
@@ -34,8 +35,6 @@ tmp/goosxgui/demo2
 
 tmp/network/jkclient
 
-tmp/network/kfclient
-
 tmp/network/kfserver
 
 bin/
@@ -46,3 +45,4 @@ pkg/
 .idea
 html/images
 /.project
+
