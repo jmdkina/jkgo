@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WSSimple Test Structure</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="addon/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/wssimple.css" />
+    <script type="text/javascript" src="addon/jquery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="addon/popper/popper.js"></script>
+    <script type="text/javascript" src="addon/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="addon/vue/vue.js"></script>
+    <script type="text/javascript" src="addon/layer/layer.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/wssimple/wssimple.js" ></script>
+</head>
+<body>
+<div id="wssimple" class="container jk-leavetop">
+<div>
+    <label>Start WS Server</label>
+    <input type="text" class="form-control input-small" v-model="port" placeholder="port" value="8081"/>
+    <button class="btn btn-default" v-on:click="start_server" >Start</button>
+    <br/>
+    <label>StopPlaying</label>
+    <button class="btn btn-default" v-on:click="do_stopplaying">Do</button>
+    <br/>
+    <label>DataUpdate</label>
+    <button class="btn btn-default" v-on:click="do_dataupdate">DataUpdate</button>
+    <br/>
+    <label>ResumePlaying</label>
+    <button class="btn btn-default" v-on:click="do_resumeplaying">ResumePlaying</button>
+    <br/>
+    <label>SongInsert</label>
+    <button class="btn btn-default" v-on:click="do_songinsert">SongInsert</button>
+    <br/>
+    <label>SongSkip</label>
+    <button class="btn btn-default" v-on:click="do_songskip">SongSkip</button>
+    <br/>
+    <label>Logout</label>
+    <button class="btn btn-default" v-on:click="do_logout">Logout</button>
+    <br/>
+    <label>Stop WS Server</label>
+    <button class="btn btn-default" v-on:click="stop_server">Stop</button>
+    <br/>
+    <label>YT play</label>
+    <button class="btn btn-default" v-on:click="yt_play">YT Play</button>
+    <hr/>
+</div>
+
+</div>
+</body>
+</html>

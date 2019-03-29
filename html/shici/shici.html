@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>满地残阳</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="addon/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/shici.css" />
+    <script type="text/javascript" src="addon/jquery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="addon/popper/popper.js"></script>
+    <script type="text/javascript" src="addon/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="addon/vue/vue.js"></script>
+    <script type="text/javascript" src="addon/layer/layer.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/shici/shici.js" ></script>
+</head>
+<body>
+<div id="shici" class="container jk-leavetop">
+   
+<div class="row items">
+<div class="item col-es-12 col-sm-5 col-md-4 col-lg-3" v-for="shici in shicis">
+    <div class="sscontent">${ shici.content } </div>
+    <div class="ssfooter text-muted border-top"> 
+        ${shici.title} - ${shici.subtitle} - <cite class="aux-title">${shici.author} - ${shici.createtimestr}</cite>
+    </div>
+    <br class="clearfix"/>
+</div>
+</div>
+<button class="btn btn-primary btn-block showmore" v-on:click="showmore">加载更多</button>
+
+<nav class="navbar navbar-default extern-brower jk-leavetop">
+<div class="container-fluid">
+<ul class="nav navbar-nav ul-horizontal" >
+<li><a class="rounded-circle" href="/jmdkina">万里浮沉</a></li>
+</ul>
+</nav>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DB Operation</title>
+    <link rel="stylesheet" href="addon/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/db.css" />
+    <script type="text/javascript" src="addon/jquery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="addon/vue/vue.js"></script>
+    <script type="text/javascript" src="addon/layer/layer.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/db.js" ></script>
+</head>
+<body>
+<div id="dboperation">
+    <label for="host">Host:</label>
+    <input type="text" class="form-control input-small" v-model="host" placeholder="localhost">
+    <button class="btn btn-info " v-on:click="query_dbs">Query DataBase</button>
+
+    <label >Databases: </label>
+    <select v-model="dbname">
+        <option v-for="option in dbs" v-bind:value="option.value">
+            ${ option.text }
+        </option>
+    </select>
+
+    <span id="collop">
+    <button class="btn btn-info" v-on:click="query_colls">Query Coll</button>
+        <label>Collections Of <strong>${ dbname }</strong> :</label>
+        <select v-model="collname">
+            <option v-for="option in colls" v-bind:value="option.value">
+                ${ option.text }
+            </option>
+        </select>
+    </span>
+
+    <span id="colldata">
+        <button class="btn btn-info" v-on:click="query_data">Query Data</button>
+    </span>
+
+    <div id="outputdata">
+
+    </div>
+</div>
+</body>
+</html>

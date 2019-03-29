@@ -1,0 +1,9 @@
+{
+	"PicsPath":"/Volumes/MacintoshHD/Users/jmd/Pictures/p/av",
+	"HtmlPath":"html",
+	"Port":12306,
+	"Index": "jmdkina",
+	"DBType":"Mongo",
+	"DBUrl":"mongodb://localhost/",
+	"LogFile":"../logs/snaky.log"
+}

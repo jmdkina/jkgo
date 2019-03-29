@@ -1,0 +1,9 @@
+{
+	"PicsPath":"J:/av/pics",
+	"HtmlPath":"html",
+	"Port":12306,
+	"Index": "jmdkina",
+	"DBType":"Mongo",
+	"DBUrl":"mongodb://localhost/",
+	"LogFile":"J:/proj/logs/snaky.log"
+}

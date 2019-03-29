@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dir Server</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="addon/bootstrap/bootstrap.min.css">
+    <script type="text/javascript" src="addon/jquery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="addon/vue/vue.js"></script>
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/dir.css" />
+    <script type="text/javascript" src="js/global.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+<table border="1">
+    <tr>
+        <td>Path</td>
+        <td>Status</td>
+    </tr>
+{{ range .FSS }}
+    <tr>
+        <td>{{ .Path }}</td>
+        <td>{{ .Status }}</td>
+    </tr>
+{{ end }}
+</table>
+<div id="addfileserver">
+    <label>Add New Server: </label>
+    <input class="form-control" type="text" placeholder="DirPath" v-model="path" /><br/>
+    <button class="btn btn-info btn-block" v-on:click="addfileserver">AddFileServer</button><br/>
+    <p>Add result: ${ result }# </p>
+    <div>
+        <hr/>
+        <label>Add Upload path: </label>
+        <input class="form-control" type="text" placeholder="UploadPath" v-model="uploadpath" /><br/>
+        <button class="btn btn-info btn-block" v-on:click="adduploadpath">AddUploadPath</button><br/>
+    </div>
+</div>
+
+</div>
+</body>
+
+    <script type="text/javascript" src="js/dir.js" ></script>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WSSimple Client Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="addon/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/wssimple.css" />
+    <script type="text/javascript" src="addon/jquery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="addon/popper/popper.js"></script>
+    <script type="text/javascript" src="addon/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="addon/vue/vue.js"></script>
+    <script type="text/javascript" src="addon/layer/layer.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/wssimple/wsclient.js" ></script>
+</head>
+<body>
+<div id="wsclient" class="container jk-leavetop">
+<div>
+    <label>Start WS Server</label>
+    <input type="text" class="form-control input-middle" v-model="addr" placeholder="addr" value="127.0.0.1"/>
+    <input type="text" class="form-control input-small" v-model="port" placeholder="port" value="8081"/>
+    <input type="text" class="form-control input-small" v-model="url" placeholder="url" value="/"/>
+    <button class="btn btn-default" v-on:click="start_server" >Start</button>
+    <br/>
+    <label>Stop</label>
+    <button class="btn btn-default" v-on:click="stop_server">Stop</button>
+    <br/>
+    <textarea v-model="sendmsg" cols=50 ></textarea>
+    <button class="btn btn-default" v-on:click="send_msg">Send</button>
+    <br/>
+    <textarea v-mode="recvmsg" cols="50"></textarea>
+    <button class="btn btn-default" v-on:click="recv_msg">Recv</button>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="addon/bootstrap/bootstrap.min.css">
+    <script type="text/javascript" src="addon/jquery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="addon/vue/vue.min.js"></script>
+    <script type="text/javascript" src="addon/layer/layer.js"></script>
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/index.css" />
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/index.js" ></script>
+</head>
+<body>
+<div class="container-fluid">
+{{ with .Sysinfo }}
+<p>OS: <strong>{{ .Info.OS }}</strong></p>
+<p>Kernel: <strong>{{ .Info.Kernel }}</strong></p>
+<p>Core: <strong>{{ .Info.Core }}</strong></p>
+<p>Platform: <strong>{{ .Info.Platform }}</strong></p>
+<p>Hostname: <strong>{{ .Info.Hostname }}</strong></p>
+<p>IPAddress: <strong>{{ .IPAddr }}</strong></p>
+<p>Mac: <strong>{{ .Mac }}</strong></p>
+<p>Disk: <strong>{{ .FreeDisk }}/{{.TotalDisk}}</strong></p>
+<p>Mem: <strong>{{ .FreeRam }}/{{.TotalRam}}</strong></p>
+<p>CPUsage: <strong>{{ .CPUUsage}}</strong></p>
+<p>CPUs: <strong>{{ .Info.CPUs }}</strong></p>
+{{ end }}
+</div>
+<div id="osoperation">
+	<label for="filename">Filename:</label>
+	<input type="text" class="form-control input-big" v-model="filename" placeholder="Filename With Path" />
+	<input type="text" class="form-control input-small" v-model="code" placeholder="Code" />
+	<button class="btn btn-info " v-on:click="open">Open</button>
+
+	<div class="content">
+		<textarea v-model="content" cols=200 rows=8>
+		</textarea>
+	</div>
+
+	<button class="btn btn-info " v-on:click="modify">Modify</button>
+</div>
+</body>
+</html>

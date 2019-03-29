@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Shici</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="addon/bootstrap/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/shici.css" />
+    <script type="text/javascript" src="addon/jquery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="addon/vue/vue.js"></script>
+    <script type="text/javascript" src="addon/layer/layer.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/shici/add.js"></script>
+</head>
+<body>
+<div id="shiciadd" class="container">
+<label>Title</label>
+<input type="text" class="form-control" v-model="title" ><br/>
+<label>Subtitle </label>
+<input type="text" class="form-control" v-model="subtitle" ><br/>
+<label>Content</label>
+<textarea rows="5" cols="20" v-model="content"></textarea><br/>
+<label>Author</label>
+<input type="text" class="form-control" v-model="author"><br/>
+<label>Code</label>
+<input type="password" class="form-control" v-model="code"><br/>
+<label>CreateTime</label>
+<input type="text" class="form-control" v-model="createtime"><br/>
+
+<button class="btn btn-default" v-on:click="add">Add</button>
+
+</div>
+</body>
+</html>

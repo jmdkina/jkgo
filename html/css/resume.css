@@ -1,0 +1,103 @@
+@charset "UTF-8";
+.basex ul li {
+  margin: 0.2rem 0;
+  overflow-wrap: break-word;
+}
+.basex ul {
+  font-size: 94%;
+  padding: 1rem 0;
+}
+.leftbar {
+  padding: 1.5rem 1.0rem;
+  background-color: gainsboro;
+  /* background-color: rgb(245, 245, 245); */
+}
+
+.projbottom {
+    /*border-bottom: #e8dfdf solid 0.5px;*/
+}
+
+.item-two {
+   margin-top: 2em;
+}
+
+.item-one {
+    margin-bottom: 2em;
+}
+
+.item-two h4 {
+   /* border-bottom: dimgray solid 2px; */
+   /*border-left: dimgray solid 4px; */
+   border-top: black solid 4px;
+   /*padding-left: 0.4rem;*/
+   padding-top: 0.5rem;
+}
+
+.rightcontent {
+  padding: 1.5rem;
+  background-color: ghostwhite;
+  /* background-color: rgb(255, 255, 255); */
+}
+.item-three {
+  padding: 0.8rem 0 0 0;
+}
+
+.left-border-less {
+  border-left: rgb(143, 143, 143) solid 2px;
+   padding-left: 0.4rem;
+}
+
+.item-three ol {
+  margin: 0.6rem 0.6rem;
+}
+
+.item-three ol li {
+  padding: 0.2rem 0;
+}
+
+.item-two ol {
+  padding: 0.2rem 1.2rem;
+}
+
+.item-two ol li {
+  padding: 0.2rem 0;
+}
+
+.item-next {
+  padding: 0.8rem 0 0 1rem;
+}
+
+.projtitle {
+  border-top: 0.5px dotted green;
+  text-align: center;
+}
+
+hr.split {
+}
+.base .card-body {
+  padding: 1.25rem 0;
+}
+cite {
+  font-size: 95%;
+}
+.baseinfo { }
+  .baseinfo li {
+    margin: 0 .8em; }
+    .baseinfo li a {
+      text-decoration: none;
+      cursor: default;
+      color: black; }
+
+.baseinfo2 {
+ }
+  .baseinfo2 li {
+    margin: 0 .8em;
+  }
+
+.panel-heading {
+  font-weight: bold; }
+
+body {
+  font-family: 'Lato' , Calibri, Arial, sans-serif; 
+}
+
