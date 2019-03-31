@@ -51,6 +51,8 @@ func (nb *JKNetBase) GetNettype() int {
 	return nb.nettype
 }
 
+// Set addr and port with nettype
+// But listen or dial depends on what your operation next
 func (nb *JKNetBase) New(addr string, port int, nettype int) error {
 	nb.address = addr
 	nb.port = port
@@ -109,7 +111,7 @@ func (nb *JKNetBase) DoRecvCycle() error {
 					break
 				}
 				if err != nil {
-					jklog.L().Errorln("Read error %s", err)
+					jklog.L().Errorln("Read error ", err)
 					break
 				}
 

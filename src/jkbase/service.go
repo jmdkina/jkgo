@@ -14,6 +14,14 @@ type Program struct {
 	Runner func()
 }
 
+func NewProgram(name, displayname, desc string) *Program {
+	return &Program{
+		Name:        name,
+		DisplayName: displayname,
+		Desc:        desc,
+	}
+}
+
 func (p *Program) Start(s service.Service) error {
 	// Start should not block. Do the actual work async.
 	go p.run()
