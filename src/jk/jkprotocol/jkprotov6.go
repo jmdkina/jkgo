@@ -58,14 +58,7 @@ func JKProtoV6MakeRegister(id string, data interface{}) (string, error) {
 
 func JKProtoV6MakeKeepalive(id string) (string, error) {
 	p := &JKProtoV6{}
-	p.H.V = jkp_v6_version
-	p.H.C = JKP_V6_KEEPALIVE_NAME
-	p.H.T = time.Now().UnixNano() / 1000000
-	p.H.ID = id
-	p.H.R = true
-	p.B = ""
-	v, err := json.Marshal(p)
-	return string(v), err
+	return p.JKProtoV6MakeCommon(JKP_V6_KEEPALIVE_NAME, id, true, "")
 }
 
 func (p *JKProtoV6) JKProtoV6MakeTR(id string, resp bool, data interface{}) (string, error) {
