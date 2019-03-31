@@ -45,4 +45,5 @@ pkg/
 .idea
 html/images
 /.project
+src/jkservice
 
