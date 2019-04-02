@@ -42,3 +42,6 @@ Makefile - linux 下的编译 make help
 http://xxx:12307/st/cmd=getstatus
 ```
 
+## golang mqtt
+Test on this `https://github.com/jeffallen/mqtt.git`
+

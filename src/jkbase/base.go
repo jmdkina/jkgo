@@ -86,6 +86,9 @@ func (nb *JKNetBase) Dial() error {
 }
 
 func (nb *JKNetBase) Send(data string) int {
+	if nb.conn == nil {
+		return -2
+	}
 	n, err := nb.conn.Write([]byte(data))
 	if err != nil {
 		return -1
@@ -129,6 +132,9 @@ func (nb *JKNetBase) DoRecvCycle() error {
 }
 
 func (nb *JKNetBase) RecvClient() ([]byte, error) {
+	if nb.conn == nil {
+		return nil, errors.New("not init")
+	}
 	rdata := make([]byte, 2<<15)
 	n, err := nb.conn.Read(rdata)
 	if err != nil {
