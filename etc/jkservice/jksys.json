@@ -1,6 +1,6 @@
 {
 	"Addr":"0.0.0.0",
-	"Port":20103,
+	"Port":1883,
 	"LogFile": "/tmp/jksys.log",
 	"LogSize": 10000000,
 	"ClientAddr": "0.0.0.0",

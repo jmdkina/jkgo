@@ -1,0 +1,6 @@
+{
+	"Addr":"0.0.0.0",
+	"Port":1883,
+	"LogFile": "/tmp/jkimgproc.log",
+	"LogSize": 10000000
+}
